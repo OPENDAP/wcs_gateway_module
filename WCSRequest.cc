@@ -1,8 +1,3 @@
-#include <iostream>
-
-using std::cerr ;
-using std::endl ;
-
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
@@ -68,6 +63,9 @@ WCSRequest::make_request( const WCSFile &file )
     }
     BESDEBUG( "WCSRequest::make_request - request = " << url << endl )
     BESDEBUG( "WCSRequest::make_request - target = " << target << endl )
+
+    // clear the header response list for this run
+    hdr_list.clear() ;
 
     CURL *d_curl = curl_easy_init();
     if( !d_curl )
@@ -135,6 +133,7 @@ WCSRequest::make_request( const WCSFile &file )
     while( iter != hdr_list.end() )
     {
 	string hdr_line = (*iter) ;
+	BESDEBUG( "WCS Response Header: " << hdr_line << endl )
 	if( hdr_line.find( "200 OK" ) != string::npos )
 	    request_status = true ;
 	iter++ ;
@@ -145,10 +144,8 @@ WCSRequest::make_request( const WCSFile &file )
 	string err = "request failed, need to get the information" ;
 	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
     }
-    else
-    {
-	cerr << "request succeeded" << endl ;
-    }
+
+    BESDEBUG( "WCSRequest::make_request - succeeded" << endl )
 
     return target ;
 }

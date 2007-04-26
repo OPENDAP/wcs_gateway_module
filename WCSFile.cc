@@ -1,8 +1,3 @@
-#include <iostream>
-
-using std::cerr ;
-using std::endl ;
-
 #include "WCSFile.h"
 #include "BESDebug.h"
 #include "BESHandlerException.h"
@@ -208,8 +203,6 @@ WCSFile::break_apart_types( const string &types )
 	    {
 		string wcs_type = types.substr( start, colon - start ) ;
 		string bes_type = types.substr( colon+1, semi - colon - 1 ) ;
-		cerr << "wcs_type = " << wcs_type << endl ;
-		cerr << "bes_type = " << bes_type << endl ;
 		type_list[wcs_type] = bes_type ;
 	    }
 	    start = semi + 1 ;
@@ -236,7 +229,6 @@ WCSFile::convert_wcs_type( const string &ret_type )
 	    break_apart_types( types ) ;
 	}
     }
-    cerr << "looking for " << ret_type << endl ;
     string bes_type = type_list[ret_type] ;
     if( bes_type.empty() )
 	bes_type = ret_type ;
