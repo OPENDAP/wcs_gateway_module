@@ -77,8 +77,11 @@ WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
 
     // reset the container information (do we really  need to? Do it for
     // now, but I don't think this container information is used any more.
-    dhi.container->set_container_type( curr_type ) ;
-    dhi.container->set_real_name( curr_name ) ;
+    //
+    // Actually it is, when retrieving the dap-server information (ascii,
+    // www, usage) it uses the dataset to read the data.
+    //dhi.container->set_container_type( curr_type ) ;
+    //dhi.container->set_real_name( curr_name ) ;
 
     return ret ;
 }
