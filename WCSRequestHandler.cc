@@ -55,7 +55,8 @@ WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
     // Now that we have the request information ... make the wcs request.
     // This will return to us the name of a new file of a type that we
     // should be able to read.
-    string new_file = WCSRequest::make_request( file ) ;
+    WCSRequest wcs ;
+    string new_file = wcs.make_request( file ) ;
 
     // Now that we have this file, and we know the type of data being
     // handled for this new file, find the request handler that knows how to
