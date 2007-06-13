@@ -1,4 +1,4 @@
-// WCSCache.h
+// WCSContainer.h
 
 // This file is part of bes, A C++ back-end server implementation framework
 // for the OPeNDAP Data Access Protocol.
@@ -30,31 +30,44 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef I_WCSCache_H
-#define I_WCSCache_H 1
+#ifndef WCSContainer_h_
+#define WCSContainer_h_ 1
 
+#include <list>
 #include <string>
 
+using std::list ;
 using std::string ;
 
-#include "BESObj.h"
+#include "BESContainer.h"
 
-class WCSCache : public BESObj
+/** @brief Container representing a WCS request
+ *
+ * @see WCSContainerStorage
+ */
+class WCSContainer : public BESContainer
 {
 private:
-    string			_cacheDir ;
-    double			_cacheTime ;
     string			_target ;
-public:
-    				WCSCache( const string &cacheDir,
-					  const string &cacheTime,
-					  const string &target ) ;
-    virtual		    	~WCSCache() ;
+    string			_cacheTime ;
 
-    virtual bool		is_cached( ) ;
+				WCSContainer() : BESContainer() {}
+protected:
+    void			_duplicate( WCSContainer &copy_to ) ;
+public:
+    				WCSContainer( const string &sym_name,
+					      const string &real_name ) ;
+
+				WCSContainer( const WCSContainer &copy_from ) ;
+
+    virtual			~WCSContainer() {}
+
+    virtual BESContainer *	ptr_duplicate( ) ;
+
+    virtual string		access() ;
 
     virtual void		dump( ostream &strm ) const ;
-} ;
+};
 
-#endif // I_WCSCache_H
+#endif // WCSContainer_h_
 

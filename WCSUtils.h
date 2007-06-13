@@ -1,4 +1,4 @@
-// WCSCache.h
+// WCSUtils.h
 
 // This file is part of bes, A C++ back-end server implementation framework
 // for the OPeNDAP Data Access Protocol.
@@ -30,31 +30,27 @@
 //      pwest       Patrick West <pwest@ucar.edu>
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
-#ifndef I_WCSCache_H
-#define I_WCSCache_H 1
+#ifndef I_WCSUtils_H
+#define I_WCSUtils_H 1
 
+#include <map>
 #include <string>
 
+using std::map ;
 using std::string ;
 
-#include "BESObj.h"
-
-class WCSCache : public BESObj
+class WCSUtils
 {
 private:
-    string			_cacheDir ;
-    double			_cacheTime ;
-    string			_target ;
+    static map<string,string>	type_list ;
+    static void			break_apart_types( const string &types ) ;
 public:
-    				WCSCache( const string &cacheDir,
-					  const string &cacheTime,
-					  const string &target ) ;
-    virtual		    	~WCSCache() ;
+    static string		convert_wcs_type( const string &wcs_type ) ;
 
-    virtual bool		is_cached( ) ;
-
-    virtual void		dump( ostream &strm ) const ;
+    static string		validate_url( const string &url,
+					      string &target,
+					      string &format ) ;
 } ;
 
-#endif // I_WCSCache_H
+#endif // I_WCSUtils_H
 

@@ -1,3 +1,35 @@
+// WCSRequest.cc
+
+// This file is part of bes, A C++ back-end server implementation framework
+// for the OPeNDAP Data Access Protocol.
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmospheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
+
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
@@ -32,13 +64,9 @@ WCSRequest::save_raw_http_headers( void *ptr, size_t size,
 }
 
 string
-WCSRequest::make_request( const WCSFile &file )
+WCSRequest::make_request( const string &url, const string &name,
+			  const string &type, const string &cacheTime )
 {
-    string url = file.get_property( WCS_REQUEST ) ;
-    string name = file.get_name() ;
-    string type = file.get_property( WCS_RETURNTYPE ) ;
-    string cacheTime = file.get_property( WCS_CACHETIME ) ;
-
     bool found = false ;
     string cacheDir = TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
     if( !found || cacheDir.empty() )
@@ -106,7 +134,7 @@ WCSRequest::make_request( const WCSFile &file )
 
 	curl_easy_setopt( d_curl, CURLOPT_URL, url.c_str() ) ;
 
-	FILE *stream = fopen( tmp_target.c_str(), "w" ) ;
+	FILE *stream = fopen( tmp_target.c_str(), "w+" ) ;
     #ifdef WIN32
 	curl_easy_setopt( d_curl, CURLOPT_FILE, stream ) ;
 	curl_easy_setopt( d_curl, CURLOPT_WRITEFUNCTION, &fwrite ) ;
@@ -132,6 +160,14 @@ WCSRequest::make_request( const WCSFile &file )
 	res = curl_easy_getinfo(d_curl, CURLINFO_HTTP_CODE, &status);
 	if (res != 0)
 	{
+	    // close the temporary target file
+	    fclose( stream ) ;
+
+	    // remove the temporary target file here
+	    if( remove( tmp_target.c_str() ) != 0 )
+	    {
+		perror( "Error deleting temporary target file" ) ;
+	    }
 	    string err = (string )"WCS request failed: " + d_error_buffer ;
 	    throw BESHandlerException( err, __FILE__, __LINE__ ) ;
 	}
@@ -151,18 +187,27 @@ WCSRequest::make_request( const WCSFile &file )
 
 	if( request_status == false )
 	{
+	    // get the error information from the temoorary file
+	    string err ;
+	    read_error( stream, err, url ) ;
+
+	    // close the temporary target
+	    fclose( stream ) ;
+	    
 	    // need to remove the temporary target file here
 	    if( remove( tmp_target.c_str() ) != 0 )
 	    {
 		perror( "Error deleting temporary target file" ) ;
 	    }
-	    string err = "request failed, need to get the information" ;
 	    throw BESHandlerException( err, __FILE__, __LINE__ ) ;
 	}
 
 	int result= rename( tmp_target.c_str() , target.c_str() );
 	if( result != 0 )
 	{
+	    // close the temporary target
+	    fclose( stream ) ;
+	    
 	    string err = "Unable to rename temporary target file "
 			 + tmp_target + " to " + target ;
 	    throw BESHandlerException( err, __FILE__, __LINE__ ) ;
@@ -176,5 +221,26 @@ WCSRequest::make_request( const WCSFile &file )
     }
 
     return target ;
+}
+
+void
+WCSRequest::read_error( FILE *f, string &err, const string &url )
+{
+    err = "WCS Request failed for url:\n" + url + "\nwith error:\n" ;
+    bool done = false ;
+    while( !done )
+    {
+	char buff[1024] ;
+	size_t bytes_read = fread( buff, 1, 1024, f ) ;
+	if( !bytes_read )
+	{
+	    done = true ;
+	}
+	else
+	{
+	    buff[bytes_read] = '\0' ;
+	    err += buff ;
+	}
+    }
 }
 

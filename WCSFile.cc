@@ -1,9 +1,39 @@
+// WCSFile.cc
+
+// This file is part of bes, A C++ back-end server implementation framework
+// for the OPeNDAP Data Access Protocol.
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmospheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
+
 #include "WCSFile.h"
+#include "WCSUtils.h"
 #include "BESDebug.h"
 #include "BESHandlerException.h"
-#include "TheBESKeys.h"
-
-map<string,string> WCSFile::type_list ;
 
 WCSFile::WCSFile( const string &filename )
     : _filename( filename )
@@ -115,7 +145,7 @@ WCSFile::read()
     // the type given is a wcs type, and not necessarily a BES type. Check
     // the configuration file to see if there is any conversion to be done.
     // Never will an empty string be returned.
-    type = convert_wcs_type( type ) ;
+    type = WCSUtils::convert_wcs_type( type ) ;
     _properties[WCS_RETURNTYPE] = type ;
     BESDEBUG( "  " << WCS_REQUEST << ": " << wcs_request << endl )
     BESDEBUG( "  " << WCS_RETURNTYPE << ": " << type << endl )
@@ -177,62 +207,6 @@ WCSFile::handle_property_element( xmlNode *a_prop )
 	    _properties[name] = value ;
 	}
     }
-}
-
-void
-WCSFile::break_apart_types( const string &types )
-{
-    bool done = false ;
-    string::size_type start = 0 ;
-    while( !done )
-    {
-	string::size_type semi = types.find( ";", start ) ;
-	if( semi == string::npos )
-	{
-	    done = true ;
-	}
-	else
-	{
-	    string::size_type colon = types.find( ":", start ) ;
-	    if( colon == string::npos || colon > semi )
-	    {
-		string err = "Malformed wcs type list: " + types ;
-		throw BESHandlerException( err, __FILE__, __LINE__ ) ;
-	    }
-	    else
-	    {
-		string wcs_type = types.substr( start, colon - start ) ;
-		string bes_type = types.substr( colon+1, semi - colon - 1 ) ;
-		type_list[wcs_type] = bes_type ;
-	    }
-	    start = semi + 1 ;
-	    if( start == types.length() )
-	    {
-		done = true ;
-	    }
-	}
-    }
-}
-
-string
-WCSFile::convert_wcs_type( const string &ret_type )
-{
-    // Read from the BES configuration file to get the list of wcs->bes
-    // types. If the list does not exist then assume that it is a direct
-    // mapping and return the type passed.
-    if( WCSFile::type_list.size() == 0 )
-    {
-	bool found = false ;
-	string types = TheBESKeys::TheKeys()->get_key( "WCS.TypeList", found ) ;
-	if( found && !types.empty() )
-	{
-	    break_apart_types( types ) ;
-	}
-    }
-    string bes_type = type_list[ret_type] ;
-    if( bes_type.empty() )
-	bes_type = ret_type ;
-    return bes_type ;
 }
 
 void

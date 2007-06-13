@@ -1,5 +1,35 @@
 // WCSRequestHandler.cc
 
+// This file is part of bes, A C++ back-end server implementation framework
+// for the OPeNDAP Data Access Protocol.
+
+// Copyright (c) 2004,2005 University Corporation for Atmospheric Research
+// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+// You can contact University Corporation for Atmospheric Research at
+// 3080 Center Green Drive, Boulder, CO 80301
+ 
+// (c) COPYRIGHT University Corporation for Atmospheric Research 2004-2005
+// Please read the full copyright statement in the file COPYRIGHT_UCAR.
+//
+// Authors:
+//      pwest       Patrick West <pwest@ucar.edu>
+//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
+
 #include "config.h"
 
 #include "WCSRequestHandler.h"
@@ -17,7 +47,7 @@
 #include "WCSRequest.h"
 #include "BESRequestHandlerList.h"
 
-WCSRequestHandler::WCSRequestHandler( string name )
+WCSRequestHandler::WCSRequestHandler( const string &name )
     : BESRequestHandler( name )
 {
     add_handler( DAS_RESPONSE, WCSRequestHandler::wcs_redirect ) ;
@@ -51,18 +81,21 @@ WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
     // thrown.
     WCSFile file( dhi.container->access() ) ;
     file.read() ;
+    string url = file.get_property( WCS_REQUEST ) ;
+    string name = file.get_name() ;
+    string type = file.get_property( WCS_RETURNTYPE ) ;
+    string cacheTime = file.get_property( WCS_CACHETIME ) ;
 
     // Now that we have the request information ... make the wcs request.
     // This will return to us the name of a new file of a type that we
     // should be able to read.
+
     WCSRequest wcs ;
-    string new_file = wcs.make_request( file ) ;
+    string new_file = wcs.make_request( url, name, type, cacheTime ) ;
 
     // Now that we have this file, and we know the type of data being
     // handled for this new file, find the request handler that knows how to
     // handle that data type.
-
-    string type = file.get_property( WCS_RETURNTYPE ) ;
 
     // Save off the current container information associated with the wcs
     // file and set the target file information in the container
@@ -85,49 +118,6 @@ WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
 
     return ret ;
 }
-
-/*
-bool
-WCSRequestHandler::wcs_build_das( BESDataHandlerInterface &dhi )
-{
-    bool ret = true ;
-    BESResponseObject *response =
-    dhi.response_handler->get_response_object();
-    BESDASResponse *bdas = dynamic_cast < BESDASResponse * >(response);
-    DAS *das = bdas->get_das();
-
-
-    return ret ;
-}
-
-bool
-WCSRequestHandler::wcs_build_dds( BESDataHandlerInterface &dhi )
-{
-    bool ret = true ;
-    BESResponseObject *response =
-    dhi.response_handler->get_response_object();
-    BESDDSResponse *bdds = dynamic_cast < BESDDSResponse * >(response);
-    DDS *dds = bdds->get_dds();
-
-    // Your code goes here
-
-    return ret ;
-}
-
-bool
-WCSRequestHandler::wcs_build_data( BESDataHandlerInterface &dhi )
-{
-    bool ret = true ;
-    BESResponseObject *response =
-    dhi.response_handler->get_response_object();
-    BESDataDDSResponse *bdds = dynamic_cast < BESDataDDSResponse * >(response);
-    DataDDS *dds = bdds->get_dds();
-
-    // Your code goes here
-
-    return ret ;
-}
-*/
 
 bool
 WCSRequestHandler::wcs_build_vers( BESDataHandlerInterface &dhi )

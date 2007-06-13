@@ -11,18 +11,21 @@ ACLOCAL_AMFLAGS = -I conf
 
 lib_LTLIBRARIES = libwcs_module.la
 
+bin_PROGRAMS = 
+
 WCS_SRCS:=
 
 WCS_HDRS:=
 
 BES_SRCS = \
 		WCSModule.cc WCSRequestHandler.cc WCSFile.cc	\
-		WCSRequest.cc WCSCache.cc
+		WCSRequest.cc WCSCache.cc WCSContainerStorage.cc \
+		WCSContainer.cc WCSUtils.cc
 
 BES_HDRS = \
 		WCSModule.h WCSRequestHandler.h WCSFile.h	\
-		WCSRequest.h WCSCache.h WCSResponseNames.h	\
-		config_wcs.h
+		WCSRequest.h WCSCache.h WCSContainerStorage.h	\
+		WCSContainer.h WCSUtils.h WCSResponseNames.h config_wcs.h
 
 libwcs_module_la_SOURCES = $(WCS_SRCS) $(BES_SRCS) $(WCS_HDRS) $(BES_HDRS)
 libwcs_module_la_CPPFLAGS = $(BES_CPPFLAGS)
