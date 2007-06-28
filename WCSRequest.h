@@ -50,6 +50,8 @@ private:
 						       void *resp_hdrs ) ;
     void			read_error( FILE *f, string &err,
 					    const string &url ) ;
+    void			read_xml_error( FILE *f, string &err,
+						const string &url ) ;
 public:
     				WCSRequest() {} ;
 				~WCSRequest() {} ;

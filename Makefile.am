@@ -9,7 +9,8 @@ AUTOMAKE_OPTIONS = foreign check-news
 
 ACLOCAL_AMFLAGS = -I conf
 
-lib_LTLIBRARIES = libwcs_module.la
+lib_besdir=$(libdir)/bes
+lib_bes_LTLIBRARIES = libwcs_module.la
 
 bin_PROGRAMS = 
 

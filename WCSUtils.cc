@@ -31,6 +31,7 @@
 //      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "WCSUtils.h"
+#include "BESUtil.h"
 #include "TheBESKeys.h"
 #include "BESHandlerException.h"
 
@@ -58,7 +59,8 @@ WCSUtils::break_apart_types( const string &types )
 	    }
 	    else
 	    {
-		string wcs_type = types.substr( start, colon - start ) ;
+		string wcs_type =
+		    BESUtil::lowercase( types.substr( start, colon - start ) ) ;
 		string bes_type = types.substr( colon+1, semi - colon - 1 ) ;
 		type_list[wcs_type] = bes_type ;
 	    }
@@ -95,7 +97,8 @@ WCSUtils::convert_wcs_type( const string &wcs_type )
 	    WCSUtils::break_apart_types( types ) ;
 	}
     }
-    string bes_type = type_list[wcs_type] ;
+    string wcs_ltype = BESUtil::lowercase( wcs_type ) ;
+    string bes_type = type_list[wcs_ltype] ;
     if( bes_type.empty() )
 	bes_type = wcs_type ;
     return bes_type ;
@@ -123,10 +126,7 @@ WCSUtils::validate_url( const string &url, string &target, string &format )
     string newurl = url.substr( 1, url.size() - 2 ) ;
 
     // convert it all to lower case
-    for( int j = 0; j < newurl.length(); j++ )
-    {
-	newurl[j] = (char)tolower( newurl[j] ) ;
-    }
+    newurl = BESUtil::lowercase( newurl ) ;
 
     // url must begin with http://
     if( newurl.compare( 0, 7, "http://" ) )

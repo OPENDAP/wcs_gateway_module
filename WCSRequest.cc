@@ -175,13 +175,30 @@ WCSRequest::make_request( const string &url, const string &name,
 	curl_easy_cleanup(d_curl);
 
 	bool request_status = false ;
+	bool xml_error = false ;
 	vector<string>::const_iterator iter = _hdr_list.begin() ;
 	while( iter != _hdr_list.end() )
 	{
 	    string hdr_line = (*iter) ;
 	    BESDEBUG( "WCS Response Header: " << hdr_line << endl )
+
+	    // if we found "200 OK" then the request was successfull, but
+	    // still need to check if the content type is xml, which would
+	    // signify an exception condition.
 	    if( hdr_line.find( "200 OK" ) != string::npos )
+	    {
 		request_status = true ;
+	    }
+
+	    // this would be found after the "200 OK" so not worry about
+	    // being set to true again
+	    if( hdr_line.find( "text/xml" ) != string::npos )
+	    {
+		request_status = false ;
+		xml_error = true ;
+	    }
+
+	    // move on to the next header
 	    iter++ ;
 	}
 
@@ -189,7 +206,14 @@ WCSRequest::make_request( const string &url, const string &name,
 	{
 	    // get the error information from the temoorary file
 	    string err ;
-	    read_error( stream, err, url ) ;
+	    if( xml_error )
+	    {
+		read_xml_error( stream, err, url ) ;
+	    }
+	    else
+	    {
+		read_error( stream, err, url ) ;
+	    }
 
 	    // close the temporary target
 	    fclose( stream ) ;
@@ -227,6 +251,12 @@ void
 WCSRequest::read_error( FILE *f, string &err, const string &url )
 {
     err = "WCS Request failed for url:\n" + url + "\nwith error:\n" ;
+
+    // rewind to the beginning of the file so we can read the error
+    // information.
+    rewind( f ) ;
+
+    // read from the file until there is no more to read
     bool done = false ;
     while( !done )
     {
@@ -242,5 +272,19 @@ WCSRequest::read_error( FILE *f, string &err, const string &url )
 	    err += buff ;
 	}
     }
+}
+
+void
+WCSRequest::read_xml_error( FILE *f, string &err, const string &url )
+{
+    err = "WCS Request failed for url:\n" + url + "\nwith error:\n" ;
+
+    // rewind to the beginning of the file so we can read the error
+    // information.
+    rewind( f ) ;
+
+    // it's an xml document, use libxml2 to read the file and then extract
+    // the Exception tag which has as an attribute the exceptionCode and
+    // then ExceptionText sub tag.
 }
 
