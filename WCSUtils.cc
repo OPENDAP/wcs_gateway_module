@@ -163,7 +163,7 @@ WCSUtils::validate_url( const string &url, string &target, string &format )
 
     // find the coverage information. This will tell us the name of the
     // target file
-    string::size_type coverage = newurl.find( "coverage" ) ;
+    string::size_type coverage = newurl.find( "coverage=" ) ;
     if( coverage == string::npos )
     {
 	return "Invalid WCS request, missing coverage information" ;
@@ -178,17 +178,24 @@ WCSUtils::validate_url( const string &url, string &target, string &format )
     {
 	return "Invalid WCS request, malformed coverage information" ;
     }
+    string::size_type cov_amp_index = newurl.find( "&", eq_index ) ;
+    if( cov_amp_index == string::npos )
+    {
+	return "Invalid WCS request, malformed coverage information" ;
+    }
+    if( cov_amp_index < col_index )
+	col_index = cov_amp_index ;
+
     string::size_type slash_index = newurl.rfind( "/", col_index ) ;
     if( slash_index == string::npos || slash_index < eq_index )
     {
 	slash_index = eq_index ;
     }
-    string::size_type dot_index = newurl.rfind( ".", col_index ) ;
-    if( dot_index == string::npos || dot_index < eq_index )
-    {
-	return "Invalid WCS request, malformed coverage information" ;
-    }
-    target = newurl.substr( slash_index+1, dot_index - slash_index - 1 ) ;
+    // This might include a different file extension than the target type.
+    // For example, the coverage file might have a .hdf extension but the
+    // target type is nc. So the resulting target will be .hdf.nc, which is
+    // fine
+    target = newurl.substr( slash_index+1, col_index - slash_index - 1 ) ;
 
     // find the format
     string::size_type format_index = newurl.find( "format" ) ;
@@ -211,7 +218,7 @@ WCSUtils::validate_url( const string &url, string &target, string &format )
     string wcs_format = url.substr( eq_index+2, amp_index - eq_index - 1 ) ;
     format = WCSUtils::convert_wcs_type( wcs_format ) ;
 
-    // the target will be added later inside of WCSRequest::make_request, so
+    // the format will be added later inside of WCSRequest::make_request, so
     // don't add it here. pcw 06/13/07
     //target = target + "." + format ;
 
