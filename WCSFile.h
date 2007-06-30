@@ -46,7 +46,7 @@ using std::string ;
 
 #define WCS_REQUEST "wcs-request"
 #define WCS_RETURNTYPE "returnType"
-#define WCS_CACHETIME "cachTime"
+#define WCS_CACHETIME "cacheTime"
 #define WCS_DESCRIPTION "request-description"
 
 #define WCS_XML_NAME "name"
