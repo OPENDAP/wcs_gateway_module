@@ -28,9 +28,12 @@ CLEANFILES =
 # Unit Tests
 #
 
-UNIT_TESTS = validateUrlT
+UNIT_TESTS = validateUrlT convertTypeT
 
 
 validateUrlT_SOURCES = validateUrlT.cc
 validateUrlT_LDADD = -lcppunit ../libwcs_module.la
+
+convertTypeT_SOURCES = convertTypeT.cc
+convertTypeT_LDADD = -lcppunit ../libwcs_module.la
 
