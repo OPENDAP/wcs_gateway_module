@@ -1,10 +1,10 @@
 // WCSModule.h
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,13 +28,15 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #ifndef I_WCSModule_H
 #define I_WCSModule_H 1
 
 #include "BESAbstractModule.h"
 
+/** @brief a BESAbstractModule representing WCS requests that can be loaded
+ * into the BES.
+ */
 class WCSModule : public BESAbstractModule
 {
 public:

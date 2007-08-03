@@ -1,10 +1,10 @@
 // WCSContainerStorage.h
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #ifndef WCSContainerStorage_h_
 #define WCSContainerStorage_h_ 1
@@ -41,38 +40,15 @@ using std::list ;
 
 class BESCatalogUtils ;
 
-/** @brief implementation of BESContainerStorage that represents a
- * regular expression means of determining a data type.
+/** @brief implementation of BESContainerStorageVolatile that represents a
+ * list of WCS requests
  *
- * When a container is added to this container storage, the file extension
- * is used to determine the type of data using a set of regular expressions.
- * The regular expressions are retrieved from the BES initialization
- * file using TheBESKeys. It also gets the root directory for where the
- * files exist. This way, the user need not know the root directory or the
- * type of data represented by the file.
+ * Each of the containers stored in the WCSContainerStorage represents a WCS
+ * request. When accessed the container will make the WCS request in order
+ * to create the target response.
  *
- * Catalog.&lt;name&gt;.RootDirectory is the key
- * representing the base directory where the files are physically located.
- * The real_name of the container is determined by concatenating the file
- * name to the base directory.
- *
- * Catalog.&lt;name&gt;.TypeMatch is the key
- * representing the regular expressions. This key is formatted as follows:
- *
- * &lt;data type&gt;:&lt;reg exp&gt;;&lt;data type&gt;:&lt;reg exp&gt;;
- *
- * For example: cedar:cedar\/.*\.cbf;cdf:cdf\/.*\.cdf;
- *
- * The first would match anything that might look like: cedar/datfile01.cbf
- *
- * &lt;name&gt; is the name of this container storage, so you could have
- * multiple container stores using regular expressions.
- *
- * The containers are stored in a volatile list.
- *
- * @see BESContainerStorage
- * @see BESContainer
- * @see BESKeys
+ * @see BESContainerStorageVolatile
+ * @see WCSContainer
  */
 class WCSContainerStorage : public BESContainerStorageVolatile
 {

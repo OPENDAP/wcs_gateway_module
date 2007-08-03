@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExceptionReport xmlns="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/ows/owsCommon.xsd" version="0.3.20" language="en">
+    <Exception exceptionCode="-1">
+	<ExceptionText>Requested coverage layer(s)/measure(s): "/Volumes/RAIDL2/TEST_DATA/CEOPTEST/testdata/MOD06_L2.A2002274.0115.005.2006333004108.hdf:Swath:mod06:Cloud_Effective_Emissivity" not available in this server</ExceptionText>
+    </Exception>
+</ExceptionReport>
+

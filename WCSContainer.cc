@@ -1,10 +1,10 @@
 // WCSContainer.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "WCSContainer.h"
 #include "WCSRequest.h"
@@ -43,12 +42,21 @@
  * name of the streamed response to the WCS request and the type of data being
  * streamed back (netCDF, etc...).
  *
+ * The target data type is also specified in the WCS request with the format
+ * parameter.
+ *
  * For example, a WCS request might look like this:
  *
  * http://data.laits.gmu.edu/cgi-bin/ACCESS/wcs300?service=WCS&amp;version=1.0.0&amp;request=getCoverage&amp;coverage=/home/mmin/testdata/MOD021KM.A2002248.0140.003.2002248112526.hdf:Swath:MODIS_SWATH_Type_L1B:EV_1KM_Emissive&amp;crs=EPSG:4326&amp;bbox=-40,29,-39,30&amp;format=netCDF&amp;resx=0.01&amp;resy=0.01&amp;Band_1KM_Emissive=1
  *
+ * The cache time, in seconds, is accessed from the BES configuration file.
+ * If not set then set to 0.0.
+ *
  * @param sym_name symbolic name representing this WCS container
  * @param real_name the WCS request
+ * @throws BESContainerStorageException if the url does not validate
+ * @see WCSUtils
+ * @see BESKeys
  */
 WCSContainer::WCSContainer( const string &sym_name,
 			    const string &real_name )
@@ -103,6 +111,11 @@ WCSContainer::ptr_duplicate( )
     return container ;
 }
 
+/** @brief access the WCS target response by making the WCS request
+ *
+ * @return the target response
+ * @throws WCSException if there is a problem making the WCS request
+ */
 string
 WCSContainer::access()
 {
@@ -124,6 +137,8 @@ WCSContainer::dump( ostream &strm ) const
     strm << BESIndent::LMarg << "WCSContainer::dump - ("
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
+    strm << BESIndent::LMarg << "target: " << _target << endl ;
+    strm << BESIndent::LMarg << "cache time: " << _cacheTime << endl ;
     BESContainer::dump( strm ) ;
     BESIndent::UnIndent() ;
 }

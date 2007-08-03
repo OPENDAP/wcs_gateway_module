@@ -1,10 +1,10 @@
 // WCSRequest.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,22 +28,25 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
+// For making the WCS request we use curl
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "WCSRequest.h"
 #include "WCSFile.h"
 #include "WCSCache.h"
+#include "WCSException.h"
 #include "BESDebug.h"
-#include "BESHandlerException.h"
 #include "TheBESKeys.h"
 #include "config.h"
 
+/* function passed to libcurl that knows how to save the raw http headers in the response
+ */
 size_t 
 WCSRequest::save_raw_http_headers( void *ptr, size_t size,
 				   size_t nmemb, void *resp_hdrs )
@@ -63,6 +66,30 @@ WCSRequest::save_raw_http_headers( void *ptr, size_t size,
     return size * nmemb;
 }
 
+/** @brief make the WCS request against the given information
+ *
+ * function that makes a WCS request using libcurl given the WCS request url, the target
+ * name of the file for the response, the type of data being returned, and the maximum
+ * amount of time (in seconds) that a response file can remain in the cache.
+ *
+ * First it is determined if the response file already exists in the WCS cache. The cache
+ * directory is retrieved from the BES configuration file using the parameter
+ * WCS.CacheDir. If not set or empty then /tmp is used. The target response file can
+ * remain in the cache for cacheTime seconds. If the target does not exist or the cache
+ * time has expired, then the request is made, otherwise the response file in the cache is
+ * used.
+ *
+ * A temporary target file is used to store the information. If the request was successful
+ * and the resulting file does not contain error information then this temporary file is
+ * moved to the real target file.
+ *
+ * @param url WCS request url
+ * @param name target file name of the WCS request response
+ * @param type target file name data type, like nc or hdf4
+ * @param cacheTime maximum time a response can remain in the cache
+ * @return target response file name
+ * @throws WCSException if there is a problem making the WCS request or the request fails
+ */
 string
 WCSRequest::make_request( const string &url, const string &name,
 			  const string &type, const string &cacheTime )
@@ -80,28 +107,28 @@ WCSRequest::make_request( const string &url, const string &name,
     if( url.empty() )
     {
 	string err = "WCS Request URL is empty" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw WCSException( err, __FILE__, __LINE__ ) ;
     }
     if( name.empty() )
     {
 	string err = "WCS Request target name is empty" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw WCSException( err, __FILE__, __LINE__ ) ;
     }
     if( type.empty() )
     {
 	string err = "WCS Request target type is empty" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw WCSException( err, __FILE__, __LINE__ ) ;
     }
-    BESDEBUG( "WCSRequest::make_request - request = " << url << endl )
-    BESDEBUG( "WCSRequest::make_request - target = " << target << endl )
-    BESDEBUG( "WCSRequest::make_request - tmp target = " << tmp_target << endl )
+    BESDEBUG( "wcs", "WCSRequest::make_request - request = " << url << endl )
+    BESDEBUG( "wcs", "WCSRequest::make_request - target = " << target << endl )
+    BESDEBUG( "wcs", "WCSRequest::make_request - tmp target = " << tmp_target << endl )
 
     WCSCache cache( cacheDir, cacheTime, target ) ;
     bool is_cached = cache.is_cached( ) ;
 
     if( !is_cached )
     {
-	BESDEBUG( "WCSRequest::make_request - making the wcs request" << endl )
+	BESDEBUG( "wcs", "WCSRequest::make_request - making the wcs request" << endl )
 	// clear the header response list for this run
 	_hdr_list.clear() ;
 
@@ -109,7 +136,7 @@ WCSRequest::make_request( const string &url, const string &name,
 	if( !d_curl )
 	{
 	    string err = "Unable to initialize curl" ;
-	    throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	    throw WCSException( err, __FILE__, __LINE__ ) ;
 	}
 
 	char d_error_buffer[CURL_ERROR_SIZE] ;
@@ -135,12 +162,12 @@ WCSRequest::make_request( const string &url, const string &name,
 	curl_easy_setopt( d_curl, CURLOPT_URL, url.c_str() ) ;
 
 	FILE *stream = fopen( tmp_target.c_str(), "w+" ) ;
-    #ifdef WIN32
+#ifdef WIN32
 	curl_easy_setopt( d_curl, CURLOPT_FILE, stream ) ;
 	curl_easy_setopt( d_curl, CURLOPT_WRITEFUNCTION, &fwrite ) ;
-    #else
+#else
 	curl_easy_setopt( d_curl, CURLOPT_FILE, stream ) ;
-    #endif
+#endif
 
 	// set some information in the header
 	struct curl_slist *req_headers = 0 ;
@@ -169,18 +196,19 @@ WCSRequest::make_request( const string &url, const string &name,
 		perror( "Error deleting temporary target file" ) ;
 	    }
 	    string err = (string )"WCS request failed: " + d_error_buffer ;
-	    throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	    throw WCSException( err, __FILE__, __LINE__ ) ;
 	}
 
 	curl_easy_cleanup(d_curl);
 
+	// Determine if the resulting response file contains error information.
 	bool request_status = false ;
 	bool xml_error = false ;
 	vector<string>::const_iterator iter = _hdr_list.begin() ;
 	while( iter != _hdr_list.end() )
 	{
 	    string hdr_line = (*iter) ;
-	    BESDEBUG( "WCS Response Header: " << hdr_line << endl )
+	    BESDEBUG( "wcs", "WCS Response Header: " << hdr_line << endl )
 
 	    // if we found "200 OK" then the request was successfull, but
 	    // still need to check if the content type is xml, which would
@@ -204,26 +232,26 @@ WCSRequest::make_request( const string &url, const string &name,
 
 	if( request_status == false )
 	{
+	    // close the temporary target
+	    fclose( stream ) ;
+	    
 	    // get the error information from the temoorary file
 	    string err ;
 	    if( xml_error )
 	    {
-		read_xml_error( stream, err, url ) ;
+		WCSException::read_xml_error( tmp_target, err, url ) ;
 	    }
 	    else
 	    {
-		read_error( stream, err, url ) ;
+		WCSException::read_error( tmp_target, err, url ) ;
 	    }
 
-	    // close the temporary target
-	    fclose( stream ) ;
-	    
 	    // need to remove the temporary target file here
 	    if( remove( tmp_target.c_str() ) != 0 )
 	    {
 		perror( "Error deleting temporary target file" ) ;
 	    }
-	    throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	    throw WCSException( err, __FILE__, __LINE__ ) ;
 	}
 
 	int result= rename( tmp_target.c_str() , target.c_str() );
@@ -234,57 +262,16 @@ WCSRequest::make_request( const string &url, const string &name,
 	    
 	    string err = "Unable to rename temporary target file "
 			 + tmp_target + " to " + target ;
-	    throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	    throw WCSException( err, __FILE__, __LINE__ ) ;
 	}
 
-	BESDEBUG( "WCSRequest::make_request - succeeded" << endl )
+	BESDEBUG( "wcs", "WCSRequest::make_request - succeeded" << endl )
     }
     else
     {
-	BESDEBUG( "WCSRequest::make_request - target cached" << endl )
+	BESDEBUG( "wcs", "WCSRequest::make_request - target cached" << endl )
     }
 
     return target ;
-}
-
-void
-WCSRequest::read_error( FILE *f, string &err, const string &url )
-{
-    err = "WCS Request failed for url:\n" + url + "\nwith error:\n" ;
-
-    // rewind to the beginning of the file so we can read the error
-    // information.
-    rewind( f ) ;
-
-    // read from the file until there is no more to read
-    bool done = false ;
-    while( !done )
-    {
-	char buff[1024] ;
-	size_t bytes_read = fread( buff, 1, 1024, f ) ;
-	if( !bytes_read )
-	{
-	    done = true ;
-	}
-	else
-	{
-	    buff[bytes_read] = '\0' ;
-	    err += buff ;
-	}
-    }
-}
-
-void
-WCSRequest::read_xml_error( FILE *f, string &err, const string &url )
-{
-    err = "WCS Request failed for url:\n" + url + "\nwith error:\n" ;
-
-    // rewind to the beginning of the file so we can read the error
-    // information.
-    rewind( f ) ;
-
-    // it's an xml document, use libxml2 to read the file and then extract
-    // the Exception tag which has as an attribute the exceptionCode and
-    // then ExceptionText sub tag.
 }
 

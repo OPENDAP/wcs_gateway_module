@@ -1,10 +1,10 @@
 // WCSContainer.h
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #ifndef WCSContainer_h_
 #define WCSContainer_h_ 1
@@ -42,6 +41,11 @@ using std::string ;
 #include "BESContainer.h"
 
 /** @brief Container representing a WCS request
+ *
+ * The real name of a WCSContainer is the actual WCS request. When the
+ * access method is called the WCS request is made, the response cached if
+ * successfull, and the target response returned as the real container that
+ * a data handler would then open.
  *
  * @see WCSContainerStorage
  */

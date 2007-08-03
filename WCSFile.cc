@@ -1,10 +1,10 @@
 // WCSFile.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,13 +28,19 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "WCSFile.h"
 #include "WCSUtils.h"
 #include "BESDebug.h"
 #include "BESHandlerException.h"
 
+/** @brief instantiate the WCS file given the .wcs filename.
+ *
+ * The constructor does NOT read the .wcs file. To do that please call the
+ * read method on this instance.
+ *
+ * @param filename name of the .wcs file
+ */
 WCSFile::WCSFile( const string &filename )
     : _filename( filename )
 {
@@ -44,6 +50,16 @@ WCSFile::~WCSFile()
 {
 }
 
+/** @brief read the .wcs file and access the information needed to make the
+ * WCS request
+ *
+ * The WCS type from the .wcs file is converted to a type known by the BES
+ * using the BES configuration parameter WCS.TypeList.
+ *
+ * @throws BESHandlerException if there is a problem reading the wcs file or
+ * the target name, wcs url, wcs id, wcs request, return type, or cache time
+ * are empty.
+ */
 void
 WCSFile::read()
 {
@@ -88,9 +104,9 @@ WCSFile::read()
 
     // get the properties of the dataset root element
     handle_dataset_properties( root_element ) ;
-    BESDEBUG( "WCSFile::read - name = " << _name << endl )
-    BESDEBUG( "WCSFile::read - url = " << _url << endl )
-    BESDEBUG( "WCSFile::read - id = " << _id << endl )
+    BESDEBUG( "wcs", "WCSFile::read - name = " << _name << endl )
+    BESDEBUG( "wcs", "WCSFile::read - url = " << _url << endl )
+    BESDEBUG( "wcs", "WCSFile::read - id = " << _id << endl )
     if( _name.empty() )
     {
 	xmlFreeDoc(doc);
@@ -147,10 +163,10 @@ WCSFile::read()
     // Never will an empty string be returned.
     type = WCSUtils::convert_wcs_type( type ) ;
     _properties[WCS_RETURNTYPE] = type ;
-    BESDEBUG( "  " << WCS_REQUEST << ": " << wcs_request << endl )
-    BESDEBUG( "  " << WCS_RETURNTYPE << ": " << type << endl )
-    BESDEBUG( "  " << WCS_CACHETIME << ": " << cacheTime << endl )
-    BESDEBUG( "  " << WCS_DESCRIPTION << ": " << description << endl )
+    BESDEBUG( "wcs", "  " << WCS_REQUEST << ": " << wcs_request << endl )
+    BESDEBUG( "wcs", "  " << WCS_RETURNTYPE << ": " << type << endl )
+    BESDEBUG( "wcs", "  " << WCS_CACHETIME << ": " << cacheTime << endl )
+    BESDEBUG( "wcs", "  " << WCS_DESCRIPTION << ": " << description << endl )
 
     /*free the document */
     xmlFreeDoc(doc);
@@ -162,6 +178,17 @@ WCSFile::read()
     xmlCleanupParser();
 }
 
+/** @brief access a property from the property list
+ *
+ * properties include, with their macro preceeding the property:
+ * WCS_REQUEST "wcs-request"
+ * WCS_RETURNTYPE "returnType"
+ * WCS_CACHETIME "cachTime"
+ * WCS_DESCRIPTION "request-description"
+ *
+ * @param the property to retrieve
+ * @return the value of the specified property name
+ */
 string
 WCSFile::get_property( const string &prop_name ) const
 {
@@ -209,6 +236,15 @@ WCSFile::handle_property_element( xmlNode *a_prop )
     }
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance along with information about
+ * the .wcs file. If the file has been read then the contents of the XML
+ * document can be displayed. If not, then just the .wcs filename is
+ * available.
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
 void
 WCSFile::dump( ostream &strm ) const
 {

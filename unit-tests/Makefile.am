@@ -28,7 +28,7 @@ CLEANFILES =
 # Unit Tests
 #
 
-UNIT_TESTS = validateUrlT convertTypeT
+UNIT_TESTS = validateUrlT convertTypeT xmlErrT
 
 
 validateUrlT_SOURCES = validateUrlT.cc
@@ -36,4 +36,7 @@ validateUrlT_LDADD = -lcppunit ../libwcs_module.la
 
 convertTypeT_SOURCES = convertTypeT.cc
 convertTypeT_LDADD = -lcppunit ../libwcs_module.la
+
+xmlErrT_SOURCES = xmlErrT.cc
+xmlErrT_LDADD = -lcppunit ../libwcs_module.la
 

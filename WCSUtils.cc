@@ -1,10 +1,10 @@
 // WCSUtils.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "WCSUtils.h"
 #include "BESUtil.h"
@@ -104,6 +103,21 @@ WCSUtils::convert_wcs_type( const string &wcs_type )
     return bes_type ;
 }
 
+/** @brief determine if the given url is a valid WCS request URL.
+ *
+ * looks for the following elements in the request:
+ * 1. the request URL must begin with http://
+ * 2. service=wcs - converted to all lower case, the service being requested must be wcs
+ * 3. version=vers_number - a version number must be provided, not validating the version
+ * 4. request=getCoverage - only thye getCoverage request is handled by the WCS module
+ * 5. coverage=wcs_request - the coverage parameter contains the wcs request url
+ * 6. format=data_format - the data format of the WCS request response file
+ *
+ * @param url the WCS request URL
+ * @param target the name of the target file (not including the cache directory)
+ * @param format the data type format of the WCS response
+ * @return an error string if any problems are encountered. No exceptions are thrown
+ */
 string
 WCSUtils::validate_url( const string &url, string &target, string &format )
 {

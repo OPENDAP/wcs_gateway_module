@@ -1,10 +1,10 @@
 // WCSModule.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include <iostream>
 
@@ -48,21 +47,47 @@ using std::endl ;
 void
 WCSModule::initialize( const string &modname )
 {
-    BESDEBUG( "Initializing WCS Handler:" << endl )
+    BESDEBUG( "wcs", "Initializing WCS Module " << modname << endl )
 
-    BESDEBUG( "    adding " << modname << " request handler" << endl )
+    BESDEBUG( "wcs", "    adding " << modname << " request handler" << endl )
     BESRequestHandlerList::TheList()->add_handler( modname, new WCSRequestHandler( modname ) ) ;
 
-    BESDEBUG( "    adding " << modname << " container storage" << endl )
+    BESDEBUG( "wcs", "    adding " << modname << " container storage" << endl )
     BESContainerStorageList::TheList()->add_persistence( new WCSContainerStorage( modname ) ) ;
+
+    BESDEBUG( "wcs", "    adding wcs debug context" << endl )
+    BESDebug::Register( "wcs" ) ;
+
+    BESDEBUG( "wcs", "Done Initializing WCS Module " << modname << endl )
 }
 
 void
 WCSModule::terminate( const string &modname )
 {
-    BESDEBUG( "Removing WCS Handlers" << endl )
+    BESDEBUG( "wcs", "Cleaning WCS Module " << modname << endl )
+
+    BESDEBUG( "wcs", "    removing " << modname << " request handler" << endl )
     BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( modname ) ;
     if( rh ) delete rh ;
+
+    BESDEBUG( "wcs", "    removing " << modname << " container storage" << endl )
+    BESContainerStorageList::TheList()->del_persistence( modname ) ;
+
+    BESDEBUG( "wcs", "Done Cleaning WCS Module " << modname << endl )
+}
+
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance along with information about
+ * this module.
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
+void
+WCSModule::dump( ostream &strm ) const
+{
+    strm << BESIndent::LMarg << "WCSModule::dump - ("
+			     << (void *)this << ")" << endl ;
 }
 
 extern "C"
@@ -71,12 +96,5 @@ extern "C"
     {
 	return new WCSModule ;
     }
-}
-
-void
-WCSModule::dump( ostream &strm ) const
-{
-    strm << BESIndent::LMarg << "WCSModule::dump - ("
-			     << (void *)this << ")" << endl ;
 }
 

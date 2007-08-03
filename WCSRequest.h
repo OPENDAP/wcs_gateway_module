@@ -1,10 +1,10 @@
 // WCSRequest.h
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #ifndef I_WCSRequest_H
 #define I_WCSRequest_H 1
@@ -41,6 +40,14 @@ using std::string ;
 
 class WCSFile ;
 
+/** @brief knows how to make a wcs request
+ *
+ * This class knows how to make a WCS request using libcurl given the wcs request, the
+ * name of the target response file, the type of the target response, and the maximum time
+ * a response is kept in the cache.
+ *
+ * @see WCSCache
+ */
 class WCSRequest
 {
 private:
@@ -48,10 +55,6 @@ private:
     static size_t		save_raw_http_headers( void *ptr, size_t size,
 						       size_t nmemb,
 						       void *resp_hdrs ) ;
-    void			read_error( FILE *f, string &err,
-					    const string &url ) ;
-    void			read_xml_error( FILE *f, string &err,
-						const string &url ) ;
 public:
     				WCSRequest() {} ;
 				~WCSRequest() {} ;

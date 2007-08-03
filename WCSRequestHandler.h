@@ -1,10 +1,10 @@
 // WCSRequestHandler.h
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,13 +28,28 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #ifndef I_WCSRequestHandler_H
 #define I_WCSRequestHandler_H
 
 #include "BESRequestHandler.h"
 
+/** @brief a data request handler that knows how to build responses for the .wcs data
+ * type.
+ *
+ * The .wcs data type represents a WCS request that can return any number of data type
+ * files, currently being netCDF and HDF4 data files. The wcs request handler first makes
+ * the wcs request for the given container and then redirects the request to the data
+ * handler that knows how to handle the resulting data file.
+ *
+ * Also knows how to add information for a help and version request for the WCS module
+ *
+ * @see WCSFile
+ * @see WCSRequest
+ * @see WCSContainer
+ * @see WCSContainerStorage
+ * @see WCSCache
+ */
 class WCSRequestHandler : public BESRequestHandler {
 public:
 			WCSRequestHandler( const string &name ) ;

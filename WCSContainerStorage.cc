@@ -1,10 +1,10 @@
 // WCSContainerStorage.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "WCSContainerStorage.h"
 #include "WCSContainer.h"
@@ -37,21 +36,8 @@
 /** @brief create an instance of this persistent store with the given name.
  *
  * Creates an instances of WCSContainerStorage with the given name.
- * Looks up the base directory and regular expressions in the dods
- * initialization file using TheBESKeys. THrows an exception if either of
- * these cannot be determined or if the regular expressions are incorrectly
- * formed.
- *
- * &lt;data type&gt;:&lt;reg exp&gt;;&lt;data type&gt;:&lt;reg exp&gt;;
- *
- * each type/reg expression pair is separated by a semicolon and ends with a
- * semicolon. The data type/expression pair itself is separated by a
- * semicolon.
  *
  * @param n name of this persistent store
- * @throws BESContainerStorageException if unable to find the base
- * directory or regular expressions in the dods initialization file. Also
- * thrown if the type matching expressions are malformed.
  * @see WCSContainer
  */
 WCSContainerStorage::WCSContainerStorage( const string &n )
@@ -65,18 +51,10 @@ WCSContainerStorage::~WCSContainerStorage()
 
 /** @brief adds a container with the provided information
  *
- * If a match is made with the real name passed then the type is set.
- *
- * The real name of the container (the file name) is constructed using the
- * root directory from the initialization file with the passed real name
- * appended to it.
- *
- * The information is then passed to the add_container method in the parent
- * class.
- *
  * @param s_name symbolic name for the container
- * @param r_name real name (full path to the file) for the container
- * @param type type of data represented by this container
+ * @param r_name the wcs request url
+ * @param type ignored. The type of the target response is determined by the
+ * WCS request with the format paramter
  */
 void
 WCSContainerStorage::add_container( const string &s_name,
@@ -90,7 +68,7 @@ WCSContainerStorage::add_container( const string &s_name,
 /** @brief dumps information about this object
  *
  * Displays the pointer value of this instance along with information about
- * the "storage" of containers in a catalog.
+ * each of the WCScontainers already stored.
  *
  * @param strm C++ i/o stream to dump the information to
  */

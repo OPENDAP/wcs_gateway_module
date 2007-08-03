@@ -1,10 +1,10 @@
 // WCSRequestHandler.cc
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu> 
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #include "config.h"
 
@@ -47,6 +46,12 @@
 #include "WCSRequest.h"
 #include "BESRequestHandlerList.h"
 
+/** @brief constructor adds the static methods that handle different requests
+ *
+ * For data responses the static method wcs_redirect is added for each of the responses
+ *
+ * Help and version responses are also registered
+ */
 WCSRequestHandler::WCSRequestHandler( const string &name )
     : BESRequestHandler( name )
 {
@@ -62,6 +67,22 @@ WCSRequestHandler::~WCSRequestHandler()
 {
 }
 
+/** @brief first make the WCS request and then redirect to the response file's data
+ * request handler
+ *
+ * The static function is registered to handle all data requests. The function first makes
+ * the WCS request using a WCSRequest instance and then, given the response file,
+ * redirects the request for the data response to the appropriate data request handler for
+ * the response file's type, such as nc or hdf4.
+ *
+ * @param dhi the data handler interface that contains the response object and other
+ * information needed to handle ther equest
+ * @return true if successful, otherwise false
+ * @throws WCSException if the WCS request fails
+ * @see WCSFile
+ * @see WCSRequest
+ * @see WCSCache
+ */
 bool
 WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
 {
@@ -119,6 +140,12 @@ WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
     return ret ;
 }
 
+/** @brief add version information for the WCS module to the informational response object
+ *
+ * @param dhi the data handler interface that contains the response object and other
+ * information needed to handle ther equest
+ * @return true if successfully added information, false otherwise
+ */
 bool
 WCSRequestHandler::wcs_build_vers( BESDataHandlerInterface &dhi )
 {
@@ -128,6 +155,12 @@ WCSRequestHandler::wcs_build_vers( BESDataHandlerInterface &dhi )
     return ret ;
 }
 
+/** @brief add help information for the WCS module to the informational response object
+ *
+ * @param dhi the data handler interface that contains the response object and other
+ * information needed to handle ther equest
+ * @return true if successfully added information, false otherwise
+ */
 bool
 WCSRequestHandler::wcs_build_help( BESDataHandlerInterface &dhi )
 {
@@ -143,6 +176,13 @@ WCSRequestHandler::wcs_build_help( BESDataHandlerInterface &dhi )
     return ret ;
 }
 
+/** @brief dumps information about this object
+ *
+ * Displays the pointer value of this instance along with information about
+ * the request handler included functions registered to handle requests.
+ *
+ * @param strm C++ i/o stream to dump the information to
+ */
 void
 WCSRequestHandler::dump( ostream &strm ) const
 {

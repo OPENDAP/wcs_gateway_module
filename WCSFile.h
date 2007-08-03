@@ -1,10 +1,10 @@
 // WCSFile.h
 
-// This file is part of bes, A C++ back-end server implementation framework
-// for the OPeNDAP Data Access Protocol.
+// This file is part of wcs_module, A C++ module that can be loaded in to
+// the OPeNDAP Back-End Server (BES) and is able to handle wcs requests.
 
 // Copyright (c) 2004,2005 University Corporation for Atmospheric Research
-// Author: Patrick West <pwest@ucar.edu> and Jose Garcia <jgarcia@ucar.edu>
+// Author: Patrick West <pwest@ucar.edu>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,6 @@
 //
 // Authors:
 //      pwest       Patrick West <pwest@ucar.edu>
-//      jgarcia     Jose Garcia <jgarcia@ucar.edu>
 
 #ifndef I_WCSFile_H
 #define I_WCSFile_H 1
@@ -51,6 +50,32 @@ using std::string ;
 
 #define WCS_XML_NAME "name"
 
+/** @brief an XML document representing a WCS request.
+ *
+ * This file exists on the local file system and is served in the Hyrax
+ * system just as any other data file. When a .wcs file is loaded an
+ * instance of WCSFile is created to represent it and to load all of its
+ * information, including the target name, the wcs URL (not the request url),
+ * the wcs id, and other properties needed to make the request.
+ *
+ * The properties are the wcs request, returnType, cacheTime and
+ * request-description (the latter is not used).
+ *
+ * The format of the wcs file is as follows:
+ *
+ * <pre>
+ * <?xml version="1.0" encoding="UTF-8"?>
+ * <dataset name="MYD11_L2.A2004210.0845.004.2004212100535"
+ *          urlPath="wcs/GeoBrain/MODIS/2004/NetCDF/MYD11_L2.A2004210.0845.004.2004212100535"
+ *          ID="wcs/GeoBrain/MODIS/2004/NetCDF/MYD11_L2.A2004210.0845.004.2004212100535" >
+ *     <property name="wcs-request" value="http://geobrain.laits.gmu.edu/cgi-bin/ACCESS/MODWCS100?service=WCS&amp;version=1.0.0&amp;request=getCoverage&amp;coverage=/Volumes/RAIDL2/TEST_DATA/CEOPTEST/MOD11/MYD11_L2.A2004210.0845.004.2004212100535.hdf:Swath:MOD_Swath_LST:LST&amp;crs=EPSG:4326&amp;bbox=-109,25,-90,44&amp;format=netcdf&amp;resx=0.05&amp;resy=0.05" />
+ *     <property name="returnType" value="netCDF" />
+ *     <property name="cachTime" value="600" />
+ *     <property name="request-description" value="cov: /Volumes/RAIDL2/TEST_DATA/CEOPTEST/MOD11/MYD11_L2.A2004210.0845.004.2004212100535.hdf:Swath:MOD_Swath_LST:LST pos: -116.5938,24.3448,-86.3859,45.5496" />
+ * </dataset>
+ * </pre>
+ * 
+ */
 class WCSFile : public BESObj
 {
 private:
@@ -68,8 +93,20 @@ public:
 
     virtual void		read( ) ;
     virtual string		get_property( const string &prop_name ) const ;
+
+    /** @brief return the target name of the WCS request
+     * @return the target name of the WCS request
+     */
     virtual string		get_name() const { return _name ; }
+
+    /** @brief return the WCS request URL
+     * @return the WCS request URL
+     */
     virtual string		get_url() const { return _url ; }
+
+    /** @brief return the WCS request id
+     * @return the WCS request id
+     */
     virtual string		get_id() const { return _id ; }
 
     virtual void		dump( ostream &strm ) const ;
