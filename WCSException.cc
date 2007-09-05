@@ -66,7 +66,7 @@ WCSException::read_error( const string &filename,
     bool done = false ;
     while( !done )
     {
-	char buff[1024] ;
+	char buff[1025] ;
 	size_t bytes_read = fread( buff, 1, 1024, f ) ;
 	if( !bytes_read )
 	{
@@ -74,7 +74,8 @@ WCSException::read_error( const string &filename,
 	}
 	else
 	{
-	    buff[bytes_read] = '\0' ;
+	    if( bytes_read >=0 && bytes_read <= 1024 )
+		buff[bytes_read] = '\0' ;
 	    err = err + buff ;
 	}
     }

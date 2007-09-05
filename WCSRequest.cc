@@ -101,9 +101,6 @@ WCSRequest::make_request( const string &url, const string &name,
 	cacheDir = "/tmp" ;
     }
 
-    string tmp_target = cacheDir + "/" + name + ".tmp" ;
-    string target = cacheDir + "/" + name + "." + type ;
-
     if( url.empty() )
     {
 	string err = "WCS Request URL is empty" ;
@@ -119,6 +116,10 @@ WCSRequest::make_request( const string &url, const string &name,
 	string err = "WCS Request target type is empty" ;
 	throw WCSException( err, __FILE__, __LINE__ ) ;
     }
+
+    string tmp_target = cacheDir + "/" + name + ".tmp" ;
+    string target = cacheDir + "/" + name + "." + type ;
+
     BESDEBUG( "wcs", "WCSRequest::make_request - request = " << url << endl )
     BESDEBUG( "wcs", "WCSRequest::make_request - target = " << target << endl )
     BESDEBUG( "wcs", "WCSRequest::make_request - tmp target = " << tmp_target << endl )
@@ -178,6 +179,19 @@ WCSRequest::make_request( const string &url, const string &name,
 	curl_easy_setopt( d_curl, CURLOPT_HTTPHEADER, req_headers ) ;
 
 	CURLcode res = curl_easy_perform(d_curl);
+	if (res != 0)
+	{
+	    // close the temporary target file
+	    fclose( stream ) ;
+
+	    // remove the temporary target file here
+	    if( remove( tmp_target.c_str() ) != 0 )
+	    {
+		perror( "Error deleting temporary target file" ) ;
+	    }
+	    string err = (string )"WCS request failed: " + d_error_buffer ;
+	    throw WCSException( err, __FILE__, __LINE__ ) ;
+	}
 
 	// Free the header list and null the value in d_curl.
 	curl_slist_free_all( req_headers ) ;
@@ -264,6 +278,8 @@ WCSRequest::make_request( const string &url, const string &name,
 			 + tmp_target + " to " + target ;
 	    throw WCSException( err, __FILE__, __LINE__ ) ;
 	}
+
+	fclose( stream ) ;
 
 	BESDEBUG( "wcs", "WCSRequest::make_request - succeeded" << endl )
     }
