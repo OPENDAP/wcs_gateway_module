@@ -56,6 +56,9 @@ WCSCache::WCSCache( const string &cacheDir,
     _cacheTime( 0.0 ),
     _target( target )
 {
+    BESDEBUG( "wcs", "WCSCache::WCSCache - cache directory: " << cacheDir << endl )
+    BESDEBUG( "wcs", "WCSCache::WCSCache - target: " << target << endl )
+    BESDEBUG( "wcs", "WCSCache::WCSCache - cache time string: " << cacheTime << endl )
     std::istringstream is( cacheTime ) ;
     is >> _cacheTime ;
     BESDEBUG( "wcs", "WCSCache::WCSCache - cache time: " << _cacheTime << endl )
