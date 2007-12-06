@@ -247,6 +247,8 @@ WCSRequest::make_request( const string &url, const string &name,
 
 	if( request_status == false )
 	{
+	    BESDEBUG( "wcs", "WCSRequest::make_request - FAILED" << endl )
+
 	    // close the temporary target
 	    fclose( stream ) ;
 	    
@@ -282,13 +284,14 @@ WCSRequest::make_request( const string &url, const string &name,
 
 	fclose( stream ) ;
 
-	BESDEBUG( "wcs", "WCSRequest::make_request - succeeded" << endl )
+	BESDEBUG( "wcs", "WCSRequest::make_request - SUCCEEDED" << endl )
     }
     else
     {
 	BESDEBUG( "wcs", "WCSRequest::make_request - target cached" << endl )
     }
 
+    BESDEBUG( "wcs", "WCSRequest::make_request - returning " << target << endl )
     return target ;
 }
 
