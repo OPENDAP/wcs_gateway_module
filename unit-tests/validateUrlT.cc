@@ -48,11 +48,13 @@ public:
 	    string e_target = BESUtil::lowercase( "MOD021KM.A2002248.0140.003.2002248112526.hdf" ) ;
 	    string format ;
 	    string e_format = "nc" ;
-	    WCSUtils::validate_url( url, target, format ) ;
+	    string result = WCSUtils::validate_url( url, target, format ) ;
+	    dbg << "result = " << result << endl ;
 	    dbg << "url = " << url << endl ;
 	    dbg << "target = " << target << endl ;
 	    dbg << "expected target = " << e_target << endl ;
 	    dbg << "format = " << format << endl ;
+	    CPPUNIT_ASSERT( result.empty() ) ;
 	    CPPUNIT_ASSERT( target == e_target ) ;
 	    CPPUNIT_ASSERT( format == e_format ) ;
 
@@ -61,11 +63,13 @@ public:
 	    e_target = BESUtil::lowercase( "GOCART_G_OL.BCEXTTAU" ) ;
 	    format = "" ;
 	    e_format = "nc" ;
-	    WCSUtils::validate_url( url, target, format ) ;
+	    result = WCSUtils::validate_url( url, target, format ) ;
+	    dbg << "result = " << result << endl ;
 	    dbg << "url = " << url << endl ;
 	    dbg << "target = " << target << endl ;
 	    dbg << "expected target = " << e_target << endl ;
 	    dbg << "format = " << format << endl ;
+	    CPPUNIT_ASSERT( result.empty() ) ;
 	    CPPUNIT_ASSERT( target == e_target ) ;
 	    CPPUNIT_ASSERT( format == e_format ) ;
 	}

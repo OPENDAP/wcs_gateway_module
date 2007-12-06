@@ -189,18 +189,16 @@ WCSUtils::validate_url( const string &url, string &target, string &format )
 	return "Invalid WCS request, malformed coverage information" ;
     }
     string::size_type col_index = newurl.find( ":", eq_index ) ;
-    if( col_index == string::npos )
-    {
-	return "Invalid WCS request, malformed coverage information" ;
-    }
     string::size_type cov_amp_index = newurl.find( "&", eq_index ) ;
     if( cov_amp_index == string::npos )
     {
-	return "Invalid WCS request, malformed coverage information" ;
+	cov_amp_index = newurl.length() ;
     }
-    if( cov_amp_index < col_index )
+    if( col_index == string::npos || col_index > cov_amp_index )
+    {
 	col_index = cov_amp_index ;
-
+    }
+    // find the last slash in the coverage file name. May not have one
     string::size_type slash_index = newurl.rfind( "/", col_index ) ;
     if( slash_index == string::npos || slash_index < eq_index )
     {
