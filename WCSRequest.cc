@@ -41,7 +41,8 @@
 #include "WCSRequest.h"
 #include "WCSFile.h"
 #include "WCSCache.h"
-#include "WCSException.h"
+#include "BESInternalError.h"
+#include "WCSError.h"
 #include "BESDebug.h"
 #include "TheBESKeys.h"
 #include "config.h"
@@ -89,7 +90,7 @@ WCSRequest::save_raw_http_headers( void *ptr, size_t size,
  * @param type target file name data type, like nc or hdf4
  * @param cacheTime maximum time a response can remain in the cache
  * @return target response file name
- * @throws WCSException if there is a problem making the WCS request or the request fails
+ * @throws BESInternalError if there is a problem making the WCS request or the request fails
  */
 string
 WCSRequest::make_request( const string &url, const string &name,
@@ -105,17 +106,17 @@ WCSRequest::make_request( const string &url, const string &name,
     if( url.empty() )
     {
 	string err = "WCS Request URL is empty" ;
-	throw WCSException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     if( name.empty() )
     {
 	string err = "WCS Request target name is empty" ;
-	throw WCSException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     if( type.empty() )
     {
 	string err = "WCS Request target type is empty" ;
-	throw WCSException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
     string tmp_target = cacheDir + "/" + name + ".tmp" ;
@@ -138,7 +139,7 @@ WCSRequest::make_request( const string &url, const string &name,
 	if( !d_curl )
 	{
 	    string err = "Unable to initialize curl" ;
-	    throw WCSException( err, __FILE__, __LINE__ ) ;
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
 	char d_error_buffer[CURL_ERROR_SIZE] ;
@@ -191,7 +192,7 @@ WCSRequest::make_request( const string &url, const string &name,
 		perror( "Error deleting temporary target file" ) ;
 	    }
 	    string err = (string )"WCS request failed: " + d_error_buffer ;
-	    throw WCSException( err, __FILE__, __LINE__ ) ;
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
 	// Free the header list and null the value in d_curl.
@@ -211,7 +212,7 @@ WCSRequest::make_request( const string &url, const string &name,
 		perror( "Error deleting temporary target file" ) ;
 	    }
 	    string err = (string )"WCS request failed: " + d_error_buffer ;
-	    throw WCSException( err, __FILE__, __LINE__ ) ;
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
 	curl_easy_cleanup(d_curl);
@@ -256,11 +257,11 @@ WCSRequest::make_request( const string &url, const string &name,
 	    string err ;
 	    if( xml_error )
 	    {
-		WCSException::read_xml_error( tmp_target, err, url ) ;
+		WCSError::read_xml_error( tmp_target, err, url ) ;
 	    }
 	    else
 	    {
-		WCSException::read_error( tmp_target, err, url ) ;
+		WCSError::read_error( tmp_target, err, url ) ;
 	    }
 
 	    // need to remove the temporary target file here
@@ -268,7 +269,7 @@ WCSRequest::make_request( const string &url, const string &name,
 	    {
 		perror( "Error deleting temporary target file" ) ;
 	    }
-	    throw WCSException( err, __FILE__, __LINE__ ) ;
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
 	int result= rename( tmp_target.c_str() , target.c_str() );
@@ -279,7 +280,7 @@ WCSRequest::make_request( const string &url, const string &name,
 	    
 	    string err = "Unable to rename temporary target file "
 			 + tmp_target + " to " + target ;
-	    throw WCSException( err, __FILE__, __LINE__ ) ;
+	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
 	fclose( stream ) ;

@@ -1,4 +1,4 @@
-// WCSException.cc
+// WCSError.cc
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "WCSException.h"
+#include "WCSError.h"
 
 /** @brief read the target response file that contains textual error
  * information
@@ -48,7 +48,7 @@
  * @param url the WCS request URL
  */
 void
-WCSException::read_error( const string &filename,
+WCSError::read_error( const string &filename,
 			  string &err,
 			  const string &url )
 {
@@ -106,7 +106,7 @@ WCSException::read_error( const string &filename,
  * @param url the WCS request URL
  */
 void
-WCSException::read_xml_error( const string &filename,
+WCSError::read_xml_error( const string &filename,
 			      string &err,
 			      const string &url )
 {

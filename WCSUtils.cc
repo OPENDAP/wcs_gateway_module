@@ -33,7 +33,7 @@
 #include "WCSUtils.h"
 #include "BESUtil.h"
 #include "TheBESKeys.h"
-#include "BESHandlerException.h"
+#include "BESInternalError.h"
 
 map<string,string> WCSUtils::type_list ;
 
@@ -55,7 +55,7 @@ WCSUtils::break_apart_types( const string &types )
 	    if( colon == string::npos || colon > semi )
 	    {
 		string err = "Malformed wcs type list: " + types ;
-		throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+		throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	    }
 	    else
 	    {

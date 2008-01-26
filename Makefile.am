@@ -23,12 +23,12 @@ WCS_HDRS:=
 BES_SRCS = \
 		WCSModule.cc WCSRequestHandler.cc WCSFile.cc	\
 		WCSRequest.cc WCSCache.cc WCSContainerStorage.cc \
-		WCSContainer.cc WCSUtils.cc WCSException.cc
+		WCSContainer.cc WCSUtils.cc WCSError.cc
 
 BES_HDRS = \
 		WCSModule.h WCSRequestHandler.h WCSFile.h	\
 		WCSRequest.h WCSCache.h WCSContainerStorage.h	\
-		WCSContainer.h WCSUtils.h WCSException.h	\
+		WCSContainer.h WCSUtils.h WCSError.h		\
 		WCSResponseNames.h config_wcs.h
 
 libwcs_module_la_SOURCES = $(WCS_SRCS) $(BES_SRCS) $(WCS_HDRS) $(BES_HDRS)

@@ -33,7 +33,7 @@
 #include "WCSContainer.h"
 #include "WCSRequest.h"
 #include "WCSUtils.h"
-#include "BESContainerStorageException.h"
+#include "BESSyntaxUserError.h"
 #include "TheBESKeys.h"
 
 /** @brief Creates an instances of WCSContainer with symbolic name and real
@@ -55,7 +55,7 @@
  *
  * @param sym_name symbolic name representing this WCS container
  * @param real_name the WCS request
- * @throws BESContainerStorageException if the url does not validate
+ * @throws BESSyntaxUserError if the url does not validate
  * @see WCSUtils
  * @see BESKeys
  */
@@ -71,7 +71,7 @@ WCSContainer::WCSContainer( const string &sym_name,
     string err = WCSUtils::validate_url( real_name, _target, type ) ;
     if( !err.empty() )
     {
-	throw BESContainerStorageException( err, __FILE__, __LINE__ ) ;
+	throw BESSyntaxUserError( err, __FILE__, __LINE__ ) ;
     }
 
     // remove the leading and trailing double quotes
@@ -115,7 +115,7 @@ WCSContainer::ptr_duplicate( )
 /** @brief access the WCS target response by making the WCS request
  *
  * @return the target response
- * @throws WCSException if there is a problem making the WCS request
+ * @throws BESError if there is a problem making the WCS request
  */
 string
 WCSContainer::access()

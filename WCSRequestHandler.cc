@@ -34,7 +34,6 @@
 
 #include "WCSRequestHandler.h"
 #include "BESResponseHandler.h"
-#include "BESResponseException.h"
 #include "BESResponseNames.h"
 #include "WCSResponseNames.h"
 #include "BESVersionInfo.h"
@@ -79,7 +78,7 @@ WCSRequestHandler::~WCSRequestHandler()
  * @param dhi the data handler interface that contains the response object and other
  * information needed to handle ther equest
  * @return true if successful, otherwise false
- * @throws WCSException if the WCS request fails
+ * @throws BESError if the WCS request fails
  * @see WCSFile
  * @see WCSRequest
  * @see WCSCache

@@ -33,7 +33,7 @@
 #include "WCSFile.h"
 #include "WCSUtils.h"
 #include "BESDebug.h"
-#include "BESHandlerException.h"
+#include "BESInternalError.h"
 
 /** @brief instantiate the WCS file given the .wcs filename.
  *
@@ -57,7 +57,7 @@ WCSFile::~WCSFile()
  * The WCS type from the .wcs file is converted to a type known by the BES
  * using the BES configuration parameter WCS.TypeList.
  *
- * @throws BESHandlerException if there is a problem reading the wcs file or
+ * @throws BESInternalError if there is a problem reading the wcs file or
  * the target name, wcs url, wcs id, wcs request, return type, or cache time
  * are empty.
  */
@@ -80,7 +80,7 @@ WCSFile::read()
     if( doc == NULL )
     {
         string err = "could not parse wcs file " + _filename ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
     /*Get the root element node */
@@ -90,7 +90,7 @@ WCSFile::read()
 	xmlFreeDoc( doc ) ;
 	xmlCleanupParser() ;
 	string err = "wcs file root element empty" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
     // The root element name should be dataset
@@ -100,7 +100,7 @@ WCSFile::read()
 	xmlFreeDoc(doc);
 	xmlCleanupParser() ;
 	string err = "wcs file root document not called dataset" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
     // get the properties of the dataset root element
@@ -113,21 +113,21 @@ WCSFile::read()
 	xmlFreeDoc(doc);
 	xmlCleanupParser() ;
 	string err = "wcs file name attribute missing" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     if( _url.empty() )
     {
 	xmlFreeDoc(doc);
 	xmlCleanupParser() ;
 	string err = "wcs file url attribute missing" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     if( _id.empty() )
     {
 	xmlFreeDoc(doc);
 	xmlCleanupParser() ;
 	string err = "wcs file id attribute missing" ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
     // all children of the root node should be called property, so deal with
@@ -143,21 +143,21 @@ WCSFile::read()
 	string err = string("wcs request url not specified") ;
 	xmlFreeDoc(doc);
 	xmlCleanupParser() ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     if( type.empty() )
     {
 	string err = string("wcs return type not specified") ;
 	xmlFreeDoc(doc);
 	xmlCleanupParser() ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     if( cacheTime.empty() )
     {
 	string err = string("wcs cache time not specified") ;
 	xmlFreeDoc(doc);
 	xmlCleanupParser() ;
-	throw BESHandlerException( err, __FILE__, __LINE__ ) ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     // the type given is a wcs type, and not necessarily a BES type. Check
     // the configuration file to see if there is any conversion to be done.
