@@ -7,7 +7,8 @@
 #include <string>
 #include <fstream>
 
-#include "WCSException.h"
+#include "WCSError.h"
+#include "BESError.h"
 
 using namespace CppUnit ;
 using std::ofstream ;
@@ -23,6 +24,8 @@ public:
 
     void setUp()
     {
+	string bes_conf = "BES_CONF=./bes.conf" ;
+	putenv( (char *)bes_conf.c_str() ) ;
     } 
 
     void tearDown()
@@ -45,12 +48,12 @@ public:
 	    string err ;
 	    string url = "http://www.testurl.org" ;
 	    string expected = "WCS Request failed for url: " + url + " with error: Requested coverage layer(s)/measure(s): \"/Volumes/RAIDL2/TEST_DATA/CEOPTEST/testdata/MOD06_L2.A2002274.0115.005.2006333004108.hdf:Swath:mod06:Cloud_Effective_Emissivity\" not available in this server" ;
-	    WCSException::read_xml_error( filename, err, url ) ;
+	    WCSError::read_xml_error( filename, err, url ) ;
 	    dbg << "got error msg " << err << endl
 	        << "should have gotten " << expected << endl ;
 	    CPPUNIT_ASSERT( err == expected ) ;
 	}
-	catch( BESException &e )
+	catch( BESError &e )
 	{
 	    dbg << e.get_message() << endl ;
 	    CPPUNIT_ASSERT( !"Caught BES exception" ) ;

@@ -1,0 +1,11 @@
+Dataset {
+    Float64 lat[lat = 181];
+    Float64 lon[lon = 361];
+    Grid {
+      Array:
+        Float32 CCEXTTAU[lat = 181][lon = 361];
+      Maps:
+        Float64 lat[lat = 181];
+        Float64 lon[lon = 361];
+    } CCEXTTAU;
+} gocart_g_ol.ccexttau.nc;

@@ -8,7 +8,7 @@
 #include <fstream>
 
 #include "WCSUtils.h"
-#include "BESException.h"
+#include "BESError.h"
 #include "BESUtil.h"
 
 using namespace CppUnit ;
@@ -25,6 +25,8 @@ public:
 
     void setUp()
     {
+	string bes_conf = "BES_CONF=./bes.conf" ;
+	putenv( (char *)bes_conf.c_str() ) ;
     } 
 
     void tearDown()
@@ -64,7 +66,7 @@ public:
 	    newType = WCSUtils::convert_wcs_type( "no_type" ) ;
 	    CPPUNIT_ASSERT( newType == "no_type" ) ;
 	}
-	catch( BESException &e )
+	catch( BESError &e )
 	{
 	    dbg << e.get_message() << endl ;
 	    CPPUNIT_ASSERT( !"Caught BES exception" ) ;

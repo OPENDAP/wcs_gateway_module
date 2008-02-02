@@ -1,0 +1,3 @@
+set container in wcs values wcsContainer, "http://g0dup05u-ts2.ecs.nasa.gov/cgi-bin/WCS/ceopL2AIRS2?service=WCS&version=1.0.0&request=GetCoverage&coverage=H2OMMRStd&crs=WGS84&bbox=-99.865000,34.235000,-95.115000,38.985000&format=netCDF&TIME=2002-08-31&resx=0.25&resy=0.25&interpolationMethod=Nearest%20neighbor";
+define d1 as wcsContainer;
+get html_form for d1 using http://localhost:8080/opendap/CEOP/SGPSite/H2OMMRStd/2002-08-31;

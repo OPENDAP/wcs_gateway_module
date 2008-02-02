@@ -1,0 +1,22 @@
+Attributes {
+    lat {
+        String long_name "Latitude";
+        String axis "Y";
+        String units "degrees_north";
+    }
+    lon {
+        String long_name "Longitude";
+        String axis "X";
+        String units "degrees_east";
+    }
+    BCEXTTAU {
+        String units "none";
+        Float32 _FillValue nan.;
+        Float32 missing_value nan.;
+    }
+    NC_GLOBAL {
+        String Conventions "CF-1.0";
+        String title "BCEXTTAU";
+        String institution "datafed";
+    }
+}

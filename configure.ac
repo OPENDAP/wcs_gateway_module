@@ -123,5 +123,5 @@ fi
 
 OPENDAP_DEBUG_OPTION
 
-AC_CONFIG_FILES([Makefile unit-tests/Makefile])
+AC_CONFIG_FILES([Makefile unit-tests/Makefile testsuite/Makefile])
 AC_OUTPUT

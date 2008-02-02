@@ -9,8 +9,8 @@ AUTOMAKE_OPTIONS = foreign check-news
 
 ACLOCAL_AMFLAGS = -I conf
 
-SUBDIRS = unit-tests
-DIST_SUBDIRS = unit-tests
+SUBDIRS = unit-tests testsuite
+DIST_SUBDIRS = unit-tests testsuite
 
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libwcs_module.la

@@ -1,0 +1,3 @@
+set container in wcs values wcsContainer, "http://webapps.datafed.net/ogc_NASA.wsfl?SERVICE=WCS&REQUEST=GetCoverage&VERSION=1.0.0&CRS=EPSG:4326&COVERAGE=GOCART_G_OL.DUEXTTAU&TIME=2007-06-24T23:00:00&BBOX=-180,-90,180,90,0,0&WIDTH=-1&HEIGHT=-1&DEPTH=-1&FORMAT=NetCDF";
+define d1 as wcsContainer;
+get ascii for d1;

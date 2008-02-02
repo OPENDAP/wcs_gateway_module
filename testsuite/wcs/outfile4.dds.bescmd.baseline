@@ -1,0 +1,11 @@
+Dataset {
+    Float64 lat[lat = 181];
+    Float64 lon[lon = 361];
+    Grid {
+      Array:
+        Float32 DUEXTTAU[lat = 181][lon = 361];
+      Maps:
+        Float64 lat[lat = 181];
+        Float64 lon[lon = 361];
+    } DUEXTTAU;
+} gocart_g_ol.duexttau.nc;
