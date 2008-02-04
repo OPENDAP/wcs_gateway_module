@@ -47,13 +47,6 @@ mv tmp.conf $bes_conf
 # directory named 'data' with various subdirectories of sample data from each
 # handler.
 
-# Add regular expressions to the BES.Catalog.catalog.TypeMatch parameter
-type_match='wcs:.*\.wcs$'
-
-sed "s%^\(BES.Catalog.catalog.TypeMatch=.*\)%\1$type_match;%" \
-    < $bes_conf > tmp.conf
-mv tmp.conf $bes_conf
-
 # Set/append any handler-specific params.
 comment_1="# WCS handler specific parameters"
 comment_2="# TypeList: translation between wcs types specified in WCS requests"

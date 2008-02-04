@@ -49,7 +49,6 @@ using std::istringstream ;
 using namespace libdap ;
 
 #include "WCSRequest.h"
-#include "WCSFile.h"
 #include "BESInternalError.h"
 #include "WCSError.h"
 #include "BESDebug.h"
