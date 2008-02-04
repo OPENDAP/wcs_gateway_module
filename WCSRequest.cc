@@ -55,6 +55,11 @@ using namespace libdap ;
 #include "TheBESKeys.h"
 #include "config.h"
 
+#define CACHE_SIZE_STR "20"
+#define MIN_CACHE_SIZE 5
+#define ENTRY_SIZE_STR "3"
+#define MIN_ENTRY_SIZE 1
+
 /* function passed to libcurl that knows how to save the raw http headers in the response
  */
 size_t 
@@ -130,10 +135,44 @@ WCSRequest::make_request( const string &url, const string &type,
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
+    // Retrieve the max cache size from the BES configuration file
+    bool found = false ;
+    string cacheSize = TheBESKeys::TheKeys()->get_key( "WCS.CacheSize", found );
+    if( !found || cacheSize.empty() )
+    {
+	cacheSize = CACHE_SIZE_STR ;
+    }
+    istringstream cacheSizeStream( cacheSize ) ;
+    int cacheSizeValue ;
+    cacheSizeStream >> cacheSizeValue ;
+    if( cacheSizeValue < MIN_CACHE_SIZE ) cacheSizeValue = MIN_CACHE_SIZE ;
+
+    // Retrieve the max cache size from the BES configuration file
+    found = false ;
+    string entrySize =
+	TheBESKeys::TheKeys()->get_key( "WCS.CacheEntrySize", found );
+    if( !found || entrySize.empty() )
+    {
+	entrySize = ENTRY_SIZE_STR ;
+    }
+    istringstream entrySizeStream( entrySize ) ;
+    int entrySizeValue ;
+    entrySizeStream >> entrySizeValue ;
+    if( entrySizeValue < MIN_ENTRY_SIZE ) entrySizeValue = MIN_ENTRY_SIZE ;
+
+    if( cacheSizeValue <= entrySizeValue )
+    {
+	string err = (string)"WCS Max Cache Size cannot be less than or equal "
+		     + "to the max size of an entry in the cache" ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
     BESDEBUG( "wcs", "WCSRequest::make_request" << endl )
     BESDEBUG( "wcs", "  request = " << url << endl )
     BESDEBUG( "wcs", "  cacheDir = " << cacheDir << endl )
     BESDEBUG( "wcs", "  cacheTime = " << cacheTime << endl )
+    BESDEBUG( "wcs", "  cacheSize = " << cacheSizeValue << endl )
+    BESDEBUG( "wcs", "  entrySize = " << entrySizeValue << endl )
 
     HTTPCache *cache = HTTPCache::instance( cacheDir, false ) ;
     if( !cache )
@@ -144,8 +183,8 @@ WCSRequest::make_request( const string &url, const string &type,
 
     cache->set_cache_enabled( true ) ;
     cache->set_expire_ignored( false ) ;
-    cache->set_max_size( 200 ) ;
-    cache->set_max_entry_size( 20 ) ;
+    cache->set_max_size( cacheSizeValue ) ;
+    cache->set_max_entry_size( entrySizeValue ) ;
     cache->set_always_validate( false ) ;
 
     istringstream ct( cacheTime ) ;
