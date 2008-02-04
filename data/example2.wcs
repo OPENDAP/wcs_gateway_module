@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset name="BCEXTTAU-INTEX.Black.Carbon.Aerosol"
+         urlPath="wcs/DataFed/NetCDF/BCEXTTAU-INTEX.Black.Carbon.Aerosol"
+         ID="wcs/DataFed/NetCDF/BCEXTTAU-INTEX.Black.Carbon.Aerosol" >
+    <property name="wcs-request" value="http://webapps.datafed.net/ogc_NASA.wsfl?SERVICE=WCS&amp;REQUEST=GetCoverage&amp;VERSION=1.0.0&amp;CRS=EPSG:4326&amp;COVERAGE=GOCART_G_OL.CCEXTTAU&amp;TIME=2007-06-24T23:00:00&amp;BBOX=-180,-90,180,90,0,0&amp;WIDTH=-1&amp;HEIGHT=-1&amp;DEPTH=-1&amp;FORMAT=NetCDF" />
+    <property name="returnType" value="netCDF" />
+    <property name="cacheTime" value="600" />
+</dataset>

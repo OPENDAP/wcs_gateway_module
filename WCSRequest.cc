@@ -38,9 +38,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <sstream>
+
+using std::istringstream ;
+
+#include "HTTPCache.h"
+#include "util.h"
+#include "util_mit.h"
+
+using namespace libdap ;
+
 #include "WCSRequest.h"
 #include "WCSFile.h"
-#include "WCSCache.h"
 #include "BESInternalError.h"
 #include "WCSError.h"
 #include "BESDebug.h"
@@ -62,8 +71,9 @@ WCSRequest::save_raw_http_headers( void *ptr, size_t size,
     else
         complete_line.assign(static_cast<char *>(ptr), size * nmemb - 1);
         
-    // Store all non-empty headers that are not HTTP status codes
-    hdrs->push_back( complete_line ) ;
+    // Store all non-empty headers
+    if( !complete_line.empty() )
+	hdrs->push_back( complete_line ) ;
 
     return size * nmemb;
 }
@@ -86,31 +96,23 @@ WCSRequest::save_raw_http_headers( void *ptr, size_t size,
  * moved to the real target file.
  *
  * @param url WCS request url
- * @param name target file name of the WCS request response
  * @param type target file name data type, like nc or hdf4
+ * @param cacheDir cache directory where results of WCS request will be
+ * stored
  * @param cacheTime maximum time a response can remain in the cache
- * @return target response file name
+ * @param cacheName out parameter where the name of the cache file will be
+ * stored for access
+ * @return FILE pointer for the cached file represented by cacheName
  * @throws BESInternalError if there is a problem making the WCS request or the request fails
  */
-string
-WCSRequest::make_request( const string &url, const string &name,
-			  const string &type, const string &cacheTime )
+FILE *
+WCSRequest::make_request( const string &url, const string &type,
+			  const string &cacheDir, const string &cacheTime,
+			  string &cacheName )
 {
-    bool found = false ;
-    string cacheDir = TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
-    if( !found || cacheDir.empty() )
-    {
-	cacheDir = "/tmp" ;
-    }
-
     if( url.empty() )
     {
 	string err = "WCS Request URL is empty" ;
-	throw BESInternalError( err, __FILE__, __LINE__ ) ;
-    }
-    if( name.empty() )
-    {
-	string err = "WCS Request target name is empty" ;
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
     if( type.empty() )
@@ -118,22 +120,68 @@ WCSRequest::make_request( const string &url, const string &name,
 	string err = "WCS Request target type is empty" ;
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
-
-    string tmp_target = cacheDir + "/" + name + ".tmp" ;
-    string target = cacheDir + "/" + name + "." + type ;
-
-    BESDEBUG( "wcs", "WCSRequest::make_request - request = " << url << endl )
-    BESDEBUG( "wcs", "WCSRequest::make_request - target = " << target << endl )
-    BESDEBUG( "wcs", "WCSRequest::make_request - tmp target = " << tmp_target << endl )
-
-    WCSCache cache( cacheDir, cacheTime, target ) ;
-    bool is_cached = cache.is_cached( ) ;
-
-    if( !is_cached )
+    if( cacheDir.empty() )
     {
-	BESDEBUG( "wcs", "WCSRequest::make_request - making the wcs request" << endl )
-	// clear the header response list for this run
-	_hdr_list.clear() ;
+	string err = "WCS Request cache directory not specified" ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+    if( cacheTime.empty() )
+    {
+	string err = "WCS Request cache time not specified" ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    BESDEBUG( "wcs", "WCSRequest::make_request" << endl )
+    BESDEBUG( "wcs", "  request = " << url << endl )
+    BESDEBUG( "wcs", "  cacheDir = " << cacheDir << endl )
+    BESDEBUG( "wcs", "  cacheTime = " << cacheTime << endl )
+
+    HTTPCache *cache = HTTPCache::instance( cacheDir, false ) ;
+    if( !cache )
+    {
+	string err = "Unable to get cache for cache directory " + cacheDir ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    cache->set_cache_enabled( true ) ;
+    cache->set_expire_ignored( false ) ;
+    cache->set_max_size( 200 ) ;
+    cache->set_max_entry_size( 20 ) ;
+    cache->set_always_validate( false ) ;
+
+    istringstream ct( cacheTime ) ;
+    int d_cacheTime = 0 ;
+    ct >> d_cacheTime ;
+    if( d_cacheTime < 0 ) d_cacheTime = 0 ;
+
+    FILE *s = 0 ;
+    BESDEBUG( "wcs", "  is url in cache? ..." )
+    if( cache && cache->is_url_in_cache( url ) )
+    {
+	BESDEBUG( "wcs", "yes" << endl )
+	BESDEBUG( "wcs", "  is url valid? ..." )
+        if( cache->is_url_valid( url ) )
+	{
+	    BESDEBUG( "wcs", "yes" << endl )
+	    vector<string> headers ;
+            s = cache->get_cached_response( url, headers, cacheName ) ;
+	    return s ;
+	}
+	else
+	{
+	    BESDEBUG( "wcs", "no" << endl )
+	}
+    }
+    else
+    {
+	BESDEBUG( "wcs", "no" << endl )
+    }
+
+    // if it's not in the cache, or isn't valid, or we couldn't get it from
+    // the cache, then make the WCS request
+    if( !s )
+    {
+	BESDEBUG( "wcs", "  making WCS request" << endl )
 
 	CURL *d_curl = curl_easy_init();
 	if( !d_curl )
@@ -156,7 +204,9 @@ WCSRequest::make_request( const string &url, const string &name,
 	curl_easy_setopt( d_curl, CURLOPT_NOPROGRESS, 1 ) ;
 	curl_easy_setopt( d_curl, CURLOPT_NOSIGNAL, 1 ) ;
 	curl_easy_setopt( d_curl, CURLOPT_HEADERFUNCTION, WCSRequest::save_raw_http_headers ) ;
-	curl_easy_setopt( d_curl, CURLOPT_WRITEHEADER, &_hdr_list ) ;
+
+	vector<string> headers ;
+	curl_easy_setopt( d_curl, CURLOPT_WRITEHEADER, &headers ) ;
 
 	// We aren't using SSL
 	curl_easy_setopt(d_curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -164,7 +214,8 @@ WCSRequest::make_request( const string &url, const string &name,
 
 	curl_easy_setopt( d_curl, CURLOPT_URL, url.c_str() ) ;
 
-	FILE *stream = fopen( tmp_target.c_str(), "w+" ) ;
+	FILE *stream = 0 ;
+	string wcs_temp = get_temp_file( stream ) ;
 #ifdef WIN32
 	curl_easy_setopt( d_curl, CURLOPT_FILE, stream ) ;
 	curl_easy_setopt( d_curl, CURLOPT_WRITEFUNCTION, &fwrite ) ;
@@ -184,13 +235,7 @@ WCSRequest::make_request( const string &url, const string &name,
 	if (res != 0)
 	{
 	    // close the temporary target file
-	    fclose( stream ) ;
-
-	    // remove the temporary target file here
-	    if( remove( tmp_target.c_str() ) != 0 )
-	    {
-		perror( "Error deleting temporary target file" ) ;
-	    }
+	    close_temp( stream, wcs_temp ) ;
 	    string err = (string )"WCS request failed: " + d_error_buffer ;
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
@@ -204,33 +249,35 @@ WCSRequest::make_request( const string &url, const string &name,
 	if (res != 0)
 	{
 	    // close the temporary target file
-	    fclose( stream ) ;
-
-	    // remove the temporary target file here
-	    if( remove( tmp_target.c_str() ) != 0 )
-	    {
-		perror( "Error deleting temporary target file" ) ;
-	    }
+	    close_temp( stream, wcs_temp ) ;
 	    string err = (string )"WCS request failed: " + d_error_buffer ;
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
 	curl_easy_cleanup(d_curl);
 
+	// Add the Expires header using the cacheTime
+	time_t now = time( 0 ) ; // When was the request made (now).
+	time_t expires = now + d_cacheTime ;
+	string expires_str = "Expires: " + date_time_str( &expires ) ;
+	headers.push_back( expires_str ) ;
+
 	// Determine if the resulting response file contains error information.
 	bool request_status = false ;
 	bool xml_error = false ;
-	vector<string>::const_iterator iter = _hdr_list.begin() ;
-	while( iter != _hdr_list.end() )
+	vector<string>::const_iterator iter = headers.begin() ;
+	while( iter != headers.end() )
 	{
+	    fflush( stream ) ;
 	    string hdr_line = (*iter) ;
-	    BESDEBUG( "wcs", "WCS Response Header: " << hdr_line << endl )
+	    BESDEBUG( "wcs", "  response header: \"" << hdr_line << "\"" << endl )
 
 	    // if we found "200 OK" then the request was successfull, but
 	    // still need to check if the content type is xml, which would
 	    // signify an exception condition.
 	    if( hdr_line.find( "200 OK" ) != string::npos )
 	    {
+		BESDEBUG( "wcs", "  found 200 OK" << endl )
 		request_status = true ;
 	    }
 
@@ -238,6 +285,7 @@ WCSRequest::make_request( const string &url, const string &name,
 	    // being set to true again
 	    if( hdr_line.find( "text/xml" ) != string::npos )
 	    {
+		BESDEBUG( "wcs", "  found xml error" << endl )
 		request_status = false ;
 		xml_error = true ;
 	    }
@@ -248,51 +296,108 @@ WCSRequest::make_request( const string &url, const string &name,
 
 	if( request_status == false )
 	{
-	    BESDEBUG( "wcs", "WCSRequest::make_request - FAILED" << endl )
+	    BESDEBUG( "wcs", " request FAILED" )
 
-	    // close the temporary target
-	    fclose( stream ) ;
-	    
 	    // get the error information from the temoorary file
 	    string err ;
 	    if( xml_error )
 	    {
-		WCSError::read_xml_error( tmp_target, err, url ) ;
+		BESDEBUG( "wcs", " reading xml error" << endl )
+		WCSError::read_xml_error( wcs_temp, err, url ) ;
 	    }
 	    else
 	    {
-		WCSError::read_error( tmp_target, err, url ) ;
+		BESDEBUG( "wcs", " reading text error" << endl )
+		WCSError::read_error( wcs_temp, err, url ) ;
 	    }
 
-	    // need to remove the temporary target file here
-	    if( remove( tmp_target.c_str() ) != 0 )
-	    {
-		perror( "Error deleting temporary target file" ) ;
-	    }
-	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
-	}
-
-	int result= rename( tmp_target.c_str() , target.c_str() );
-	if( result != 0 )
-	{
 	    // close the temporary target
-	    fclose( stream ) ;
-	    
-	    string err = "Unable to rename temporary target file "
-			 + tmp_target + " to " + target ;
+	    close_temp( stream, wcs_temp ) ;
+
 	    throw BESInternalError( err, __FILE__, __LINE__ ) ;
 	}
 
+	BESDEBUG( "wcs", "  rewinding stream" << endl )
+	rewind( stream ) ;
+
+	// cache the response
+	BESDEBUG( "wcs", "  caching response" << endl )
+	cache->cache_response( url, now, headers, stream ) ;
+
+	// close the temporary target
+	BESDEBUG( "wcs", "  closing temporary file" << endl )
+	close_temp( stream, wcs_temp ) ;
 	fclose( stream ) ;
 
-	BESDEBUG( "wcs", "WCSRequest::make_request - SUCCEEDED" << endl )
-    }
-    else
-    {
-	BESDEBUG( "wcs", "WCSRequest::make_request - target cached" << endl )
+	// get the cached response and return that instead of the temporary
+	// file
+	BESDEBUG( "wcs", "  getting cached response" << endl )
+	vector<string> cached_headers ;
+	s = cache->get_cached_response( url, cached_headers, cacheName ) ;
+
+	BESDEBUG( "wcs", "  request SUCCEEDED" << endl )
     }
 
-    BESDEBUG( "wcs", "WCSRequest::make_request - returning " << target << endl )
-    return target ;
+    BESDEBUG( "wcs", "  returning stream " << (void *)s << " - name " << cacheName << endl )
+    return s ;
+}
+
+/** Open a temporary file and return its name. This method opens a temporary
+    file using get_tempfile_template(). The FILE* \c stream is opened for
+    both reads and writes; if it already exists (highly unlikely), it is
+    truncated. If used on Unix, it's the callers responsibility to unlink the
+    named file so that when all descriptors to it are closed, it will be
+    deleted. On Win32 platforms, this method pushes the name of the temporary
+    file onto a vector which is used during object destruction to delete all
+    the temporary files.
+
+    @note Delete the returned char* using delete[].
+
+    A private method.
+
+    @param stream A value-result parameter; the open file descriptor is
+    returned via this parameter.
+    @return The name of the temporary file.
+    @exception InternalErr thrown if the FILE* could not be opened. */
+
+string
+WCSRequest::get_temp_file( FILE *&stream )
+{
+    // get_tempfile_template() uses new, must call delete
+    char *wcs_temp = get_tempfile_template("wcsXXXXXX");
+
+    // Open truncated for update. NB: mkstemp() returns a file descriptor.
+#if defined(WIN32) || defined(TEST_WIN32_TEMPS)
+    stream = fopen(_mktemp(wcs_temp), "w+b");
+#else
+    stream = fdopen(mkstemp(wcs_temp), "w+");
+#endif
+
+    string wcs_temp_s = wcs_temp;
+    delete[] wcs_temp; wcs_temp = 0;
+
+    if( !stream )
+    {
+        string err = "Failed to open a temporary file for WCS Request" ;
+        throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+
+    return wcs_temp_s;
+}
+
+/** @brief Close the temporary file opened for storing the results of the
+ * WCS Request.
+ *
+ * @param stream FILE ptr to close
+ * @param name filename of the temporary file to remove
+ */
+void
+WCSRequest::close_temp( FILE *stream, const string &name )
+{
+    int res = fclose( stream ) ;
+    if( res )
+        BESDEBUG( "wcs", "Failed to close temp file " << (void *)stream << endl)
+
+    unlink( name.c_str() ) ;
 }
 

@@ -53,10 +53,14 @@ using std::string ;
 class WCSContainer : public BESContainer
 {
 private:
-    string			_target ;
+    string			_cacheDir ;
     string			_cacheTime ;
+    string			_cacheName ;
+    FILE *			_file_ptr ;
 
-				WCSContainer() : BESContainer() {}
+				WCSContainer()
+				    : BESContainer(),
+				      _file_ptr( 0 ) {}
 protected:
     void			_duplicate( WCSContainer &copy_to ) ;
 public:
@@ -65,11 +69,13 @@ public:
 
 				WCSContainer( const WCSContainer &copy_from ) ;
 
-    virtual			~WCSContainer() {}
+    virtual			~WCSContainer() ;
 
     virtual BESContainer *	ptr_duplicate( ) ;
 
     virtual string		access() ;
+
+    virtual bool		release() ;
 
     virtual void		dump( ostream &strm ) const ;
 };

@@ -30,11 +30,17 @@
 // Authors:
 //      pcw       Patrick West <pwest@ucar.edu>
 
+#include "HTTPCache.h"
+
+using namespace libdap ;
+
 #include "WCSContainer.h"
 #include "WCSRequest.h"
 #include "WCSUtils.h"
 #include "BESSyntaxUserError.h"
+#include "BESInternalError.h"
 #include "TheBESKeys.h"
+#include "BESDebug.h"
 
 /** @brief Creates an instances of WCSContainer with symbolic name and real
  * name that is the WCS request
@@ -61,14 +67,15 @@
  */
 WCSContainer::WCSContainer( const string &sym_name,
 			    const string &real_name )
-    : BESContainer( sym_name, "", "" )
+    : BESContainer( sym_name, "", "" ),
+      _file_ptr( 0 )
 {
     // The real name passed is the wcs request string. Within the request is
     // the name of the file we will use to form the cached file name, and the
     // type of file being cached. We also need to verify that this is a
     // well formed WCS request.
     string type ;
-    string err = WCSUtils::validate_url( real_name, _target, type ) ;
+    string err = WCSUtils::validate_url( real_name, type ) ;
     if( !err.empty() )
     {
 	throw BESSyntaxUserError( err, __FILE__, __LINE__ ) ;
@@ -87,20 +94,45 @@ WCSContainer::WCSContainer( const string &sym_name,
     {
 	_cacheTime = "0.0" ;
     }
+
+    found = false ;
+    _cacheDir = TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
+    if( !found || _cacheDir.empty() )
+    {
+	_cacheDir = "/tmp" ;
+    }
 }
 
 WCSContainer::WCSContainer( const WCSContainer &copy_from )
     : BESContainer( copy_from ),
-      _target( copy_from._target ),
-      _cacheTime( copy_from._cacheTime )
+      _cacheDir( copy_from._cacheDir ),
+      _cacheTime( copy_from._cacheTime ),
+      _cacheName( copy_from._cacheName ),
+      _file_ptr( copy_from._file_ptr )
 {
+    // we can not make a copy of this container once the WCS request has
+    // been made
+    if( _file_ptr )
+    {
+	string err = (string)"The Container has already been accessed, "
+	             + "can not create a copy of this container." ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
 }
 
 void
 WCSContainer::_duplicate( WCSContainer &copy_to )
 {
-    copy_to._target = _target ;
+    if( copy_to._file_ptr )
+    {
+	string err = (string)"The Container has already been accessed, "
+	             + "can not duplicate this resource." ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
+    copy_to._cacheDir = _cacheDir ;
     copy_to._cacheTime = _cacheTime ;
+    copy_to._cacheName = _cacheName ;
+    copy_to._file_ptr = _file_ptr ;
     BESContainer::_duplicate( copy_to ) ;
 }
 
@@ -112,6 +144,14 @@ WCSContainer::ptr_duplicate( )
     return container ;
 }
 
+WCSContainer::~WCSContainer()
+{
+    if( _file_ptr )
+    {
+	release() ;
+    }
+}
+
 /** @brief access the WCS target response by making the WCS request
  *
  * @return the target response
@@ -120,9 +160,34 @@ WCSContainer::ptr_duplicate( )
 string
 WCSContainer::access()
 {
-    WCSRequest r ;
-    return r.make_request( get_real_name(), _target,
-			   get_container_type(), _cacheTime ) ;
+    BESDEBUG( "wcs", "accessed" << endl )
+    if( !_file_ptr )
+    {
+	WCSRequest r ;
+	_file_ptr = r.make_request( get_real_name(), get_container_type(),
+				    _cacheDir, _cacheTime, _cacheName ) ;
+    }
+    return _cacheName ;
+}
+
+/** @brief release the WCS cache resources
+ *
+ * Release the resource
+ *
+ * @return true if the resource is released successfully and false otherwise
+ */
+bool
+WCSContainer::release()
+{
+    if( _file_ptr )
+    {
+	HTTPCache *cache = HTTPCache::instance( get_real_name(), false ) ;
+	cache->release_cached_response( _file_ptr ) ;
+	fclose( _file_ptr ) ;
+	_file_ptr = 0 ;
+    }
+
+    return true ;
 }
 
 /** @brief dumps information about this object
@@ -138,7 +203,6 @@ WCSContainer::dump( ostream &strm ) const
     strm << BESIndent::LMarg << "WCSContainer::dump - ("
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
-    strm << BESIndent::LMarg << "target: " << _target << endl ;
     strm << BESIndent::LMarg << "cache time: " << _cacheTime << endl ;
     BESContainer::dump( strm ) ;
     BESIndent::UnIndent() ;

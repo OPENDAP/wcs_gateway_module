@@ -57,7 +57,6 @@ public:
     static string		convert_wcs_type( const string &wcs_type ) ;
 
     static string		validate_url( const string &url,
-					      string &target,
 					      string &format ) ;
 } ;
 

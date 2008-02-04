@@ -22,14 +22,22 @@ DIRS_EXTRA =
 
 EXTRA_DIST = $(DIRS_EXTRA) 
 
-CLEANFILES = 
+CLEANFILES = *.dbg
+
+clean-local:
+	rm -rf wcs
+
+check-local:
+	rm -rf wcs
 
 ############################################################################
 # Unit Tests
 #
 
-UNIT_TESTS = validateUrlT convertTypeT xmlErrT
+UNIT_TESTS = requestT validateUrlT convertTypeT xmlErrT
 
+requestT_SOURCES = requestT.cc
+requestT_LDADD = -lcppunit ../libwcs_module.la
 
 validateUrlT_SOURCES = validateUrlT.cc
 validateUrlT_LDADD = -lcppunit ../libwcs_module.la

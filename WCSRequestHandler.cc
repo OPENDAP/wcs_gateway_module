@@ -32,6 +32,10 @@
 
 #include "config.h"
 
+#include "HTTPCache.h"
+
+using namespace libdap ;
+
 #include "WCSRequestHandler.h"
 #include "BESResponseHandler.h"
 #include "BESResponseNames.h"
@@ -45,6 +49,7 @@
 #include "WCSFile.h"
 #include "WCSRequest.h"
 #include "BESRequestHandlerList.h"
+#include "TheBESKeys.h"
 
 /** @brief constructor adds the static methods that handle different requests
  *
@@ -81,7 +86,6 @@ WCSRequestHandler::~WCSRequestHandler()
  * @throws BESError if the WCS request fails
  * @see WCSFile
  * @see WCSRequest
- * @see WCSCache
  */
 bool
 WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
@@ -107,12 +111,26 @@ WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
     string type = file.get_property( WCS_RETURNTYPE ) ;
     string cacheTime = file.get_property( WCS_CACHETIME ) ;
 
+    bool found = false ;
+    string cacheDir = TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
+    if( !found || cacheDir.empty() )
+    {
+	cacheDir = "/tmp" ;
+    }
+
     // Now that we have the request information ... make the wcs request.
     // This will return to us the name of a new file of a type that we
     // should be able to read.
 
     WCSRequest wcs ;
-    string new_file = wcs.make_request( url, name, type, cacheTime ) ;
+    string new_file ;
+    FILE *stream = wcs.make_request( url, type, cacheDir,
+                                     cacheTime, new_file ) ;
+    if( !stream )
+    {
+	string err = "WCS request failed: unknown error" ;
+	throw BESInternalError( err, __FILE__, __LINE__ ) ;
+    }
 
     // Now that we have this file, and we know the type of data being
     // handled for this new file, find the request handler that knows how to
@@ -127,7 +145,29 @@ WCSRequestHandler::wcs_redirect( BESDataHandlerInterface &dhi )
     dhi.container->set_real_name( new_file ) ;
 
     // handle this new container.
-    BESRequestHandlerList::TheList()->execute_current( dhi ) ;
+    try
+    {
+	BESRequestHandlerList::TheList()->execute_current( dhi ) ;
+    }
+    catch( BESError &e )
+    {
+	// clean up the cached resource
+	HTTPCache *cache = HTTPCache::instance( cacheDir, false ) ;
+	if( cache )
+	{
+	    cache->release_cached_response( stream ) ;
+	}
+
+	throw e ;
+    }
+
+    // We not quite done with the resource, but how to get it cleaned up
+    // properly is a question. So let's clean it up here: FIXME
+    HTTPCache *cache = HTTPCache::instance( cacheDir, false ) ;
+    if( cache )
+    {
+	cache->release_cached_response( stream ) ;
+    }
 
     // reset the container information (do we really  need to? Do it for
     // now, but I don't think this container information is used any more.

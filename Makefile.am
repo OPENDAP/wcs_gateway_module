@@ -22,12 +22,12 @@ WCS_HDRS:=
 
 BES_SRCS = \
 		WCSModule.cc WCSRequestHandler.cc WCSFile.cc	\
-		WCSRequest.cc WCSCache.cc WCSContainerStorage.cc \
+		WCSRequest.cc WCSContainerStorage.cc 		\
 		WCSContainer.cc WCSUtils.cc WCSError.cc
 
 BES_HDRS = \
 		WCSModule.h WCSRequestHandler.h WCSFile.h	\
-		WCSRequest.h WCSCache.h WCSContainerStorage.h	\
+		WCSRequest.h WCSContainerStorage.h		\
 		WCSContainer.h WCSUtils.h WCSError.h		\
 		WCSResponseNames.h config_wcs.h
 
@@ -38,9 +38,12 @@ libwcs_module_la_LIBADD = $(BES_LIBS)
 
 EXTRA_PROGRAMS = 
 
-EXTRA_DIST = COPYRIGHT COPYING wcs_handler.spec bes-wcs-data.sh
+EXTRA_DIST = data COPYRIGHT COPYING wcs_handler.spec bes-wcs-data.sh
 
 CLEANFILES = *~ bes-wcs-data.sh
+
+sample_datadir = $(datadir)/hyrax/data/wcs
+sample_data_DATA = data/example1.wcs data/example2.wcs
 
 do_subst = sed -e 's,[@]sysconfdir[@],$(sysconfdir),g' \
 		   	   -e 's,[@]libdir[@],$(libdir),g' \
