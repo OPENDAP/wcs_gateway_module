@@ -23,11 +23,16 @@ BUILDING THE SOFTWARE
   1. Type `./configure' at the system prompt. On some systems you may have
      to type `sh configure'.
 
-  2. Type `make' to build the software, `make check' to run the tests. You
-     must have DejaGNU to run `make check.'
+  2. Type `make' to build the software
 
   3. Type `make install' to install the BES software. The package installs
      in /usr/local/ by default; use --prefix to change that.
+
+  4 Type `make check' to run the tests. You must run 'make install' first in
+    order to run these tests as a test module for the BES is installed. You
+    must have DejaGNU to run `make check.' Also, for these tests to run
+    successfully, you will need an Internet connection as WCS requests are
+    made.
 
 Building from Our SVN Repository
 
@@ -139,9 +144,8 @@ CONFIGURATION AND TESTING
 
   o TESTING
 
-    - Once you have built the software you can run 'make check' to make sure
-      that the software is working properly. There are also tests in the
-      bes/cmdln directory that can be used to test as well, but is not a
-      part of the default test environment. To use the tests in bes/cmdln
-      please contact OPeNDAP for assistance.
+    - Once you have built the software and installed it you can run 'make
+      check' to make sure that the software is working properly. DEJAGNU is
+      required for the tests to work successfully, as well as an Internet
+      connection.
 

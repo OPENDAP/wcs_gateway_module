@@ -9,6 +9,7 @@
 
 #include "WCSError.h"
 #include "BESError.h"
+#include "test_config.h"
 
 using namespace CppUnit ;
 using std::ofstream ;
@@ -24,7 +25,7 @@ public:
 
     void setUp()
     {
-	string bes_conf = "BES_CONF=./bes.conf" ;
+	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
 	putenv( (char *)bes_conf.c_str() ) ;
     } 
 
@@ -44,7 +45,7 @@ public:
 
 	try
 	{
-	    string filename = "err.xml" ;
+	    string filename = (string)TEST_SRC_DIR + "/err.xml" ;
 	    string err ;
 	    string url = "http://www.testurl.org" ;
 	    string expected = "WCS Request failed for url: " + url + " with error: Requested coverage layer(s)/measure(s): \"/Volumes/RAIDL2/TEST_DATA/CEOPTEST/testdata/MOD06_L2.A2002274.0115.005.2006333004108.hdf:Swath:mod06:Cloud_Effective_Emissivity\" not available in this server" ;

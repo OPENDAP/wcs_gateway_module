@@ -14,6 +14,7 @@
 #include "BESError.h"
 #include "TheBESKeys.h"
 #include "BESDebug.h"
+#include "test_config.h"
 
 using namespace CppUnit ;
 using namespace libdap ;
@@ -31,7 +32,7 @@ public:
 
     void setUp()
     {
-	string bes_conf = "BES_CONF=./bes.conf" ;
+	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
 	putenv( (char *)bes_conf.c_str() ) ;
 	BESDebug::SetUp( "cerr,wcs" ) ;
     } 

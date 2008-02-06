@@ -10,6 +10,7 @@
 #include "WCSUtils.h"
 #include "BESError.h"
 #include "BESUtil.h"
+#include "test_config.h"
 
 using namespace CppUnit ;
 using std::ofstream ;
@@ -25,7 +26,7 @@ public:
 
     void setUp()
     {
-	string bes_conf = "BES_CONF=./bes.conf" ;
+	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
 	putenv( (char *)bes_conf.c_str() ) ;
     } 
 

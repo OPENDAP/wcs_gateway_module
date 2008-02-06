@@ -26,7 +26,7 @@ BES_SRCS = \
 
 BES_HDRS = \
 		WCSModule.h WCSRequest.h WCSContainerStorage.h		\
-		WCSContainer.h WCSUtils.h WCSError.h config_wcs.h
+		WCSContainer.h WCSUtils.h WCSError.h
 
 libwcs_module_la_SOURCES = $(WCS_SRCS) $(BES_SRCS) $(WCS_HDRS) $(BES_HDRS)
 libwcs_module_la_CPPFLAGS = $(BES_CPPFLAGS)
@@ -35,7 +35,7 @@ libwcs_module_la_LIBADD = $(BES_LIBS)
 
 EXTRA_PROGRAMS = 
 
-EXTRA_DIST = COPYRIGHT COPYING wcs_handler.spec bes-wcs-data.sh
+EXTRA_DIST = COPYRIGHT_URI COPYING wcs_module.spec bes-wcs-data.sh.in
 
 CLEANFILES = *~ bes-wcs-data.sh
 

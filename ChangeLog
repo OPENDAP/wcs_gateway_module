@@ -1,0 +1,423 @@
+2008-02-05  Patrick West <pwest@ucar.edu>
+
+	Updated configuration and cleaned up unneeded files. Updated the
+	regression tests in testsuite to have a consistent name for
+	checking.
+	D    unit-tests/validateUrlT.dbg
+	M    conf/mkinstalldirs
+	D    conf/acinclude.m4
+	M    conf/bes.m4
+	M    conf/missing
+	M    conf/config.guess
+	M    conf/libdap.m4
+	M    conf/config.sub
+	M    conf/install-sh
+	A    testsuite/WCSTestTransmitter.h
+	A    testsuite/WCSTestModule.cc
+	A    testsuite/WCSTestModule.h
+	M    testsuite/Makefile.am
+	M    testsuite/wcs/accesserror.bescmd.baseline
+	M    testsuite/wcs/infile1.das.bescmd
+	M    testsuite/wcs/infile3.das.bescmd
+	M    testsuite/wcs/infile1.dds.bescmd
+	M    testsuite/wcs/infile3.dds.bescmd
+	M    testsuite/wcs/infile2.ddx.bescmd
+	M    testsuite/wcs/infile4.ddx.bescmd
+	M    testsuite/wcs/infile1.ascii.bescmd
+	M    testsuite/wcs/infile3.ascii.bescmd
+	M    testsuite/wcs/outfile1.dds.bescmd.baseline
+	M    testsuite/wcs/outfile2.dds.bescmd.baseline
+	M    testsuite/wcs/outfile3.dds.bescmd.baseline
+	M    testsuite/wcs/outfile4.dds.bescmd.baseline
+	M    testsuite/wcs/outfile1.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile2.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile3.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile4.ddx.bescmd.baseline
+	M    testsuite/wcs/infile2.das.bescmd
+	M    testsuite/wcs/outfile1.ascii.bescmd.baseline
+	M    testsuite/wcs/infile4.das.bescmd
+	M    testsuite/wcs/outfile2.ascii.bescmd.baseline
+	M    testsuite/wcs/infile2.dds.bescmd
+	M    testsuite/wcs/outfile3.ascii.bescmd.baseline
+	M    testsuite/wcs/outfile4.ascii.bescmd.baseline
+	M    testsuite/wcs/infile4.dds.bescmd
+	M    testsuite/wcs/infile1.ddx.bescmd
+	M    testsuite/wcs/infile3.ddx.bescmd
+	M    testsuite/wcs/infile2.ascii.bescmd
+	M    testsuite/wcs/infile4.ascii.bescmd
+	M    testsuite/bes.conf
+	A    testsuite/WCSTestTransmitter.cc
+	M    config.h.in
+	M    configure.ac
+
+2008-02-04  Patrick West <pwest@ucar.edu>
+
+	Added two new configuration options for WCS to set the cache size
+	and cache entry size.
+	M    bes-wcs-data.sh.in
+	M    WCSRequest.cc
+
+2008-02-04  Patrick West <pwest@ucar.edu>
+
+	No longer needing the code that can read a .wcs file and make the wcs
+	request from that information. We are only using the wcs container and
+	container storage code.
+	D    WCSFile.cc
+	D    WCSFile.h
+	D    WCSResponseNames.h
+	M    WCSModule.cc
+	D    WCSRequestHandler.cc
+	M    bes-wcs-data.sh.in
+	M    WCSRequest.cc
+	D    WCSRequestHandler.h
+	M    testsuite/wcs/accesserror.bescmd.baseline
+	D    data
+	M    Makefile.am
+
+2008-02-04  Patrick West <pwest@ucar.edu>
+
+	Now using HTTPCache for WCS requests rather than own WCSCache. This will
+	allow the entire URL to be cached properly with expiration. Modified
+	regression tests. Updated .wcs request access and examples.
+	M    WCSContainer.cc
+	M    WCSContainer.h
+	M    WCSRequestHandler.cc
+	M    WCSRequest.cc
+	M    WCSRequest.h
+	M    WCSUtils.cc
+	M    WCSUtils.h
+	D    WCSCache.cc
+	A    data
+	A    data/example1.wcs
+	A    data/example2.wcs
+	A    unit-tests/requestT.cc
+	M    unit-tests/validateUrlT.cc
+	M    unit-tests/Makefile.am
+	M    unit-tests/validateUrlT.dbg
+	M    unit-tests/bes.conf
+	M    testsuite/wcs/accesserror.bescmd.baseline
+	D    WCSCache.h
+	M    Makefile.am
+
+2008-02-02  Patrick West <pwest@ucar.edu>
+
+	Added using namespace libdap where needed. Changed the exception and
+	error code to use BESError. Added regression testing to build.
+	D    bes.conf
+	M    configure.ac
+	M    unit-tests/xmlErrT.cc
+	M    unit-tests/validateUrlT.cc
+	M    unit-tests/convertTypeT.cc
+	A    testsuite
+	A    testsuite/common_tests.exp
+	A    testsuite/Makefile.am
+	A    testsuite/wcs
+	A    testsuite/wcs/accesserror.bescmd.baseline
+	A    testsuite/wcs/infile1.das.bescmd
+	A    testsuite/wcs/infile3.das.bescmd
+	A    testsuite/wcs/infile1.dds.bescmd
+	A    testsuite/wcs/infile3.dds.bescmd
+	A    testsuite/wcs/infile2.ddx.bescmd
+	A    testsuite/wcs/infile4.ddx.bescmd
+	A    testsuite/wcs/infile1.ascii.bescmd
+	A    testsuite/wcs/infile3.ascii.bescmd
+	A    testsuite/wcs/outfile1.dds.bescmd.baseline
+	A    testsuite/wcs/outfile2.dds.bescmd.baseline
+	A    testsuite/wcs/outfile3.dds.bescmd.baseline
+	A    testsuite/wcs/outfile4.dds.bescmd.baseline
+	A    testsuite/wcs/outfile1.ddx.bescmd.baseline
+	A    testsuite/wcs/outfile2.ddx.bescmd.baseline
+	A    testsuite/wcs/outfile3.ddx.bescmd.baseline
+	A    testsuite/wcs/outfile4.ddx.bescmd.baseline
+	A    testsuite/wcs/infile2.das.bescmd
+	A    testsuite/wcs/infile4.das.bescmd
+	A    testsuite/wcs/outfile1.ascii.bescmd.baseline
+	A    testsuite/wcs/infile2.dds.bescmd
+	A    testsuite/wcs/outfile2.ascii.bescmd.baseline
+	A    testsuite/wcs/outfile3.ascii.bescmd.baseline
+	A    testsuite/wcs/infile4.dds.bescmd
+	A    testsuite/wcs/outfile4.ascii.bescmd.baseline
+	A    testsuite/wcs/infile1.ddx.bescmd
+	A    testsuite/wcs/infile3.ddx.bescmd
+	A    testsuite/wcs/accesserror.bescmd
+	A    testsuite/wcs/infile2.ascii.bescmd
+	A    testsuite/wcs/outfile1.das.bescmd.baseline
+	A    testsuite/wcs/outfile2.das.bescmd.baseline
+	A    testsuite/wcs/outfile3.das.bescmd.baseline
+	A    testsuite/wcs/infile4.ascii.bescmd
+	A    testsuite/wcs/outfile4.das.bescmd.baseline
+	A    testsuite/bes.conf
+	A    testsuite/besstandalone.wcs
+	A    testsuite/besstandalone.wcs/infile1.das.exp
+	A    testsuite/besstandalone.wcs/infile2.das.exp
+	A    testsuite/besstandalone.wcs/infile3.das.exp
+	A    testsuite/besstandalone.wcs/infile1.dds.exp
+	A    testsuite/besstandalone.wcs/infile4.das.exp
+	A    testsuite/besstandalone.wcs/infile2.dds.exp
+	A    testsuite/besstandalone.wcs/infile3.dds.exp
+	A    testsuite/besstandalone.wcs/infile4.dds.exp
+	A    testsuite/besstandalone.wcs/infile1.ddx.exp
+	A    testsuite/besstandalone.wcs/infile2.ddx.exp
+	A    testsuite/besstandalone.wcs/infile3.ddx.exp
+	A    testsuite/besstandalone.wcs/infile4.ddx.exp
+	A    testsuite/besstandalone.wcs/accesserror.exp
+	A    testsuite/besstandalone.wcs/infile1.ascii.exp
+	A    testsuite/besstandalone.wcs/infile2.ascii.exp
+	A    testsuite/besstandalone.wcs/infile3.ascii.exp
+	A    testsuite/besstandalone.wcs/infile4.ascii.exp
+	M    Makefile.am
+
+2008-01-25  Patrick West <pwest@ucar.edu>
+
+	Exception/Error information updated from the BES. Not using
+	WCSException any longer, but the default Error objects.
+	M    WCSFile.cc
+	M    WCSContainer.cc
+	M    WCSRequestHandler.cc
+	M    WCSRequest.cc
+	A    WCSError.cc
+	M    bes.conf
+	M    WCSUtils.cc
+	M    WCSContainerStorage.cc
+	A    WCSError.h
+	D    WCSException.cc
+	D    WCSException.h
+	M    Makefile.am
+
+2007-12-06  Patrick West <pwest@ucar.edu>
+
+	Checking return value of validate tests. Added the
+	bes-wcs-data.sh.in script to update the bes.conf file. Updated the
+	Makefile.am to create the script, and the bes-conf target to run the
+	script. Also added the rpm and pkg and fortify build targets to the
+	Makfile. Changed the validate method in WCSUtils when checking the
+	coverage parameter. Colon is no longer required. Also, if & was not
+	found, this could just mean that it is at the end of the request, so
+	don't throw an error there either.
+	M    unit-tests/validateUrlT.cc
+	M    unit-tests/validateUrlT.dbg
+	A    bes-wcs-data.sh.in
+	M    bes.conf
+	M    config.h.in
+	M    WCSUtils.cc
+	M    Makefile.am
+
+2007-12-06  Patrick West <pwest@ucar.edu>
+
+	added hdf4 type for wcs
+	M    bes.conf
+
+2007-12-06  Patrick West <pwest@ucar.edu>
+
+	debug statement updates
+	M    WCSCache.cc
+
+2007-12-06  Patrick West <pwest@ucar.edu>
+
+	debug statement updates
+	M    WCSRequest.cc
+
+2007-10-03  Patrick West <pwest@ucar.edu>
+
+	README that specifies configuration options in the BES configuration
+	file.  INSTALL that specifies how to build and any build
+	requirements and how to test and debug.
+	A    README
+	A    INSTALL
+
+2007-09-27  Patrick West <pwest@ucar.edu>
+
+	Changed copyright information
+	M    WCSFile.cc
+	M    WCSFile.h
+	M    WCSContainer.cc
+	M    WCSResponseNames.h
+	M    WCSContainer.h
+	M    WCSModule.cc
+	A    COPYRIGHT_URI
+	M    WCSRequestHandler.cc
+	M    WCSModule.h
+	M    WCSRequestHandler.h
+	M    WCSRequest.cc
+	M    WCSRequest.h
+	M    WCSException.cc
+	M    WCSUtils.cc
+	M    WCSException.h
+	M    WCSUtils.h
+	M    WCSCache.cc
+	M    WCSCache.h
+	M    WCSContainerStorage.cc
+	M    WCSContainerStorage.h
+
+2007-09-05  Patrick West <pwest@ucar.edu>
+
+	Fortify issue fixes.
+	M    WCSRequest.cc
+	M    WCSException.cc
+
+2007-08-28  Patrick West <pwest@ucar.edu>
+
+	WCS specification document from source, used to create wcs_module
+	A    docs
+	A    docs/06-083r8_OpenGIS_Web_Coverage_Service_WCS_Implementation_Specification_v_1.1.pdf
+
+2007-08-03  Patrick West <pwest@ucar.edu>
+
+	Integrated unit tests into Makefile for make check.
+	M    Makefile.am
+
+2007-08-03  Patrick West <pwest@ucar.edu>
+
+	Updated the copywrite information, added doxygen to all classes.
+	A    unit-tests/xmlErrT.cc
+	A    unit-tests/err.xml
+	M    unit-tests/Makefile.am
+	M    WCSFile.cc
+	M    WCSFile.h
+	M    WCSContainer.cc
+	M    WCSResponseNames.h
+	M    WCSContainer.h
+	M    WCSModule.cc
+	M    WCSRequestHandler.cc
+	M    WCSModule.h
+	M    WCSRequestHandler.h
+	M    WCSRequest.cc
+	M    WCSRequest.h
+	A    WCSException.cc
+	M    WCSUtils.cc
+	A    WCSException.h
+	M    WCSUtils.h
+	M    WCSCache.cc
+	M    WCSCache.h
+	M    WCSContainerStorage.cc
+	M    Makefile.am
+	M    WCSContainerStorage.h
+
+2007-07-05  Patrick West <pwest@ucar.edu>
+
+	added test for convert_wcs_type using bes.conf file.
+	M    unit-tests/Makefile.am
+	A    unit-tests/convertTypeT.cc
+	M    unit-tests/bes.conf
+
+2007-06-29  Nathan Potter <ndp@coas.oregonstate.edu>
+
+	wcs_module: Changed cachTime to cacheTime in WCSFile.h. A corresponding change was already made to the data project.
+
+2007-06-29  Patrick West <pwest@ucar.edu>
+
+	Beginning of unit tests for wcs_module.
+	A    unit-tests
+	A    unit-tests/validateUrlT.cc
+	A    unit-tests/Makefile.am
+	A    unit-tests/validateUrlT.dbg
+	A    unit-tests/bes.conf
+	M    configure.ac
+
+2007-06-29  Patrick West <pwest@ucar.edu>
+
+	Checking for coverage parameter in the wcs request was failing
+	because it found getcoverage instead of coverage=. target file name
+	is now accessed successfully.
+	M    WCSUtils.cc
+
+2007-06-28  Patrick West <pwest@ucar.edu>
+
+	Comparing the wcs type by converting to lower case. Testing for
+	exception case, where xml exception document is returned from WCS.
+	Still need to report exception and error conditions.
+	M    WCSContainer.cc
+	M    WCSRequest.cc
+	M    WCSRequest.h
+	M    bes.conf
+	M    WCSUtils.cc
+	M    Makefile.am
+
+2007-06-13  Patrick West <pwest@ucar.edu>
+
+	Second method of interracting with WCS system by having the client
+	create a container within the wcs module. 'set container in wcs
+	values name,"request"; where the request MUST be enclosed in quotes,
+	which is different from the other set container calls.
+	M    WCSFile.cc
+	M    WCSFile.h
+	A    WCSContainer.cc
+	A    WCSContainer.h
+	M    WCSResponseNames.h
+	M    WCSModule.cc
+	M    WCSRequestHandler.cc
+	M    WCSModule.h
+	M    WCSRequest.cc
+	M    WCSRequestHandler.h
+	M    WCSRequest.h
+	M    bes.conf
+	A    WCSUtils.cc
+	A    WCSUtils.h
+	M    WCSCache.cc
+	M    WCSCache.h
+	A    WCSContainerStorage.cc
+	M    Makefile.am
+	A    WCSContainerStorage.h
+
+2007-04-27  Patrick West <pwest@ucar.edu>
+
+	Was resetting the container name and type to the wcs file name and
+	wcs type.  Don't need to reset it, and this information is used when
+	retrieving the dap-server information.
+	M    wcs_module/WCSRequestHandler.cc
+
+2007-04-26  Patrick West <pwest@ucar.edu>
+
+	Caching added using the cache time in the .wcs file. If the cachTime
+	is set to 0 then every request for the .wcs file will cause the wcs
+	request to be made. Otherwise, if the current time minus the
+	creation time of the .nc file created from the wcs request is
+	greater than the cacheTime specified in the .wcs file then the wcs
+	request will be made. Otherwise, use the cached file.
+	M    wcs_module/WCSRequestHandler.cc
+	M    wcs_module/WCSRequest.cc
+	M    wcs_module/WCSRequest.h
+	A    wcs_module/WCSCache.cc
+	A    wcs_module/WCSCache.h
+	M    wcs_module/Makefile.am
+
+2007-04-25  Patrick West <pwest@ucar.edu>
+
+	Removed debug print statements in WCSFile. Clearing the response
+	header list in WCSRequest. Added more BESDEBUG statements to
+	WCSRequest.
+	M    wcs_module/WCSFile.cc
+	M    wcs_module/WCSRequest.cc
+
+2007-04-25  Patrick West <pwest@ucar.edu>
+
+	WCS access module
+	A    wcs_module
+	A    wcs_module/config.h.in
+	A    wcs_module/WCSFile.cc
+	A    wcs_module/WCSFile.h
+	A    wcs_module/configure.ac
+	A    wcs_module/conf
+	A    wcs_module/conf/mkinstalldirs
+	A    wcs_module/conf/acinclude.m4
+	A    wcs_module/conf/depcomp
+	A    wcs_module/conf/bes.m4
+	A    wcs_module/conf/missing
+	A    wcs_module/conf/config.guess
+	A    wcs_module/conf/libdap.m4
+	A    wcs_module/conf/config.sub
+	A    wcs_module/conf/ltmain.sh
+	A    wcs_module/conf/install-sh
+	A    wcs_module/WCSResponseNames.h
+	A    wcs_module/WCSModule.cc
+	A    wcs_module/WCSRequestHandler.cc
+	A    wcs_module/WCSModule.h
+	A    wcs_module/Makefile.am
+	A    wcs_module/WCSRequest.cc
+	A    wcs_module/WCSRequestHandler.h
+	A    wcs_module/WCSRequest.h
+	A    wcs_module/bes.conf
+
+;; Local Variables:
+;; coding: utf-8
+;; End:

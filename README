@@ -51,19 +51,34 @@ configuraiton file. At the bottom of this file is a place where you can
 specify module-specific parameters. Add the following:
 
 WCS.TypeList=netcdf:nc;hdf:h4;
-WCS.CacheDir=/tmp
+WCS.CacheDir=/tmp/wcs
 WCS.CacheTime=600
+WCS.CacheSize=20
+WCS.CacheEntrySize=3
 
 The WCS.TypeList paramter tells the WCS module how to translate WCS data
-types into BES data types. You shouldn't have to change this values.
+types into BES data types. You shouldn't have to change this value.
 
 WCS.CacheDir tells the WCS Module where to put cached wcs request responses,
-which are the actual data files. /tmp is a default value and should be
+which are the actual data files. /tmp/wcs is a default value and should be
 changed. We suggest putting the cache directory under the BES root
 directory, which is specified in the BES configuration file.
 
 WCS.CacheTime specifies how long a cached object can remain in the cache
 before it is replaced by a subsequent wcs request to retrieve that object.
 
+WCS.CacheSize specifies the maximum size of the WCS cache. Remember, the
+cached responses are netcdf and hdf files, so this value should be
+sufficient to store many of these files without having to continuously purge
+the cache.
+
+WCS.CacheEntrySize specifies the maximum size of a single entry in the WCS
+cache. Remember, the cached responses are netcdf and hdf files, so this
+value should be set to hold your data. If an entry in the cache is too large
+then an error will be thrown.
+
 * Testing
+
+For testing, please refer to the INSTALL file. An internet connection is
+required for these tests to run successfully.
 
