@@ -15,7 +15,7 @@ on this server.<P>
             <Administrator>admin.email.address@your.domain.name</Administrator>
             <Location>
                 <File>WCSRequest.cc</File>
-                <Line>316</Line>
+                <Line>355</Line>
             </Location>
         </BESError>
     </response>
