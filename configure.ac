@@ -44,8 +44,6 @@ AC_CHECK_LIBDAP([3.7.10],
   
 AC_CHECK_BES([3.1.0],
  [
-  LIBS="$LIBS $BES_LIBS"
-  CPPFLAGS="$CPPFLAGS $BES_CFLAGS"
  ],
  [ AC_MSG_ERROR([Cannot find bes])
 ])
