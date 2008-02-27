@@ -10,10 +10,15 @@ instructions, the latest configuration inforamtion, tutorials, how to
 develop new modules for the BES, and more.
 
 Contents
-  What's here: What files are in the distribution
-  About the WCS Module: What exactly is this
-  Configuration: How to configure the WCS Module
-  Testing: Once built and configured, how do you know it works?
+  - What's here: What files are in the distribution
+
+  - About the WCS Module: What exactly is this
+
+  - Configuration: How to configure the WCS Module
+
+  - Testing: Once built and configured, how do you know it works?
+
+-----------------------------------------------------------------------
 
 * What's here:
 
@@ -39,22 +44,28 @@ To load the WCS Module into the BES you will need to add wcs to the list of
 modules. Locate the paramter called BES.modules and add ",wcs" to the end of
 that line. For example:
 
-BES.modules=dap,cmds,ascii,usage,www,nc,h4,wcs
+<code>
+    BES.modules=dap,cmds,ascii,usage,www,nc,h4,wcs
+</code>
 
 Next you will need to tell the BES where to find the WCS Module. Add the
 following line after BES.modules:
 
-BES.module.wcs=/path/to/libwcs_module.so
+<code>
+    BES.module.wcs=/path/to/libwcs_module.so
+</code>
 
 There are a few WCS specific parameters that need to be set in the BES
 configuraiton file. At the bottom of this file is a place where you can
 specify module-specific parameters. Add the following:
 
-WCS.TypeList=netcdf:nc;hdf:h4;
-WCS.CacheDir=/tmp/wcs
-WCS.CacheTime=600
-WCS.CacheSize=20
-WCS.CacheEntrySize=3
+<code>
+    WCS.TypeList=netcdf:nc;hdf:h4;
+    WCS.CacheDir=/tmp/wcs
+    WCS.CacheTime=600
+    WCS.CacheSize=20
+    WCS.CacheEntrySize=3
+</code>
 
 The WCS.TypeList paramter tells the WCS module how to translate WCS data
 types into BES data types. You shouldn't have to change this value.
