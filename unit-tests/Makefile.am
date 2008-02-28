@@ -5,7 +5,11 @@ AUTOMAKE_OPTIONS = foreign
 # Headers in 'tests' are used by the arrayT unit tests.
 
 AM_CPPFLAGS = -I$(top_srcdir) $(BES_CPPFLAGS)
-AM_CXXFLAGS = 
+AM_LDADD = 
+if CPPUNIT
+AM_CPPFLAGS += $(CPPUNIT_CFLAGS)
+AM_LDADD += $(CPPUNIT_LIBS)
+endif
 
 # These are not used by automake but are often useful for certain types of
 # debugging. Set CXXFLAGS to this in the nightly build using export ...
@@ -34,24 +38,38 @@ test_config.h: test_config.h.in Makefile
 clean-local:
 	rm -rf wcs
 
+if CPPUNIT
 check-local:
 	rm -rf wcs
+else
+check-local:
+	@echo ""
+	@echo "**********************************************************"
+	@echo "You must have cppunit 1.12.x or greater installed to run *"
+	@echo "check target in unit-tests directory                     *"
+	@echo "**********************************************************"
+	@echo ""
+endif
 
 ############################################################################
 # Unit Tests
 #
 
+if CPPUNIT
 UNIT_TESTS = requestT validateUrlT convertTypeT xmlErrT
+else
+UNIT_TESTS =
+endif
 
 requestT_SOURCES = requestT.cc
-requestT_LDADD = -lcppunit ../libwcs_module.la
+requestT_LDADD = ../libwcs_module.la $(AM_LDADD)
 
 validateUrlT_SOURCES = validateUrlT.cc
-validateUrlT_LDADD = -lcppunit ../libwcs_module.la
+validateUrlT_LDADD = ../libwcs_module.la $(AM_LDADD)
 
 convertTypeT_SOURCES = convertTypeT.cc
-convertTypeT_LDADD = -lcppunit ../libwcs_module.la
+convertTypeT_LDADD = ../libwcs_module.la $(AM_LDADD)
 
 xmlErrT_SOURCES = xmlErrT.cc
-xmlErrT_LDADD = -lcppunit ../libwcs_module.la
+xmlErrT_LDADD = ../libwcs_module.la $(AM_LDADD)
 
