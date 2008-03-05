@@ -244,8 +244,8 @@ WCSUtils::validate_url( const string &url, string &format )
 // (see open()) to make it more secure. Ideal solution: get deserialize()
 // methods to read from a stream returned by libcurl, not from a temporary
 // file. 9/21/07 jhrg
-static char *
-get_tempfile_template(char *file_template)
+char *
+WCSUtils::get_tempfile_template(char *file_template)
 {
     char *c;
     
