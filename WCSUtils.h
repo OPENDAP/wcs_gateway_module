@@ -58,6 +58,7 @@ public:
 
     static string		validate_url( const string &url,
 					      string &format ) ;
+    static char *		get_tempfile_template( char *file_template ) ;
 } ;
 
 #endif // I_WCSUtils_H

@@ -49,6 +49,7 @@ using std::istringstream ;
 using namespace libdap ;
 
 #include "WCSRequest.h"
+#include "WCSUtils.h"
 #include "BESInternalError.h"
 #include "WCSError.h"
 #include "BESDebug.h"
@@ -402,7 +403,7 @@ string
 WCSRequest::get_temp_file( FILE *&stream )
 {
     // get_tempfile_template() uses new, must call delete
-    char *wcs_temp = get_tempfile_template("wcsXXXXXX");
+    char *wcs_temp = WCSUtils::get_tempfile_template("wcsXXXXXX");
 
     // Open truncated for update. NB: mkstemp() returns a file descriptor.
 #if defined(WIN32) || defined(TEST_WIN32_TEMPS)
