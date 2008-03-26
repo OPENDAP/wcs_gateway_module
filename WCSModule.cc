@@ -37,12 +37,18 @@ using std::endl ;
 #include "WCSModule.h"
 #include "BESDebug.h"
 #include "WCSContainerStorage.h"
+#include "WCSRequestHandler.h"
+#include "BESRequestHandlerList.h"
 #include "BESContainerStorageList.h"
 
 void
 WCSModule::initialize( const string &modname )
 {
     BESDEBUG( "wcs", "Initializing WCS Module " << modname << endl )
+
+    BESDEBUG( "wcs", "    adding " << modname << " request handler" << endl )
+    BESRequestHandler *handler = new WCSRequestHandler( modname ) ;
+    BESRequestHandlerList::TheList()->add_handler( modname, handler ) ;
 
     BESDEBUG( "wcs", "    adding " << modname << " container storage" << endl )
     BESContainerStorageList::TheList()->add_persistence( new WCSContainerStorage( modname ) ) ;
@@ -57,6 +63,10 @@ void
 WCSModule::terminate( const string &modname )
 {
     BESDEBUG( "wcs", "Cleaning WCS Module " << modname << endl )
+
+    BESDEBUG( "nc", "    removing NC Handler" << modname << endl )
+    BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( modname ) ;
+    if( rh ) delete rh ;
 
     BESDEBUG( "wcs", "    removing " << modname << " container storage" << endl )
     BESContainerStorageList::TheList()->del_persistence( modname ) ;

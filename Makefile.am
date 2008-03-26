@@ -22,11 +22,13 @@ WCS_HDRS:=
 
 BES_SRCS = \
 		WCSModule.cc WCSRequest.cc WCSContainerStorage.cc	\
-		WCSContainer.cc WCSUtils.cc WCSError.cc
+		WCSContainer.cc WCSUtils.cc WCSError.cc			\
+		WCSRequestHandler.cc
 
 BES_HDRS = \
 		WCSModule.h WCSRequest.h WCSContainerStorage.h		\
-		WCSContainer.h WCSUtils.h WCSError.h
+		WCSContainer.h WCSUtils.h WCSError.h			\
+		WCSRequestHandler.h
 
 libwcs_module_la_SOURCES = $(WCS_SRCS) $(BES_SRCS) $(WCS_HDRS) $(BES_HDRS)
 libwcs_module_la_CPPFLAGS = $(BES_CPPFLAGS)
