@@ -53,8 +53,6 @@ using std::string ;
 class WCSContainer : public BESContainer
 {
 private:
-    string			_cacheDir ;
-    string			_cacheTime ;
     string			_cacheName ;
     FILE *			_file_ptr ;
 

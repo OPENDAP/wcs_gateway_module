@@ -57,7 +57,7 @@ public:
 	    cacheDir = "./wcs" ;
 	}
 
-	string url = "\"http://webapps.datafed.net/ogc_NASA.wsfl?SERVICE=WCS&REQUEST=GetCoverage&VERSION=1.0.0&CRS=EPSG:4326&COVERAGE=GOCART_G_OL.BCEXTTAU&TIME=2007-06-24T23:00:00&BBOX=-180,-90,180,90,0,0&WIDTH=-1&HEIGHT=-1&DEPTH=-1&FORMAT=NetCDF\"" ;
+	string url = "\"http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&version=1.0.0&request=GetCoverage&coverage=totH2OStd&TIME=2003-03-08&crs=WGS84&bbox=-53.885000,-4.085000,-49.135000,0.665000&resx=0.25&resy=0.25&interpolationMethod=Nearest%20neighbor&format=netCDF\"";
 
 	string qurl = url.substr( 1, url.length() - 2 ) ;
 	cerr << qurl << endl ;

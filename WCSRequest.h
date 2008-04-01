@@ -60,8 +60,6 @@ public:
 				~WCSRequest() {} ;
     FILE *			make_request( const string &url,
 					      const string &type,
-					      const string &cacheDir,
-					      const string &cacheTime,
 					      string &cacheName ) ;
 } ;
 

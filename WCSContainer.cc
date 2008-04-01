@@ -39,7 +39,6 @@ using namespace libdap ;
 #include "WCSUtils.h"
 #include "BESSyntaxUserError.h"
 #include "BESInternalError.h"
-#include "TheBESKeys.h"
 #include "BESDebug.h"
 
 /** @brief Creates an instances of WCSContainer with symbolic name and real
@@ -63,7 +62,6 @@ using namespace libdap ;
  * @param real_name the WCS request
  * @throws BESSyntaxUserError if the url does not validate
  * @see WCSUtils
- * @see BESKeys
  */
 WCSContainer::WCSContainer( const string &sym_name,
 			    const string &real_name )
@@ -86,27 +84,10 @@ WCSContainer::WCSContainer( const string &sym_name,
     set_real_name( new_real_name ) ;
 
     set_container_type( type ) ;
-
-    // Retrieve the cache time from the BES configuration file
-    bool found = false ;
-    _cacheTime = TheBESKeys::TheKeys()->get_key( "WCS.CacheTime", found );
-    if( !found || _cacheTime.empty() )
-    {
-	_cacheTime = "0.0" ;
-    }
-
-    found = false ;
-    _cacheDir = TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
-    if( !found || _cacheDir.empty() )
-    {
-	_cacheDir = "/tmp" ;
-    }
 }
 
 WCSContainer::WCSContainer( const WCSContainer &copy_from )
     : BESContainer( copy_from ),
-      _cacheDir( copy_from._cacheDir ),
-      _cacheTime( copy_from._cacheTime ),
       _cacheName( copy_from._cacheName ),
       _file_ptr( copy_from._file_ptr )
 {
@@ -129,8 +110,6 @@ WCSContainer::_duplicate( WCSContainer &copy_to )
 	             + "can not duplicate this resource." ;
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
-    copy_to._cacheDir = _cacheDir ;
-    copy_to._cacheTime = _cacheTime ;
     copy_to._cacheName = _cacheName ;
     copy_to._file_ptr = _file_ptr ;
     BESContainer::_duplicate( copy_to ) ;
@@ -164,8 +143,9 @@ WCSContainer::access()
     if( !_file_ptr )
     {
 	WCSRequest r ;
-	_file_ptr = r.make_request( get_real_name(), get_container_type(),
-				    _cacheDir, _cacheTime, _cacheName ) ;
+	_file_ptr = r.make_request( get_real_name(),
+				    get_container_type(),
+				    _cacheName ) ;
     }
     return _cacheName ;
 }
@@ -203,7 +183,6 @@ WCSContainer::dump( ostream &strm ) const
     strm << BESIndent::LMarg << "WCSContainer::dump - ("
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
-    strm << BESIndent::LMarg << "cache time: " << _cacheTime << endl ;
     BESContainer::dump( strm ) ;
     BESIndent::UnIndent() ;
 }

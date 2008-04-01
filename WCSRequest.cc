@@ -50,18 +50,13 @@ using namespace libdap ;
 
 #include "WCSRequest.h"
 #include "WCSUtils.h"
+#include "WCSParams.h"
 #include "BESInternalError.h"
 #include "WCSError.h"
 #include "BESDebug.h"
-#include "TheBESKeys.h"
 #include "config.h"
 
-#define CACHE_SIZE_STR "20"
-#define MIN_CACHE_SIZE 5
-#define ENTRY_SIZE_STR "3"
-#define MIN_ENTRY_SIZE 1
-
-/* function passed to libcurl that knows how to save the raw http headers in the response
+/* function passed to libcurl to save the raw http headers from the response
  */
 size_t 
 WCSRequest::save_raw_http_headers( void *ptr, size_t size,
@@ -85,34 +80,32 @@ WCSRequest::save_raw_http_headers( void *ptr, size_t size,
 
 /** @brief make the WCS request against the given information
  *
- * function that makes a WCS request using libcurl given the WCS request url, the target
- * name of the file for the response, the type of data being returned, and the maximum
- * amount of time (in seconds) that a response file can remain in the cache.
+ * function that makes a WCS request using libcurl given the WCS request
+ * url, the target name of the file for the response, the type of data being
+ * returned, and the maximum amount of time (in seconds) that a response
+ * file can remain in the cache.
  *
- * First it is determined if the response file already exists in the WCS cache. The cache
- * directory is retrieved from the BES configuration file using the parameter
- * WCS.CacheDir. If not set or empty then /tmp is used. The target response file can
- * remain in the cache for cacheTime seconds. If the target does not exist or the cache
- * time has expired, then the request is made, otherwise the response file in the cache is
- * used.
+ * First it is determined if the response file already exists in the WCS
+ * cache. The cache directory is retrieved from the BES configuration file
+ * using the parameter WCS.CacheDir. If not set or empty then /tmp is used.
+ * The target response file can remain in the cache for cacheTime seconds.
+ * If the target does not exist or the cache time has expired, then the
+ * request is made, otherwise the response file in the cache is used.
  *
- * A temporary target file is used to store the information. If the request was successful
- * and the resulting file does not contain error information then this temporary file is
- * moved to the real target file.
+ * A temporary target file is used to store the information. If the request
+ * was successful and the resulting file does not contain error information
+ * then this temporary file is moved to the real target file.
  *
  * @param url WCS request url
  * @param type target file name data type, like nc or hdf4
- * @param cacheDir cache directory where results of WCS request will be
- * stored
- * @param cacheTime maximum time a response can remain in the cache
- * @param cacheName out parameter where the name of the cache file will be
+ * @param cacheName out parameter where the name of the cached file will be
  * stored for access
  * @return FILE pointer for the cached file represented by cacheName
  * @throws BESInternalError if there is a problem making the WCS request or the request fails
+ * @see WCSParams
  */
 FILE *
 WCSRequest::make_request( const string &url, const string &type,
-			  const string &cacheDir, const string &cacheTime,
 			  string &cacheName )
 {
     if( url.empty() )
@@ -125,55 +118,14 @@ WCSRequest::make_request( const string &url, const string &type,
 	string err = "WCS Request target type is empty" ;
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
-    if( cacheDir.empty() )
-    {
-	string err = "WCS Request cache directory not specified" ;
-	throw BESInternalError( err, __FILE__, __LINE__ ) ;
-    }
-    if( cacheTime.empty() )
-    {
-	string err = "WCS Request cache time not specified" ;
-	throw BESInternalError( err, __FILE__, __LINE__ ) ;
-    }
 
-    // Retrieve the max cache size from the BES configuration file
-    bool found = false ;
-    string cacheSize = TheBESKeys::TheKeys()->get_key( "WCS.CacheSize", found );
-    if( !found || cacheSize.empty() )
-    {
-	cacheSize = CACHE_SIZE_STR ;
-    }
-    istringstream cacheSizeStream( cacheSize ) ;
-    int cacheSizeValue ;
-    cacheSizeStream >> cacheSizeValue ;
-    if( cacheSizeValue < MIN_CACHE_SIZE ) cacheSizeValue = MIN_CACHE_SIZE ;
-
-    // Retrieve the max cache size from the BES configuration file
-    found = false ;
-    string entrySize =
-	TheBESKeys::TheKeys()->get_key( "WCS.CacheEntrySize", found );
-    if( !found || entrySize.empty() )
-    {
-	entrySize = ENTRY_SIZE_STR ;
-    }
-    istringstream entrySizeStream( entrySize ) ;
-    int entrySizeValue ;
-    entrySizeStream >> entrySizeValue ;
-    if( entrySizeValue < MIN_ENTRY_SIZE ) entrySizeValue = MIN_ENTRY_SIZE ;
-
-    if( cacheSizeValue <= entrySizeValue )
-    {
-	string err = (string)"WCS Max Cache Size cannot be less than or equal "
-		     + "to the max size of an entry in the cache" ;
-	throw BESInternalError( err, __FILE__, __LINE__ ) ;
-    }
+    string cacheDir = WCSParams::GetCacheDir() ;
+    int cacheTime = WCSParams::GetCacheTime() ;
+    int cacheSize = WCSParams::GetCacheSize() ;
+    int entrySize = WCSParams::GetEntrySize() ;
 
     BESDEBUG( "wcs", "WCSRequest::make_request" << endl )
     BESDEBUG( "wcs", "  request = " << url << endl )
-    BESDEBUG( "wcs", "  cacheDir = " << cacheDir << endl )
-    BESDEBUG( "wcs", "  cacheTime = " << cacheTime << endl )
-    BESDEBUG( "wcs", "  cacheSize = " << cacheSizeValue << endl )
-    BESDEBUG( "wcs", "  entrySize = " << entrySizeValue << endl )
 
     HTTPCache *cache = HTTPCache::instance( cacheDir, false ) ;
     if( !cache )
@@ -184,21 +136,16 @@ WCSRequest::make_request( const string &url, const string &type,
 
     cache->set_cache_enabled( true ) ;
     cache->set_expire_ignored( false ) ;
-    cache->set_max_size( cacheSizeValue ) ;
-    cache->set_max_entry_size( entrySizeValue ) ;
+    cache->set_max_size( cacheSize ) ;
+    cache->set_max_entry_size( entrySize ) ;
     cache->set_always_validate( false ) ;
 
-    istringstream ct( cacheTime ) ;
-    int d_cacheTime = 0 ;
-    ct >> d_cacheTime ;
-    if( d_cacheTime < 0 ) d_cacheTime = 0 ;
-
     FILE *s = 0 ;
-    BESDEBUG( "wcs", "  is url in cache? ..." )
+    BESDEBUG( "wcs", "  is url in cache? ..." << endl )
     if( cache && cache->is_url_in_cache( url ) )
     {
 	BESDEBUG( "wcs", "yes" << endl )
-	BESDEBUG( "wcs", "  is url valid? ..." )
+	BESDEBUG( "wcs", "  is url valid? ..." << endl )
         if( cache->is_url_valid( url ) )
 	{
 	    BESDEBUG( "wcs", "yes" << endl )
@@ -297,7 +244,7 @@ WCSRequest::make_request( const string &url, const string &type,
 
 	// Add the Expires header using the cacheTime
 	time_t now = time( 0 ) ; // When was the request made (now).
-	time_t expires = now + d_cacheTime ;
+	time_t expires = now + cacheTime ;
 	string expires_str = "Expires: " + date_time_str( &expires ) ;
 	headers.push_back( expires_str ) ;
 
@@ -335,7 +282,7 @@ WCSRequest::make_request( const string &url, const string &type,
 
 	if( request_status == false )
 	{
-	    BESDEBUG( "wcs", " request FAILED" )
+	    BESDEBUG( "wcs", " request FAILED" << endl )
 
 	    // get the error information from the temoorary file
 	    string err ;
