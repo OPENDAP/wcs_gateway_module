@@ -37,6 +37,7 @@ using namespace libdap ;
 #include "WCSContainer.h"
 #include "WCSRequest.h"
 #include "WCSUtils.h"
+#include "WCSParams.h"
 #include "BESSyntaxUserError.h"
 #include "BESInternalError.h"
 #include "BESDebug.h"
@@ -139,7 +140,7 @@ WCSContainer::~WCSContainer()
 string
 WCSContainer::access()
 {
-    BESDEBUG( "wcs", "accessed" << endl )
+    BESDEBUG( "wcs", "accessing " << get_real_name() << endl )
     if( !_file_ptr )
     {
 	WCSRequest r ;
@@ -147,6 +148,8 @@ WCSContainer::access()
 				    get_container_type(),
 				    _cacheName ) ;
     }
+    BESDEBUG( "wcs", "done accessing " << get_real_name() << " returning "
+		     << _cacheName << endl )
     return _cacheName ;
 }
 
@@ -161,12 +164,15 @@ WCSContainer::release()
 {
     if( _file_ptr )
     {
-	HTTPCache *cache = HTTPCache::instance( get_real_name(), false ) ;
+	BESDEBUG( "wcs", "releasing " << _cacheName << endl )
+	HTTPCache *cache =
+	    HTTPCache::instance( WCSParams::GetCacheDir(), false ) ;
 	cache->release_cached_response( _file_ptr ) ;
 	fclose( _file_ptr ) ;
 	_file_ptr = 0 ;
     }
 
+    BESDEBUG( "wcs", "done releasing " << _cacheName << endl )
     return true ;
 }
 
