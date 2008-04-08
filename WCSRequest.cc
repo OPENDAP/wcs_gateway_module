@@ -144,23 +144,23 @@ WCSRequest::make_request( const string &url, const string &type,
     BESDEBUG( "wcs", "  is url in cache? ..." << endl )
     if( cache && cache->is_url_in_cache( url ) )
     {
-	BESDEBUG( "wcs", "yes" << endl )
+	BESDEBUG( "wcs", "  yes" << endl )
 	BESDEBUG( "wcs", "  is url valid? ..." << endl )
         if( cache->is_url_valid( url ) )
 	{
-	    BESDEBUG( "wcs", "yes" << endl )
+	    BESDEBUG( "wcs", "  yes" << endl )
 	    vector<string> headers ;
             s = cache->get_cached_response( url, headers, cacheName ) ;
 	    return s ;
 	}
 	else
 	{
-	    BESDEBUG( "wcs", "no" << endl )
+	    BESDEBUG( "wcs", "  no" << endl )
 	}
     }
     else
     {
-	BESDEBUG( "wcs", "no" << endl )
+	BESDEBUG( "wcs", "  no" << endl )
     }
 
     // if it's not in the cache, or isn't valid, or we couldn't get it from
@@ -313,7 +313,6 @@ WCSRequest::make_request( const string &url, const string &type,
 	// close the temporary target
 	BESDEBUG( "wcs", "  closing temporary file" << endl )
 	close_temp( stream, wcs_temp ) ;
-	fclose( stream ) ;
 
 	// get the cached response and return that instead of the temporary
 	// file
