@@ -8,64 +8,131 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
         <Attribute name="Conventions" type="String">
             <value>&quot;CF-1.0&quot;</value>
         </Attribute>
-        <Attribute name="title" type="String">
-            <value>&quot;DUEXTTAU&quot;</value>
-        </Attribute>
-        <Attribute name="institution" type="String">
-            <value>&quot;datafed&quot;</value>
+        <Attribute name="Institution" type="String">
+            <value>&quot;CSISS,GMU&quot;</value>
         </Attribute>
     </Attribute>
 
-    <Array name="lat">
+    <Grid name="CO_total_column">
+        <Attribute name="standard_name" type="String">
+            <value>&quot;CO_total_column&quot;</value>
+        </Attribute>
         <Attribute name="long_name" type="String">
-            <value>&quot;Latitude&quot;</value>
+            <value>&quot;Total column CO&quot;</value>
+        </Attribute>
+        <Attribute name="_FillValue" type="Float32">
+            <value>-1.000000000</value>
+        </Attribute>
+        <Attribute name="units" type="String">
+            <value>&quot;molecules/cm2&quot;</value>
+        </Attribute>
+        <Array name="CO_total_column">
+            <Float32/>
+            <dimension name="time" size="1"/>
+            <dimension name="latitude" size="20"/>
+            <dimension name="longitude" size="20"/>
+        </Array>
+        <Map name="time">
+            <Float64/>
+            <dimension name="time" size="1"/>
+        </Map>
+        <Map name="latitude">
+            <Float64/>
+            <dimension name="latitude" size="20"/>
+        </Map>
+        <Map name="longitude">
+            <Float64/>
+            <dimension name="longitude" size="20"/>
+        </Map>
+    </Grid>
+    <Array name="nv">
+        <Attribute name="long_name" type="String">
+            <value>&quot;number_of_vertices&quot;</value>
+        </Attribute>
+        <Int32/>
+        <dimension name="nv" size="2"/>
+    </Array>
+    <Grid name="time_bnds">
+        <Attribute name="long_name" type="String">
+            <value>&quot;time_bnds&quot;</value>
+        </Attribute>
+        <Attribute name="units" type="String">
+            <value>&quot;seconds since 1993-1-1 0:0:0&quot;</value>
+        </Attribute>
+        <Array name="time_bnds">
+            <Float64/>
+            <dimension name="time" size="1"/>
+            <dimension name="nv" size="2"/>
+        </Array>
+        <Map name="time">
+            <Float64/>
+            <dimension name="time" size="1"/>
+        </Map>
+        <Map name="nv">
+            <Int32/>
+            <dimension name="nv" size="2"/>
+        </Map>
+    </Grid>
+    <Array name="time">
+        <Attribute name="long_name" type="String">
+            <value>&quot;time&quot;</value>
         </Attribute>
         <Attribute name="axis" type="String">
-            <value>&quot;Y&quot;</value>
+            <value>&quot;T&quot;</value>
+        </Attribute>
+        <Attribute name="units" type="String">
+            <value>&quot;seconds since 1993-1-1 0:0:0&quot;</value>
+        </Attribute>
+        <Attribute name="bounds" type="String">
+            <value>&quot;time_bnds&quot;</value>
+        </Attribute>
+        <Float64/>
+        <dimension name="time" size="1"/>
+    </Array>
+    <Array name="latitude">
+        <Attribute name="long_name" type="String">
+            <value>&quot;latitude&quot;</value>
         </Attribute>
         <Attribute name="units" type="String">
             <value>&quot;degrees_north&quot;</value>
         </Attribute>
-        <Float64/>
-        <dimension name="lat" size="181"/>
-    </Array>
-    <Array name="lon">
-        <Attribute name="long_name" type="String">
-            <value>&quot;Longitude&quot;</value>
+        <Attribute name="standard_name" type="String">
+            <value>&quot;latitude&quot;</value>
         </Attribute>
         <Attribute name="axis" type="String">
-            <value>&quot;X&quot;</value>
+            <value>&quot;Y&quot;</value>
+        </Attribute>
+        <Attribute name="GCTP_Projection_Name" type="String">
+            <value>&quot;Geographic&quot;</value>
+        </Attribute>
+        <Attribute name="GCTP_Spheroid_Name" type="String">
+            <value>&quot;Clarke 1866&quot;</value>
+        </Attribute>
+        <Float64/>
+        <dimension name="latitude" size="20"/>
+    </Array>
+    <Array name="longitude">
+        <Attribute name="long_name" type="String">
+            <value>&quot;longitude&quot;</value>
         </Attribute>
         <Attribute name="units" type="String">
             <value>&quot;degrees_east&quot;</value>
         </Attribute>
+        <Attribute name="standard_name" type="String">
+            <value>&quot;longitude&quot;</value>
+        </Attribute>
+        <Attribute name="axis" type="String">
+            <value>&quot;X&quot;</value>
+        </Attribute>
+        <Attribute name="GCTP_Projection_Name" type="String">
+            <value>&quot;Geographic&quot;</value>
+        </Attribute>
+        <Attribute name="GCTP_Spheroid_Name" type="String">
+            <value>&quot;Clarke 1866&quot;</value>
+        </Attribute>
         <Float64/>
-        <dimension name="lon" size="361"/>
+        <dimension name="longitude" size="20"/>
     </Array>
-    <Grid name="DUEXTTAU">
-        <Attribute name="units" type="String">
-            <value>&quot;none&quot;</value>
-        </Attribute>
-        <Attribute name="_FillValue" type="Float32">
-            <value>nan.</value>
-        </Attribute>
-        <Attribute name="missing_value" type="Float32">
-            <value>nan.</value>
-        </Attribute>
-        <Array name="DUEXTTAU">
-            <Float32/>
-            <dimension name="lat" size="181"/>
-            <dimension name="lon" size="361"/>
-        </Array>
-        <Map name="lat">
-            <Float64/>
-            <dimension name="lat" size="181"/>
-        </Map>
-        <Map name="lon">
-            <Float64/>
-            <dimension name="lon" size="361"/>
-        </Map>
-    </Grid>
 
     <dataBLOB href=""/>
 </Dataset>

@@ -1,11 +1,23 @@
 Dataset {
-    Float64 lat[lat = 181];
-    Float64 lon[lon = 361];
     Grid {
       Array:
-        Float32 COCL001[lat = 181][lon = 361];
+        Float32 PCldTopStd[time = 2][Cloud = 2][latitude = 20][longitude = 20];
       Maps:
-        Float64 lat[lat = 181];
-        Float64 lon[lon = 361];
-    } COCL001;
+        Float64 time[time = 2];
+        Int32 Cloud[Cloud = 2];
+        Float64 latitude[latitude = 20];
+        Float64 longitude[longitude = 20];
+    } PCldTopStd;
+    Int32 nv[nv = 2];
+    Grid {
+      Array:
+        Float64 time_bnds[time = 2][nv = 2];
+      Maps:
+        Float64 time[time = 2];
+        Int32 nv[nv = 2];
+    } time_bnds;
+    Float64 time[time = 2];
+    Int32 Cloud[Cloud = 2];
+    Float64 latitude[latitude = 20];
+    Float64 longitude[longitude = 20];
 } test;

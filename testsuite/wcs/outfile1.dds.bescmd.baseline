@@ -1,11 +1,21 @@
 Dataset {
-    Float64 lat[lat = 181];
-    Float64 lon[lon = 361];
     Grid {
       Array:
-        Float32 BCEXTTAU[lat = 181][lon = 361];
+        Float32 TSurfAir[time = 1][latitude = 20][longitude = 20];
       Maps:
-        Float64 lat[lat = 181];
-        Float64 lon[lon = 361];
-    } BCEXTTAU;
+        Float64 time[time = 1];
+        Float64 latitude[latitude = 20];
+        Float64 longitude[longitude = 20];
+    } TSurfAir;
+    Int32 nv[nv = 2];
+    Grid {
+      Array:
+        Float64 time_bnds[time = 1][nv = 2];
+      Maps:
+        Float64 time[time = 1];
+        Int32 nv[nv = 2];
+    } time_bnds;
+    Float64 time[time = 1];
+    Float64 latitude[latitude = 20];
+    Float64 longitude[longitude = 20];
 } test;

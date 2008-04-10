@@ -1,22 +1,47 @@
 Attributes {
-    lat {
-        String long_name "Latitude";
-        String axis "Y";
+    CH4_VMR_eff {
+        String standard_name "CH4_VMR_eff";
+        String long_name "Effective CH4 Volume Mixing Ratio Profile";
+        Float32 _FillValue -1.000000000;
+        String units "unitless";
+    }
+    nv {
+        String long_name "number_of_vertices";
+    }
+    time_bnds {
+        String long_name "time_bnds";
+        String units "seconds since 1993-1-1 0:0:0";
+    }
+    time {
+        String long_name "time";
+        String axis "T";
+        String units "seconds since 1993-1-1 0:0:0";
+        String bounds "time_bnds";
+    }
+    CH4Func {
+        String long_name "CH4Func";
+        String Description "CH4 trapezoid layer ID, each value representing one of the following 7 CH4 trapezoid layers: 1,30,51,60,67,73,80";
+        String axis "Z";
+        String units "unitless";
+    }
+    latitude {
+        String long_name "latitude";
         String units "degrees_north";
+        String standard_name "latitude";
+        String axis "Y";
+        String GCTP_Projection_Name "Geographic";
+        String GCTP_Spheroid_Name "Clarke 1866";
     }
-    lon {
-        String long_name "Longitude";
-        String axis "X";
+    longitude {
+        String long_name "longitude";
         String units "degrees_east";
-    }
-    CCEXTTAU {
-        String units "none";
-        Float32 _FillValue nan.;
-        Float32 missing_value nan.;
+        String standard_name "longitude";
+        String axis "X";
+        String GCTP_Projection_Name "Geographic";
+        String GCTP_Spheroid_Name "Clarke 1866";
     }
     NC_GLOBAL {
         String Conventions "CF-1.0";
-        String title "CCEXTTAU";
-        String institution "datafed";
+        String Institution "CSISS,GMU";
     }
 }

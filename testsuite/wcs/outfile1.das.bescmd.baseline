@@ -1,22 +1,41 @@
 Attributes {
-    lat {
-        String long_name "Latitude";
-        String axis "Y";
+    TSurfAir {
+        String standard_name "TSurfAir";
+        String long_name "Surface Air Temperature";
+        Float32 _FillValue -1.000000000;
+        String units "K";
+    }
+    nv {
+        String long_name "number_of_vertices";
+    }
+    time_bnds {
+        String long_name "time_bnds";
+        String units "seconds since 1993-1-1 0:0:0";
+    }
+    time {
+        String long_name "time";
+        String axis "T";
+        String units "seconds since 1993-1-1 0:0:0";
+        String bounds "time_bnds";
+    }
+    latitude {
+        String long_name "latitude";
         String units "degrees_north";
+        String standard_name "latitude";
+        String axis "Y";
+        String GCTP_Projection_Name "Geographic";
+        String GCTP_Spheroid_Name "Clarke 1866";
     }
-    lon {
-        String long_name "Longitude";
-        String axis "X";
+    longitude {
+        String long_name "longitude";
         String units "degrees_east";
-    }
-    BCEXTTAU {
-        String units "none";
-        Float32 _FillValue nan.;
-        Float32 missing_value nan.;
+        String standard_name "longitude";
+        String axis "X";
+        String GCTP_Projection_Name "Geographic";
+        String GCTP_Spheroid_Name "Clarke 1866";
     }
     NC_GLOBAL {
         String Conventions "CF-1.0";
-        String title "BCEXTTAU";
-        String institution "datafed";
+        String Institution "CSISS,GMU";
     }
 }
