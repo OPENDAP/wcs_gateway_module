@@ -55,7 +55,8 @@ WCSModule::initialize( const string &modname )
     BESRequestHandlerList::TheList()->add_handler( modname, handler ) ;
 
     BESDEBUG( "wcs", "    adding " << modname << " container storage" << endl )
-    BESContainerStorageList::TheList()->add_persistence( new WCSContainerStorage( modname ) ) ;
+    BESContainerStorageList::TheList()->
+	add_persistence( new WCSContainerStorage( modname ) ) ;
 
     BESDEBUG( "wcs", "    adding wcs debug context" << endl )
     BESDebug::Register( "wcs" ) ;

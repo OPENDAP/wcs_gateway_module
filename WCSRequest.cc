@@ -189,7 +189,14 @@ WCSRequest::make_request( const string &url, const string &type,
 
 	curl_easy_setopt( d_curl, CURLOPT_NOPROGRESS, 1 ) ;
 	curl_easy_setopt( d_curl, CURLOPT_NOSIGNAL, 1 ) ;
-	curl_easy_setopt( d_curl, CURLOPT_HEADERFUNCTION, WCSRequest::save_raw_http_headers ) ;
+
+	// If Location is returned in the HTML header then follow the
+	// redirect. At most, 5 redirects are allowed.
+	curl_easy_setopt( d_curl, CURLOPT_FOLLOWLOCATION, 1 ) ;
+	curl_easy_setopt( d_curl, CURLOPT_MAXREDIRS, 5 ) ;
+
+	curl_easy_setopt( d_curl, CURLOPT_HEADERFUNCTION,
+			  WCSRequest::save_raw_http_headers ) ;
 
 	vector<string> headers ;
 	curl_easy_setopt( d_curl, CURLOPT_WRITEHEADER, &headers ) ;
