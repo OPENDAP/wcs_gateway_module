@@ -4,8 +4,12 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include <string>
 #include <fstream>
+#include <cerrno>
 
 #include "HTTPCache.h"
 #include "Error.h"
@@ -25,7 +29,7 @@ using std::ios ;
 
 class requestT: public TestFixture {
 private:
-
+    string cacheDir ;
 public:
     requestT() {}
     ~requestT() {}
@@ -35,6 +39,23 @@ public:
 	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
 	putenv( (char *)bes_conf.c_str() ) ;
 	BESDebug::SetUp( "cerr,wcs" ) ;
+
+	bool found = false ;
+	cacheDir = TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
+	if( !found || cacheDir.empty() )
+	{
+	    cacheDir = "./wcs" ;
+	}
+
+	mode_t mode = S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH ;
+	int ret = mkdir( cacheDir.c_str(), mode ) ;
+	int myerrno = errno ;
+	if( ret == -1 && myerrno != EEXIST )
+	{
+	    cerr << "Unable to create the wcs cache directory "
+	         << cacheDir << " for this test" << endl ;
+	    throw "failed" ;
+	}
     } 
 
     void tearDown()
@@ -49,14 +70,6 @@ public:
 
     void make_request()
     {
-	bool found = false ;
-	string cacheDir =
-	    TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
-	if( !found || cacheDir.empty() )
-	{
-	    cacheDir = "./wcs" ;
-	}
-
 	string url = "\"http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&version=1.0.0&request=GetCoverage&coverage=totH2OStd&TIME=2003-03-08&crs=WGS84&bbox=-53.885000,-4.085000,-49.135000,0.665000&resx=0.25&resy=0.25&interpolationMethod=Nearest%20neighbor&format=netCDF\"";
 
 	string qurl = url.substr( 1, url.length() - 2 ) ;
