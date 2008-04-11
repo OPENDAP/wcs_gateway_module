@@ -193,10 +193,10 @@ WCSParams::Dump( ostream &strm )
 {
     strm << BESIndent::LMarg << "WCSParams::Dump" << endl ;
     BESIndent::Indent() ;
-    strm << BESIndent::LMarg << "cache directory: " << GetCacheDir() ;
-    strm << BESIndent::LMarg << "cache time: " << GetCacheTime() ;
-    strm << BESIndent::LMarg << "cache size: " << GetCacheSize() ;
-    strm << BESIndent::LMarg << "entry size: " << GetEntrySize() ;
+    strm << BESIndent::LMarg << "cache directory: " << GetCacheDir() << endl ;
+    strm << BESIndent::LMarg << "cache time: " << GetCacheTime() << endl ;
+    strm << BESIndent::LMarg << "cache size: " << GetCacheSize() << endl ;
+    strm << BESIndent::LMarg << "entry size: " << GetEntrySize() << endl ;
     BESIndent::UnIndent() ;
 }
 
