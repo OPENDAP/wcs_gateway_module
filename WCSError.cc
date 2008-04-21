@@ -90,7 +90,9 @@ WCSError::read_error( const string &filename,
  * The XML document is parsed using the libxml2 library and the error
  * information is palced in the err parameter.
  *
- * The format of the XML document is expected to be as follows:
+ * The format of the XML document ExceptionReport is expected to be as
+ * follows, where the report can have multiple Exception elements within it
+ * and multiple ExceptionText elements.
  *
  * <pre>
  * <?xml version="1.0" encoding="UTF-8"?>
@@ -100,6 +102,10 @@ WCSError::read_error( const string &filename,
  *   </Exception>
  * </ExceptionReport>
  * </pre>
+ *
+ * The format of the XML document ServiceExceptionReport is expected to be
+ * as follows, where the report can have multiple ServiceException elements
+ * within it and multiple messages.
  *
  * @param filename target response file name with the error information
  * @param err return the error message in this variable
@@ -148,75 +154,81 @@ WCSError::read_xml_error( const string &filename,
 
     // The root element name should be ExceptionReport
     string root_name = (char *)root_element->name ;
-    if( root_name != "ExceptionReport" )
+    if( root_name == "ExceptionReport" )
     {
-	xmlFreeDoc(doc);
-	xmlCleanupParser() ;
-	err = err + "wcs exception root document not called ExceptionReport" ;
-	return ;
-    }
-
-    // one and only child should be <Exception>
-    exception_element = root_element->children ;
-    bool done = false ;
-    while( !done )
-    {
-	if( !exception_element )
+	// can be multiple exception elements within the report, each with
+	// multiple messages.
+	exception_element = root_element->children ;
+	while( exception_element )
 	{
-	    xmlFreeDoc( doc ) ;
-	    xmlCleanupParser() ;
-	    err = err + "Could not find the Exception element" ;
-	    return ;
-	}
-	string name = (char *)exception_element->name ;
-	if( name == "Exception" && exception_element->type == 1 )
-	{
-	    done = true ;
-	}
-	else
-	{
+	    string name = (char *)exception_element->name ;
+	    if( name == "Exception" && exception_element->type == 1 )
+	    {
+		msg_element = exception_element->children ;
+		while( msg_element )
+		{
+		    string name = (char *)msg_element->name ;
+		    if( name == "ExceptionText" && msg_element->type == 1 )
+		    {
+			char *content =
+			    (char *)xmlNodeGetContent( msg_element ) ;
+			if( content )
+			{
+			    if( !err.empty() )
+			    {
+				err = err + "\n" ;
+			    }
+			    err = err + content ;
+			}
+		    }
+		    msg_element = msg_element->next ;
+		}
+	    }
 	    exception_element = exception_element->next ;
 	}
-    }
-
-    msg_element = exception_element->children ;
-    done = false ;
-    while( !done )
-    {
-	if( !msg_element )
+	if( err.empty() )
 	{
-	    xmlFreeDoc( doc ) ;
-	    xmlCleanupParser() ;
-	    err = err + "Could not find the ExceptionText element" ;
-	    return ;
-	}
-	string name = (char *)msg_element->name ;
-	if( name == "ExceptionText" && msg_element->type == 1 )
-	{
-	    done = true ;
-	}
-	else
-	{
-	    msg_element = msg_element->next ;
+	    err = err + "No exception message is available" ;
 	}
     }
-
-    char *content = (char *)xmlNodeGetContent( msg_element ) ;
-    if( content )
+    else if( root_name == "ServiceExceptionReport" )
     {
-	err = err + content ;
+	// can be multiple exception elements within the report, each with
+	// multiple messages.
+	exception_element = root_element->children ;
+	while( exception_element )
+	{
+	    string name = (char *)exception_element->name ;
+	    if( name == "ServiceException" && exception_element->type == 1 )
+	    {
+		char *content = (char *)xmlNodeGetContent( exception_element ) ;
+		if( content )
+		{
+		    if( !err.empty() )
+		    {
+			err = err + "\n" ;
+		    }
+		    err = err + content ;
+		}
+	    }
+	    exception_element = exception_element->next ;
+	}
+	if( err.empty() )
+	{
+	    err = err + "No exception message is available" ;
+	}
     }
     else
     {
-	err = err + "No exception message is available" ;
+	err = err + "wcs exception root document not ExceptionReport or ServiceExceptionReport" ;
     }
 
-    /*free the document */
+    /* free the document */
     xmlFreeDoc(doc);
 
     /*
-     *Free the global variables that may
-     *have been allocated by the parser.
+     * Free the global variables that may
+     * have been allocated by the parser.
      */
     xmlCleanupParser();
 }
