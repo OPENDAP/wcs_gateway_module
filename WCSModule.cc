@@ -38,7 +38,6 @@ using std::endl ;
 #include "BESDebug.h"
 #include "WCSContainerStorage.h"
 #include "WCSRequestHandler.h"
-#include "WCSParams.h"
 #include "BESRequestHandlerList.h"
 #include "BESContainerStorageList.h"
 
@@ -46,9 +45,6 @@ void
 WCSModule::initialize( const string &modname )
 {
     BESDEBUG( "wcs", "Initializing WCS Module " << modname << endl )
-
-    BESDEBUG( "wcs", "    initializing WCS parameters " << endl )
-    WCSParams::Initialize() ;
 
     BESDEBUG( "wcs", "    adding " << modname << " request handler" << endl )
     BESRequestHandler *handler = new WCSRequestHandler( modname ) ;

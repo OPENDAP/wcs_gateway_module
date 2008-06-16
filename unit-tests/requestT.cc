@@ -11,13 +11,13 @@
 #include <fstream>
 #include <cerrno>
 
-#include "HTTPCache.h"
-#include "Error.h"
+#include <Error.h>
+
+#include <BESError.h>
+#include <TheBESKeys.h>
+#include <BESDebug.h>
 
 #include "WCSContainer.h"
-#include "BESError.h"
-#include "TheBESKeys.h"
-#include "BESDebug.h"
 #include "test_config.h"
 
 using namespace CppUnit ;
@@ -39,23 +39,6 @@ public:
 	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
 	putenv( (char *)bes_conf.c_str() ) ;
 	BESDebug::SetUp( "cerr,wcs" ) ;
-
-	bool found = false ;
-	cacheDir = TheBESKeys::TheKeys()->get_key( "WCS.CacheDir", found ) ;
-	if( !found || cacheDir.empty() )
-	{
-	    cacheDir = "./wcs" ;
-	}
-
-	mode_t mode = S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH ;
-	int ret = mkdir( cacheDir.c_str(), mode ) ;
-	int myerrno = errno ;
-	if( ret == -1 && myerrno != EEXIST )
-	{
-	    cerr << "Unable to create the wcs cache directory "
-	         << cacheDir << " for this test" << endl ;
-	    throw "failed" ;
-	}
     } 
 
     void tearDown()
@@ -126,92 +109,8 @@ public:
 	    CPPUNIT_ASSERT( !"Failed to release container" ) ;
 	}
 
-	// Grab the cache object for this cacheDir and make sure the url is
-	// in the cache and is valid.
-	HTTPCache *cache = 0 ;
-	try
-	{
-	    cache = HTTPCache::instance( cacheDir, false ) ;
-	    CPPUNIT_ASSERT( cache != 0 ) ;
-	    CPPUNIT_ASSERT( cache->is_url_in_cache( qurl ) ) ;
-	    CPPUNIT_ASSERT( cache->is_url_valid( qurl ) ) ;
-	}
-	catch( BESError &e )
-	{
-	    cerr << e.get_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed cache tests" ) ;
-	}
-	catch( Error &e )
-	{
-	    cerr << e.get_error_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed cache tests" ) ;
-	}
-
-	// cacheTime is set at 10 seconds, so sleep and run the tests again.
-	cerr << "sleeping" << endl ;
-	sleep( 15 ) ;
-	cerr << "done sleeping" << endl ;
-
-	// The url should be in the cache but it shouldn't be valid as the
-	// time as expired.
-	try
-	{
-	    CPPUNIT_ASSERT( cache != 0 ) ;
-	    CPPUNIT_ASSERT( cache->is_url_in_cache( qurl ) ) ;
-	    CPPUNIT_ASSERT( cache->is_url_valid( qurl ) == false ) ;
-	}
-	catch( BESError &e )
-	{
-	    cerr << e.get_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed cache tests" ) ;
-	}
-	catch( Error &e )
-	{
-	    cerr << e.get_error_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed cache tests" ) ;
-	}
-
-	// access the url again. Should make the WCS request again and
-	// return the same name as before.
-	string name2 ;
-	WCSContainer *c2 = 0 ;
-	try
-	{
-	    c2 = new WCSContainer( "c", url ) ;
-	    name2 = c2->access() ;
-	}
-	catch( BESError &e )
-	{
-	    cerr << e.get_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed to access container" ) ;
-	}
-	catch( Error &e )
-	{
-	    cerr << e.get_error_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed to access container" ) ;
-	}
-
-	// release the resource. This should just drop the lock and close
-	// the file descriptor 
-	try
-	{
-	    c2->release() ;
-	}
-	catch( BESError &e )
-	{
-	    cerr << e.get_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed to release container" ) ;
-	}
-	catch( Error &e )
-	{
-	    cerr << e.get_error_message() << endl ;
-	    CPPUNIT_ASSERT( !"Failed to release container" ) ;
-	}
-
 	delete c1 ;
-	delete c2 ;
     }
-
 } ;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( requestT ) ;

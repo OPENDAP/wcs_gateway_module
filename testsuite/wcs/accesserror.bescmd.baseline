@@ -3,19 +3,13 @@
     <response>
         <BESError>
             <Type>1</Type>
-            <Message>WCS Request failed for url: http://g0dup05u-ts2.ecs.nasa.gov/cgi-bin/WCS/ceopL2AIRS2?service=WCS&amp;version=1.0.0&amp;request=GetCoverage&amp;coverage=H2OMMRStd&amp;crs=WGS84&amp;bbox=-99.865000,34.235000,-95.115000,38.985000&amp;format=netCDF&amp;TIME=2002-08-31&amp;resx=0.25&amp;resy=0.25&amp;interpolationMethod=Nearest%20neighbor with error: &lt;!DOCTYPE HTML PUBLIC &quot;-//IETF//DTD HTML 2.0//EN&quot;&gt;
-&lt;HTML&gt;&lt;HEAD&gt;
-&lt;TITLE&gt;403 Forbidden&lt;/TITLE&gt;
-&lt;/HEAD&gt;&lt;BODY&gt;
-&lt;H1&gt;Forbidden&lt;/H1&gt;
-You don&apos;t have permission to access /cgi-bin/WCS/ceopL2AIRS2
-on this server.&lt;P&gt;
-&lt;/BODY&gt;&lt;/HTML&gt;
-</Message>
+            <Message>Error while reading the URL: http://g0dup05u-ts2.ecs.nasa.gov/cgi-bin/WCS/ceopL2AIRS2?service=WCS&amp;version=1.0.0&amp;request=GetCoverage&amp;coverage=H2OMMRStd&amp;crs=WGS84&amp;bbox=-99.865000,34.235000,-95.115000,38.985000&amp;format=netCDF&amp;TIME=2002-08-31&amp;resx=0.25&amp;resy=0.25&amp;interpolationMethod=Nearest%20neighbor.
+The OPeNDAP server returned the following message:
+Forbidden: Contact the server administrator.</Message>
             <Administrator>admin.email.address@your.domain.name</Administrator>
             <Location>
                 <File>WCSRequest.cc</File>
-                <Line>310</Line>
+                <Line>92</Line>
             </Location>
         </BESError>
     </response>

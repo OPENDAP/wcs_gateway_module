@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<getDAS>
+    <response>
+        <BESError>
+            <Type>1</Type>
+            <Message>WCS Request failed for url: http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&amp;version=1.0.0&amp;request=GetCoverage&amp;coverage=CheckErrorTSurfAir&amp;TIME=2002-10-09&amp;crs=WGS84&amp;bbox=-53.885000,-4.085000,-49.135000,0.665000&amp;resx=0.25&amp;resy=0.25&amp;interpolationMethod=Nearest%20neighbor&amp;format=netCDF with error: 
+Coverage, CheckErrorTSurfAir, is not available from this server.   Available coverages are: TSurfAir, TAirStd, GP_Height, GP_Surface, PSurfStd, TSurfStd, totH2OStd, H2OMMRStd, H2OMMRSat, H2OMMRSat_liquid, O3VMRStd, totO3Std, PCldTopStd, TCldTopStd, olr, clrolr, CO_total_column, CO_VMR_eff, CO_eff_press, CH4_total_column, CH4_VMR_eff, CH4_eff_press, GP_Height_MWOnly, sfcTbMWStd, EmisMWStd, totH2OMWOnlyStd, totCldH2OStd, numCloud</Message>
+            <Administrator>admin.email.address@your.domain.name</Administrator>
+            <Location>
+                <File>WCSRequest.cc</File>
+                <Line>162</Line>
+            </Location>
+        </BESError>
+    </response>
+</getDAS>

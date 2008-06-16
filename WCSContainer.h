@@ -33,11 +33,13 @@
 #ifndef WCSContainer_h_
 #define WCSContainer_h_ 1
 
-#include <list>
 #include <string>
 
-using std::list ;
 using std::string ;
+
+#include <HTTPResponse.h>
+
+using namespace libdap ;
 
 #include "BESContainer.h"
 
@@ -53,12 +55,10 @@ using std::string ;
 class WCSContainer : public BESContainer
 {
 private:
-    string			_cacheName ;
-    FILE *			_file_ptr ;
+    HTTPResponse *		_response ;
 
 				WCSContainer()
-				    : BESContainer(),
-				      _file_ptr( 0 ) {}
+				    : BESContainer(), _response( 0 ) {}
 protected:
     void			_duplicate( WCSContainer &copy_to ) ;
 public:

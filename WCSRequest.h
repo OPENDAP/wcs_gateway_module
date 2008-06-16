@@ -37,7 +37,9 @@
 
 using std::string ;
 
-class WCSFile ;
+#include <HTTPResponse.h>
+
+using namespace libdap ;
 
 /** @brief knows how to make a wcs request
  *
@@ -58,9 +60,7 @@ private:
 public:
     				WCSRequest() {} ;
 				~WCSRequest() {} ;
-    FILE *			make_request( const string &url,
-					      const string &type,
-					      string &cacheName ) ;
+    HTTPResponse *		make_request( const string &url ) ;
 } ;
 
 #endif // I_WCSRequest_H

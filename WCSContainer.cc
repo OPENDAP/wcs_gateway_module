@@ -37,7 +37,6 @@ using namespace libdap ;
 #include "WCSContainer.h"
 #include "WCSRequest.h"
 #include "WCSUtils.h"
-#include "WCSParams.h"
 #include "BESSyntaxUserError.h"
 #include "BESInternalError.h"
 #include "BESDebug.h"
@@ -66,8 +65,7 @@ using namespace libdap ;
  */
 WCSContainer::WCSContainer( const string &sym_name,
 			    const string &real_name )
-    : BESContainer( sym_name, "", "" ),
-      _file_ptr( 0 )
+    : BESContainer( sym_name, "", "" ), _response( 0 )
 {
     // The real name passed is the wcs request string. Within the request is
     // the name of the file we will use to form the cached file name, and the
@@ -89,12 +87,11 @@ WCSContainer::WCSContainer( const string &sym_name,
 
 WCSContainer::WCSContainer( const WCSContainer &copy_from )
     : BESContainer( copy_from ),
-      _cacheName( copy_from._cacheName ),
-      _file_ptr( copy_from._file_ptr )
+      _response( copy_from._response )
 {
     // we can not make a copy of this container once the WCS request has
     // been made
-    if( _file_ptr )
+    if( _response )
     {
 	string err = (string)"The Container has already been accessed, "
 	             + "can not create a copy of this container." ;
@@ -105,14 +102,13 @@ WCSContainer::WCSContainer( const WCSContainer &copy_from )
 void
 WCSContainer::_duplicate( WCSContainer &copy_to )
 {
-    if( copy_to._file_ptr )
+    if( copy_to._response )
     {
 	string err = (string)"The Container has already been accessed, "
 	             + "can not duplicate this resource." ;
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
-    copy_to._cacheName = _cacheName ;
-    copy_to._file_ptr = _file_ptr ;
+    copy_to._response = _response ;
     BESContainer::_duplicate( copy_to ) ;
 }
 
@@ -126,7 +122,7 @@ WCSContainer::ptr_duplicate( )
 
 WCSContainer::~WCSContainer()
 {
-    if( _file_ptr )
+    if( _response )
     {
 	release() ;
     }
@@ -141,16 +137,21 @@ string
 WCSContainer::access()
 {
     BESDEBUG( "wcs", "accessing " << get_real_name() << endl )
-    if( !_file_ptr )
+    string accessed ;
+    if( !_response )
     {
 	WCSRequest r ;
-	_file_ptr = r.make_request( get_real_name(),
-				    get_container_type(),
-				    _cacheName ) ;
+	_response = r.make_request( get_real_name() ) ;
+	if( _response )
+	    accessed = _response->get_file() ;
+    }
+    else
+    {
+	accessed = _response->get_file() ;
     }
     BESDEBUG( "wcs", "done accessing " << get_real_name() << " returning "
-		     << _cacheName << endl )
-    return _cacheName ;
+		     << accessed << endl )
+    return accessed ;
 }
 
 /** @brief release the WCS cache resources
@@ -162,17 +163,14 @@ WCSContainer::access()
 bool
 WCSContainer::release()
 {
-    if( _file_ptr )
+    if( _response )
     {
-	BESDEBUG( "wcs", "releasing " << _cacheName << endl )
-	HTTPCache *cache =
-	    HTTPCache::instance( WCSParams::GetCacheDir(), false ) ;
-	cache->release_cached_response( _file_ptr ) ;
-	fclose( _file_ptr ) ;
-	_file_ptr = 0 ;
+	BESDEBUG( "wcs", "releasing wcs response" << endl )
+	delete _response ;
+	_response = 0 ;
     }
 
-    BESDEBUG( "wcs", "done releasing " << _cacheName << endl )
+    BESDEBUG( "wcs", "done releasing wcs response" << endl )
     return true ;
 }
 
