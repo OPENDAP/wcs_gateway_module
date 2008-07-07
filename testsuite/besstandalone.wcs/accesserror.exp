@@ -9,5 +9,5 @@ global srcdir
 # The `1' in compare_stdout means call xfail if the test fails.
 
 besstandalone_start "wcs/accesserror.bescmd"
-compare_stdout "wcs/accesserror.bescmd.baseline" "asccess error" 0
+compare_stdout "wcs/accesserror.bescmd.baseline" "asccess error" 0 match
 
