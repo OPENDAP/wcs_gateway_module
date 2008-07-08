@@ -65,7 +65,7 @@ WCSModule::terminate( const string &modname )
 {
     BESDEBUG( "wcs", "Cleaning WCS Module " << modname << endl )
 
-    BESDEBUG( "nc", "    removing NC Handler" << modname << endl )
+    BESDEBUG( "wcs", "    removing WCS Handler" << modname << endl )
     BESRequestHandler *rh = BESRequestHandlerList::TheList()->remove_handler( modname ) ;
     if( rh ) delete rh ;
 

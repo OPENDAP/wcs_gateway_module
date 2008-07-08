@@ -46,26 +46,16 @@ using namespace libdap ;
 
 /** @brief make the WCS request against the given information
  *
- * function that makes a WCS request using libcurl given the WCS request
- * url, the target name of the file for the response, the type of data being
- * returned, and the maximum amount of time (in seconds) that a response
- * file can remain in the cache.
- *
- * First it is determined if the response file already exists in the WCS
- * cache. The cache directory is retrieved from the BES configuration file
- * using the parameter WCS.CacheDir. If not set or empty then /tmp is used.
- * The target response file can remain in the cache for cacheTime seconds.
- * If the target does not exist or the cache time has expired, then the
- * request is made, otherwise the response file in the cache is used.
- *
- * A temporary target file is used to store the information. If the request
- * was successful and the resulting file does not contain error information
- * then this temporary file is moved to the real target file.
+ * function that makes a WCS request using HTTPConnect from libdap given the
+ * WCS request url. An HTTPResponse object is returned from the HTTPConnect
+ * fetch_url method. This response contains the FILE pointer as well as the
+ * name of the file to be used by the corresponding data handler (determined
+ * by the format parameter in the WCS url).
  *
  * @param url WCS request url
- * @param type target file name data type, like nc or hdf4
  * @return HTTPResponse pointer for the wcs request response
- * @throws BESInternalError if there is a problem making the WCS request or the request fails
+ * @throws BESInternalError if there is a problem making the WCS request or
+ * the request fails
  */
 HTTPResponse *
 WCSRequest::make_request( const string &url )

@@ -49,8 +49,8 @@
  */
 void
 WCSError::read_error( const string &filename,
-			  string &err,
-			  const string &url )
+		      string &err,
+		      const string &url )
 {
     err = "WCS Request failed for url: " + url + " with error: " ;
 
@@ -103,9 +103,17 @@ WCSError::read_error( const string &filename,
  * </ExceptionReport>
  * </pre>
  *
- * The format of the XML document ServiceExceptionReport is expected to be
+ * Or the format of the XML document ServiceExceptionReport is expected to be
  * as follows, where the report can have multiple ServiceException elements
  * within it and multiple messages.
+ *
+ * <pre>
+ * <?xml version="1.0" encoding="UTF-8"?>
+ * <ServiceExceptionReport>
+ *   <ServiceException>error message</ServiceException>
+ * </ServiceExceptionReport>
+ * </pre>
+ *
  *
  * @param filename target response file name with the error information
  * @param err return the error message in this variable

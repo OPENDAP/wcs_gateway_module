@@ -58,8 +58,8 @@ WCSContainerStorage::~WCSContainerStorage()
  */
 void
 WCSContainerStorage::add_container( const string &s_name,
-					   const string &r_name,
-					   const string &type )
+				    const string &r_name,
+				    const string &type )
 {
     BESContainer *c = new WCSContainer( s_name, r_name ) ;
     BESContainerStorageVolatile::add_container( c ) ;

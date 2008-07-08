@@ -51,15 +51,7 @@ mv tmp.conf $bes_conf
 comment_1="# WCS handler specific parameters"
 comment_2="# TypeList: translation between wcs types specified in WCS requests"
 comment_3="#           and the TypeList specified above"
-comment_4="# CacheDir: cache directory used by the WCS module"
-comment_5="# CacheTime: Time in seconds that an item is allwed to remain in the cache"
-comment_6="# CacheSize: Max size of the WCS cache, in MB, default is 20, minimum is 5, must not be smaller than the CacheEntrySize"
-comment_7="# CacheEntrySize: Max size of an entry into the WCS cache, in MB, default is 3, minimum is 1"
 type_list="WCS.TypeList=netcdf:nc;hdfeos:h4;"
-cache_dir="WCS.CacheDir=/tmp/wcs"
-cache_time="WCS.CacheTime=600"
-cache_size="WCS.CacheSize=20"
-entry_size="WCS.CacheEntrySize=3"
 
 awk "BEGIN {wcs_found=0}
 	/# Data Handler Specific/ {wcs_found=1}
@@ -67,15 +59,7 @@ awk "BEGIN {wcs_found=0}
 	/^$/ && wcs_found == 1 {print \"$comment_1\"}
 	/^$/ && wcs_found == 1 {print \"$comment_2\"}
 	/^$/ && wcs_found == 1 {print \"$comment_3\"}
-	/^$/ && wcs_found == 1 {print \"$comment_4\"}
-	/^$/ && wcs_found == 1 {print \"$comment_5\"}
-	/^$/ && wcs_found == 1 {print \"$comment_6\"}
-	/^$/ && wcs_found == 1 {print \"$comment_7\"}
-	/^$/ && wcs_found == 1 {print \"$type_list\"}
-	/^$/ && wcs_found == 1 {print \"$cache_dir\"}
-	/^$/ && wcs_found == 1 {print \"$cache_time\"}
-	/^$/ && wcs_found == 1 {print \"$cache_size\"}
-	/^$/ && wcs_found == 1 {print \"$entry_size\"; wcs_found=0}
+	/^$/ && wcs_found == 1 {print \"$type_list\"; wcs_found=0}
 	{print}" \
 	< $bes_conf > tmp.conf
 mv tmp.conf $bes_conf

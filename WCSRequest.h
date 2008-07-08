@@ -41,22 +41,9 @@ using std::string ;
 
 using namespace libdap ;
 
-/** @brief knows how to make a wcs request
- *
- * This class knows how to make a WCS request using libcurl given the wcs request, the
- * name of the target response file, the type of the target response, and the maximum time
- * a response is kept in the cache.
- *
- * @see WCSCache
- */
+/** @brief knows how to make a wcs request */
 class WCSRequest
 {
-private:
-    static size_t		save_raw_http_headers( void *ptr, size_t size,
-						       size_t nmemb,
-						       void *resp_hdrs ) ;
-    string			get_temp_file( FILE *&stream ) ;
-    void			close_temp( FILE *s, const string &name ) ;
 public:
     				WCSRequest() {} ;
 				~WCSRequest() {} ;

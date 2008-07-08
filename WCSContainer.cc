@@ -30,10 +30,6 @@
 // Authors:
 //      pcw       Patrick West <pwest@ucar.edu>
 
-#include "HTTPCache.h"
-
-using namespace libdap ;
-
 #include "WCSContainer.h"
 #include "WCSRequest.h"
 #include "WCSUtils.h"
@@ -42,24 +38,18 @@ using namespace libdap ;
 #include "BESDebug.h"
 
 /** @brief Creates an instances of WCSContainer with symbolic name and real
- * name that is the WCS request
+ * name, which is the WCS request.
  *
- * The real_name is the WCS request URL. Within this url is the target file
- * name of the streamed response to the WCS request and the type of data being
- * streamed back (netCDF, etc...).
- *
- * The target data type is also specified in the WCS request with the format
- * parameter.
+ * The real_name is the WCS request URL. Within this url we expect to find
+ * certain elements: service=WCS, version=x, request=getCoverage,
+ * format=netCDF|HDF.
  *
  * For example, a WCS request might look like this:
  *
  * http://data.laits.gmu.edu/cgi-bin/ACCESS/wcs300?service=WCS&amp;version=1.0.0&amp;request=getCoverage&amp;coverage=/home/mmin/testdata/MOD021KM.A2002248.0140.003.2002248112526.hdf:Swath:MODIS_SWATH_Type_L1B:EV_1KM_Emissive&amp;crs=EPSG:4326&amp;bbox=-40,29,-39,30&amp;format=netCDF&amp;resx=0.01&amp;resy=0.01&amp;Band_1KM_Emissive=1
  *
- * The cache time, in seconds, is accessed from the BES configuration file.
- * If not set then set to 0.0.
- *
  * @param sym_name symbolic name representing this WCS container
- * @param real_name the WCS request
+ * @param real_name the WCS request URL
  * @throws BESSyntaxUserError if the url does not validate
  * @see WCSUtils
  */
@@ -130,7 +120,7 @@ WCSContainer::~WCSContainer()
 
 /** @brief access the WCS target response by making the WCS request
  *
- * @return the target response
+ * @return full path to the WCS request response data file
  * @throws BESError if there is a problem making the WCS request
  */
 string
@@ -151,10 +141,11 @@ WCSContainer::access()
     }
     BESDEBUG( "wcs", "done accessing " << get_real_name() << " returning "
 		     << accessed << endl )
+    BESDEBUG( "wcs", "done accessing " << *this << endl )
     return accessed ;
 }
 
-/** @brief release the WCS cache resources
+/** @brief release the WCS cached resources
  *
  * Release the resource
  *
@@ -188,6 +179,34 @@ WCSContainer::dump( ostream &strm ) const
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
     BESContainer::dump( strm ) ;
+    if( _response )
+    {
+	strm << BESIndent::LMarg << "response file: " << _response->get_file()
+	     << endl ;
+	strm << BESIndent::LMarg << "response headers: " ;
+	vector<string> *hdrs = _response->get_headers() ;
+	if( hdrs )
+	{
+	    strm << endl ;
+	    BESIndent::Indent() ;
+	    vector<string>::const_iterator i = hdrs->begin() ;
+	    vector<string>::const_iterator e = hdrs->end() ;
+	    for( ; i != e; i++ )
+	    {
+		string hdr_line = (*i) ;
+		strm << BESIndent::LMarg << hdr_line << endl ;
+	    }
+	    BESIndent::UnIndent() ;
+	}
+	else
+	{
+	    strm << "none" << endl ;
+	}
+    }
+    else
+    {
+	strm << BESIndent::LMarg << "response not yet obtained" << endl ;
+    }
     BESIndent::UnIndent() ;
 }
 
