@@ -22,24 +22,30 @@ WCSRequestHandler::~WCSRequestHandler()
 bool
 WCSRequestHandler::sample_build_vers( BESDataHandlerInterface &dhi )
 {
-    bool ret = true ;
-    BESVersionInfo *info = dynamic_cast<BESVersionInfo *>(dhi.response_handler->get_response_object() ) ;
+    BESResponseObject *response = dhi.response_handler->get_response_object();
+    BESVersionInfo *info = dynamic_cast < BESVersionInfo * >(response);
+    if( !info )
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
+  
     info->addHandlerVersion( PACKAGE_NAME, PACKAGE_VERSION ) ;
-    return ret ;
+
+    return true ;
 }
 
 bool
 WCSRequestHandler::sample_build_help( BESDataHandlerInterface &dhi )
 {
-    bool ret = true ;
-    BESInfo *info = dynamic_cast<BESInfo *>(dhi.response_handler->get_response_object());
+    BESResponseObject *response = dhi.response_handler->get_response_object();
+    BESInfo *info = dynamic_cast<BESInfo *>(response);
+    if( !info )
+	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
 
     info->begin_tag("Handler");
     info->add_tag("name", PACKAGE_NAME);
     info->add_tag("version", PACKAGE_STRING);
     info->end_tag("Handler");
 
-    return ret ;
+    return true ;
 }
 
 void
