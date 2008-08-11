@@ -69,6 +69,8 @@ WCSRequest::make_request( const string &url )
     BESDEBUG( "wcs", "WCSRequest::make_request" << endl )
     BESDEBUG( "wcs", "  request = " << url << endl )
 
+    RCReader *rcr = RCReader::instance() ;
+    rcr->set_use_cache( false ) ;
     HTTPConnect connect( RCReader::instance() ) ;
     connect.set_cache_enabled( false ) ;
 
