@@ -7,7 +7,7 @@
 #include <string>
 #include <fstream>
 
-#include "WCSUtils.h"
+#include "WCSGatewayUtils.h"
 #include "BESError.h"
 #include "BESUtil.h"
 #include "test_config.h"
@@ -46,25 +46,25 @@ public:
 
 	try
 	{
-	    string newType = WCSUtils::convert_wcs_type( "netcdf" ) ;
+	    string newType = WCSGatewayUtils::convert_wcs_type( "netcdf" ) ;
 	    CPPUNIT_ASSERT( newType == "nc" ) ;
 
-	    newType = WCSUtils::convert_wcs_type( "netCDF" ) ;
+	    newType = WCSGatewayUtils::convert_wcs_type( "netCDF" ) ;
 	    CPPUNIT_ASSERT( newType == "nc" ) ;
 
-	    newType = WCSUtils::convert_wcs_type( "NETCDF" ) ;
+	    newType = WCSGatewayUtils::convert_wcs_type( "NETCDF" ) ;
 	    CPPUNIT_ASSERT( newType == "nc" ) ;
 
-	    newType = WCSUtils::convert_wcs_type( "hdfeos" ) ;
+	    newType = WCSGatewayUtils::convert_wcs_type( "hdfeos" ) ;
 	    CPPUNIT_ASSERT( newType == "h4" ) ;
 
-	    newType = WCSUtils::convert_wcs_type( "HDFEOS" ) ;
+	    newType = WCSGatewayUtils::convert_wcs_type( "HDFEOS" ) ;
 	    CPPUNIT_ASSERT( newType == "h4" ) ;
 
-	    newType = WCSUtils::convert_wcs_type( "HDFeos" ) ;
+	    newType = WCSGatewayUtils::convert_wcs_type( "HDFeos" ) ;
 	    CPPUNIT_ASSERT( newType == "h4" ) ;
 
-	    newType = WCSUtils::convert_wcs_type( "no_type" ) ;
+	    newType = WCSGatewayUtils::convert_wcs_type( "no_type" ) ;
 	    CPPUNIT_ASSERT( newType == "no_type" ) ;
 	}
 	catch( BESError &e )

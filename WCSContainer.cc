@@ -31,8 +31,8 @@
 //      pcw       Patrick West <pwest@ucar.edu>
 
 #include "WCSContainer.h"
-#include "WCSRequest.h"
-#include "WCSUtils.h"
+#include "WCSGatewayRequest.h"
+#include "WCSGatewayUtils.h"
 #include "BESSyntaxUserError.h"
 #include "BESInternalError.h"
 #include "BESDebug.h"
@@ -51,7 +51,7 @@
  * @param sym_name symbolic name representing this WCS container
  * @param real_name the WCS request URL
  * @throws BESSyntaxUserError if the url does not validate
- * @see WCSUtils
+ * @see WCSGatewayUtils
  */
 WCSContainer::WCSContainer( const string &sym_name,
 			    const string &real_name )
@@ -62,7 +62,7 @@ WCSContainer::WCSContainer( const string &sym_name,
     // type of file being cached. We also need to verify that this is a
     // well formed WCS request.
     string type ;
-    string err = WCSUtils::validate_url( real_name, type ) ;
+    string err = WCSGatewayUtils::validate_url( real_name, type ) ;
     if( !err.empty() )
     {
 	throw BESSyntaxUserError( err, __FILE__, __LINE__ ) ;
@@ -130,7 +130,7 @@ WCSContainer::access()
     string accessed ;
     if( !_response )
     {
-	WCSRequest r ;
+	WCSGatewayRequest r ;
 	_response = r.make_request( get_real_name() ) ;
 	if( _response )
 	    accessed = _response->get_file() ;

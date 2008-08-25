@@ -1,4 +1,4 @@
-// WCSRequest.cc
+// WCSGatewayRequest.cc
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
@@ -39,9 +39,9 @@ using namespace libdap ;
 #include <BESInternalError.h>
 #include <BESDebug.h>
 
-#include "WCSRequest.h"
-#include "WCSError.h"
-#include "WCSUtils.h"
+#include "WCSGatewayRequest.h"
+#include "WCSGatewayError.h"
+#include "WCSGatewayUtils.h"
 #include "config.h"
 
 /** @brief make the WCS request against the given information
@@ -58,7 +58,7 @@ using namespace libdap ;
  * the request fails
  */
 HTTPResponse *
-WCSRequest::make_request( const string &url )
+WCSGatewayRequest::make_request( const string &url )
 {
     if( url.empty() )
     {
@@ -66,7 +66,7 @@ WCSRequest::make_request( const string &url )
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "wcs", "WCSRequest::make_request" << endl )
+    BESDEBUG( "wcs", "WCSGatewayRequest::make_request" << endl )
     BESDEBUG( "wcs", "  request = " << url << endl )
 
     RCReader *rcr = RCReader::instance() ;
@@ -139,12 +139,12 @@ WCSRequest::make_request( const string &url )
 	if( xml_error )
 	{
 	    BESDEBUG( "wcs", " reading xml error" << endl )
-	    WCSError::read_xml_error( response->get_file(), err, url ) ;
+	    WCSGatewayError::read_xml_error( response->get_file(), err, url ) ;
 	}
 	else
 	{
 	    BESDEBUG( "wcs", " reading text error" << endl )
-	    WCSError::read_error( response->get_file(), err, url ) ;
+	    WCSGatewayError::read_error( response->get_file(), err, url ) ;
 	}
 
 	// toss the response
@@ -154,7 +154,7 @@ WCSRequest::make_request( const string &url )
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "wcs", "WCSRequest::make_request - done" << endl )
+    BESDEBUG( "wcs", "WCSGatewayRequest::make_request - done" << endl )
 
     return response ;
 }

@@ -1,4 +1,4 @@
-// WCSModule.h
+// WCSGatewayRequest.h
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
@@ -30,24 +30,25 @@
 // Authors:
 //      pcw       Patrick West <pwest@ucar.edu>
 
-#ifndef I_WCSModule_H
-#define I_WCSModule_H 1
+#ifndef I_WCSGatewayRequest_H
+#define I_WCSGatewayRequest_H 1
 
-#include "BESAbstractModule.h"
+#include <string>
 
-/** @brief a BESAbstractModule representing WCS requests that can be loaded
- * into the BES.
- */
-class WCSModule : public BESAbstractModule
+using std::string ;
+
+#include <HTTPResponse.h>
+
+using namespace libdap ;
+
+/** @brief knows how to make a wcs request */
+class WCSGatewayRequest
 {
 public:
-    				WCSModule() {}
-    virtual		    	~WCSModule() {}
-    virtual void		initialize( const string &modname ) ;
-    virtual void		terminate( const string &modname ) ;
-
-    virtual void		dump( ostream &strm ) const ;
+    				WCSGatewayRequest() {} ;
+				~WCSGatewayRequest() {} ;
+    HTTPResponse *		make_request( const string &url ) ;
 } ;
 
-#endif // I_WCSModule_H
+#endif // I_WCSGatewayRequest_H
 

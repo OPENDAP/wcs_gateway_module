@@ -13,7 +13,7 @@ SUBDIRS = unit-tests testsuite
 DIST_SUBDIRS = unit-tests testsuite
 
 lib_besdir=$(libdir)/bes
-lib_bes_LTLIBRARIES = libwcs_module.la
+lib_bes_LTLIBRARIES = libwcs_gateway_module.la
 dist_bin_SCRIPTS = bes-wcs-data.sh
 
 WCS_SRCS:=
@@ -21,23 +21,25 @@ WCS_SRCS:=
 WCS_HDRS:=
 
 BES_SRCS = \
-		WCSModule.cc WCSRequest.cc WCSContainerStorage.cc	\
-		WCSContainer.cc WCSUtils.cc WCSError.cc			\
-		WCSRequestHandler.cc
+		WCSGatewayModule.cc WCSGatewayRequest.cc 		\
+		WCSContainerStorage.cc WCSContainer.cc 			\
+		WCSGatewayUtils.cc WCSGatewayError.cc			\
+		WCSGatewayRequestHandler.cc
 
 BES_HDRS = \
-		WCSModule.h WCSRequest.h WCSContainerStorage.h		\
-		WCSContainer.h WCSUtils.h WCSError.h			\
-		WCSRequestHandler.h
+		WCSGatewayModule.h WCSGatewayRequest.h 			\
+		WCSContainerStorage.h WCSContainer.h			\
+		WCSGatewayUtils.h WCSGatewayError.h			\
+		WCSGatewayRequestHandler.h
 
-libwcs_module_la_SOURCES = $(WCS_SRCS) $(BES_SRCS) $(WCS_HDRS) $(BES_HDRS)
-libwcs_module_la_CPPFLAGS = $(BES_CPPFLAGS)
-libwcs_module_la_LDFLAGS = -avoid-version -module 
-libwcs_module_la_LIBADD = $(BES_LIBS)
+libwcs_gateway_module_la_SOURCES = $(WCS_SRCS) $(BES_SRCS) $(WCS_HDRS) $(BES_HDRS)
+libwcs_gateway_module_la_CPPFLAGS = $(BES_CPPFLAGS)
+libwcs_gateway_module_la_LDFLAGS = -avoid-version -module 
+libwcs_gateway_module_la_LIBADD = $(BES_LIBS)
 
 EXTRA_PROGRAMS = 
 
-EXTRA_DIST = COPYRIGHT_URI COPYING wcs_module.spec bes-wcs-data.sh.in
+EXTRA_DIST = COPYRIGHT_URI COPYING wcs_gateway_module.spec bes-wcs-data.sh.in
 
 CLEANFILES = *~ bes-wcs-data.sh
 
@@ -79,10 +81,10 @@ fortifyclean:
 # Build linux RPMs
 
 srpm:
-	rpmbuild -ts wcs_module-@PACKAGE_VERSION@.tar.gz
+	rpmbuild -ts wcs_gateway_module-@PACKAGE_VERSION@.tar.gz
 
 rpm:
-	rpmbuild -tb wcs_module-@PACKAGE_VERSION@.tar.gz
+	rpmbuild -tb wcs_gateway_module-@PACKAGE_VERSION@.tar.gz
 
 ###########################################################################
 

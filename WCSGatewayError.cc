@@ -1,4 +1,4 @@
-// WCSError.cc
+// WCSGatewayError.cc
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "WCSError.h"
+#include "WCSGatewayError.h"
 
 /** @brief read the target response file that contains textual error
  * information
@@ -48,7 +48,7 @@
  * @param url the WCS request URL
  */
 void
-WCSError::read_error( const string &filename,
+WCSGatewayError::read_error( const string &filename,
 		      string &err,
 		      const string &url )
 {
@@ -120,7 +120,7 @@ WCSError::read_error( const string &filename,
  * @param url the WCS request URL
  */
 void
-WCSError::read_xml_error( const string &filename,
+WCSGatewayError::read_xml_error( const string &filename,
 			      string &err,
 			      const string &url )
 {

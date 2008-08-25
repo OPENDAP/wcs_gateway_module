@@ -62,14 +62,14 @@ UNIT_TESTS =
 endif
 
 requestT_SOURCES = requestT.cc
-requestT_LDADD = ../libwcs_module.la $(AM_LDADD)
+requestT_LDADD = ../libwcs_gateway_module.la $(AM_LDADD)
 
 validateUrlT_SOURCES = validateUrlT.cc
-validateUrlT_LDADD = ../libwcs_module.la $(AM_LDADD)
+validateUrlT_LDADD = ../libwcs_gateway_module.la $(AM_LDADD)
 
 convertTypeT_SOURCES = convertTypeT.cc
-convertTypeT_LDADD = ../libwcs_module.la $(AM_LDADD)
+convertTypeT_LDADD = ../libwcs_gateway_module.la $(AM_LDADD)
 
 xmlErrT_SOURCES = xmlErrT.cc
-xmlErrT_LDADD = ../libwcs_module.la $(AM_LDADD)
+xmlErrT_LDADD = ../libwcs_gateway_module.la $(AM_LDADD)
 

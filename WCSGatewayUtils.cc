@@ -1,4 +1,4 @@
-// WCSUtils.cc
+// WCSGatewayUtils.cc
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
@@ -30,7 +30,7 @@
 // Authors:
 //      pcw       Patrick West <pwest@ucar.edu>
 
-#include "WCSUtils.h"
+#include "WCSGatewayUtils.h"
 #include "BESUtil.h"
 #include "TheBESKeys.h"
 #include "BESInternalError.h"
@@ -39,10 +39,10 @@
 
 using namespace libdap ;
 
-map<string,string> WCSUtils::type_list ;
+map<string,string> WCSGatewayUtils::type_list ;
 
 void
-WCSUtils::break_apart_types( const string &types )
+WCSGatewayUtils::break_apart_types( const string &types )
 {
     bool done = false ;
     string::size_type start = 0 ;
@@ -90,15 +90,15 @@ WCSUtils::break_apart_types( const string &types )
  * @return corresponding bes_type
  */
 string
-WCSUtils::convert_wcs_type( const string &wcs_type )
+WCSGatewayUtils::convert_wcs_type( const string &wcs_type )
 {
-    if( WCSUtils::type_list.size() == 0 )
+    if( WCSGatewayUtils::type_list.size() == 0 )
     {
 	bool found = false ;
 	string types = TheBESKeys::TheKeys()->get_key( "WCS.TypeList", found ) ;
 	if( found && !types.empty() )
 	{
-	    WCSUtils::break_apart_types( types ) ;
+	    WCSGatewayUtils::break_apart_types( types ) ;
 	}
     }
     string wcs_ltype = BESUtil::lowercase( wcs_type ) ;
@@ -123,7 +123,7 @@ WCSUtils::convert_wcs_type( const string &wcs_type )
  * @return an error string if any problems are encountered. No exceptions are thrown
  */
 string
-WCSUtils::validate_url( const string &url, string &format )
+WCSGatewayUtils::validate_url( const string &url, string &format )
 {
     // look for the ?, then mandatory fields service=WCS,
     // version=<something>, request=getCoverage, format=<something>
@@ -226,7 +226,7 @@ WCSUtils::validate_url( const string &url, string &format )
     // url and newurl are the same, except for case and the leading and
     // trailing double quote. We want the case for the format conversion.
     string wcs_format = url.substr( eq_index+2, amp_index - eq_index - 1 ) ;
-    format = WCSUtils::convert_wcs_type( wcs_format ) ;
+    format = WCSGatewayUtils::convert_wcs_type( wcs_format ) ;
 
     return "" ;
 }
@@ -245,7 +245,7 @@ WCSUtils::validate_url( const string &url, string &format )
 // methods to read from a stream returned by libcurl, not from a temporary
 // file. 9/21/07 jhrg
 char *
-WCSUtils::get_tempfile_template(char *file_template)
+WCSGatewayUtils::get_tempfile_template(char *file_template)
 {
     char *c;
     

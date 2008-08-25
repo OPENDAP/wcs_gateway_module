@@ -3,9 +3,9 @@
 # Configure script for OPeNDAP WCS data handler
 
 AC_PREREQ(2.59)
-AC_INIT(wcs_module, 1.0.0, opendap-tech@opendap.org)
+AC_INIT(wcs_gateway_module, 1.0.0, opendap-tech@opendap.org)
 AC_CONFIG_AUX_DIR([conf])
-AC_CONFIG_SRCDIR([WCSModule.h])
+AC_CONFIG_SRCDIR([WCSGatewayModule.h])
 AC_CONFIG_HEADER([config.h])
 
 AM_INIT_AUTOMAKE

@@ -1,4 +1,4 @@
-// WCSModule.cc
+// WCSGatewayModule.cc
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
@@ -34,20 +34,20 @@
 
 using std::endl ;
 
-#include "WCSModule.h"
+#include "WCSGatewayModule.h"
 #include "BESDebug.h"
 #include "WCSContainerStorage.h"
-#include "WCSRequestHandler.h"
+#include "WCSGatewayRequestHandler.h"
 #include "BESRequestHandlerList.h"
 #include "BESContainerStorageList.h"
 
 void
-WCSModule::initialize( const string &modname )
+WCSGatewayModule::initialize( const string &modname )
 {
     BESDEBUG( "wcs", "Initializing WCS Module " << modname << endl )
 
     BESDEBUG( "wcs", "    adding " << modname << " request handler" << endl )
-    BESRequestHandler *handler = new WCSRequestHandler( modname ) ;
+    BESRequestHandler *handler = new WCSGatewayRequestHandler( modname ) ;
     BESRequestHandlerList::TheList()->add_handler( modname, handler ) ;
 
     BESDEBUG( "wcs", "    adding " << modname << " container storage" << endl )
@@ -61,7 +61,7 @@ WCSModule::initialize( const string &modname )
 }
 
 void
-WCSModule::terminate( const string &modname )
+WCSGatewayModule::terminate( const string &modname )
 {
     BESDEBUG( "wcs", "Cleaning WCS Module " << modname << endl )
 
@@ -83,9 +83,9 @@ WCSModule::terminate( const string &modname )
  * @param strm C++ i/o stream to dump the information to
  */
 void
-WCSModule::dump( ostream &strm ) const
+WCSGatewayModule::dump( ostream &strm ) const
 {
-    strm << BESIndent::LMarg << "WCSModule::dump - ("
+    strm << BESIndent::LMarg << "WCSGatewayModule::dump - ("
 			     << (void *)this << ")" << endl ;
 }
 
@@ -93,7 +93,7 @@ extern "C"
 {
     BESAbstractModule *maker()
     {
-	return new WCSModule ;
+	return new WCSGatewayModule ;
     }
 }
 

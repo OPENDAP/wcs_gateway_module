@@ -1,26 +1,26 @@
-// WCSRequestHandler.cc
+// WCSGatewayRequestHandler.cc
 
 #include "config.h"
 
-#include "WCSRequestHandler.h"
+#include "WCSGatewayRequestHandler.h"
 #include "BESResponseHandler.h"
 #include "BESResponseNames.h"
 #include "BESVersionInfo.h"
 #include "BESTextInfo.h"
 
-WCSRequestHandler::WCSRequestHandler( const string &name )
+WCSGatewayRequestHandler::WCSGatewayRequestHandler( const string &name )
     : BESRequestHandler( name )
 {
-    add_handler( VERS_RESPONSE, WCSRequestHandler::sample_build_vers ) ;
-    add_handler( HELP_RESPONSE, WCSRequestHandler::sample_build_help ) ;
+    add_handler( VERS_RESPONSE, WCSGatewayRequestHandler::sample_build_vers ) ;
+    add_handler( HELP_RESPONSE, WCSGatewayRequestHandler::sample_build_help ) ;
 }
 
-WCSRequestHandler::~WCSRequestHandler()
+WCSGatewayRequestHandler::~WCSGatewayRequestHandler()
 {
 }
 
 bool
-WCSRequestHandler::sample_build_vers( BESDataHandlerInterface &dhi )
+WCSGatewayRequestHandler::sample_build_vers( BESDataHandlerInterface &dhi )
 {
     BESResponseObject *response = dhi.response_handler->get_response_object();
     BESVersionInfo *info = dynamic_cast < BESVersionInfo * >(response);
@@ -33,7 +33,7 @@ WCSRequestHandler::sample_build_vers( BESDataHandlerInterface &dhi )
 }
 
 bool
-WCSRequestHandler::sample_build_help( BESDataHandlerInterface &dhi )
+WCSGatewayRequestHandler::sample_build_help( BESDataHandlerInterface &dhi )
 {
     BESResponseObject *response = dhi.response_handler->get_response_object();
     BESInfo *info = dynamic_cast<BESInfo *>(response);
@@ -49,9 +49,9 @@ WCSRequestHandler::sample_build_help( BESDataHandlerInterface &dhi )
 }
 
 void
-WCSRequestHandler::dump( ostream &strm ) const
+WCSGatewayRequestHandler::dump( ostream &strm ) const
 {
-    strm << BESIndent::LMarg << "WCSRequestHandler::dump - ("
+    strm << BESIndent::LMarg << "WCSGatewayRequestHandler::dump - ("
 			     << (void *)this << ")" << endl ;
     BESIndent::Indent() ;
     BESRequestHandler::dump( strm ) ;

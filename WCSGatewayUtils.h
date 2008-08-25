@@ -1,4 +1,4 @@
-// WCSRequest.h
+// WCSGatewayUtils.h
 
 // -*- mode: c++; c-basic-offset:4 -*-
 
@@ -30,25 +30,36 @@
 // Authors:
 //      pcw       Patrick West <pwest@ucar.edu>
 
-#ifndef I_WCSRequest_H
-#define I_WCSRequest_H 1
+#ifndef I_WCSGatewayUtils_H
+#define I_WCSGatewayUtils_H 1
 
+#include <map>
 #include <string>
 
+using std::map ;
 using std::string ;
 
-#include <HTTPResponse.h>
-
-using namespace libdap ;
-
-/** @brief knows how to make a wcs request */
-class WCSRequest
+/** @brief utility class for the WCS request mechanism
+ *
+ * Current static functions available are:
+ *   convert_wcs_type - converts the format parameter in the WCS request to a type that is
+ *   understood by the BES using the WCS.TypeList parameter in the BES configuration file
+ *
+ *   validate_url - validates the WCS request URL to make sure all the information
+ *   required to make the request are present.
+ */
+class WCSGatewayUtils
 {
+private:
+    static map<string,string>	type_list ;
+    static void			break_apart_types( const string &types ) ;
 public:
-    				WCSRequest() {} ;
-				~WCSRequest() {} ;
-    HTTPResponse *		make_request( const string &url ) ;
+    static string		convert_wcs_type( const string &wcs_type ) ;
+
+    static string		validate_url( const string &url,
+					      string &format ) ;
+    static char *		get_tempfile_template( char *file_template ) ;
 } ;
 
-#endif // I_WCSRequest_H
+#endif // I_WCSGatewayUtils_H
 
