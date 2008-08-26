@@ -72,7 +72,7 @@ BES.module.usage=@libdir@/bes/libusage_module.so
 BES.module.www=@libdir@/bes/libwww_module.so
 BES.module.nc=@libdir@/bes/libnc_module.so
 BES.module.h4=@libdir@/bes/libhdf4_module.so
-BES.module.wcs=@libdir@/bes/libwcs_module.so
+BES.module.wcs=@libdir@/bes/libwcs_gateway_module.so
 BES.module.test=@libdir@/bes/libwcs_test_module.so
 
 #-----------------------------------------------------------------------#

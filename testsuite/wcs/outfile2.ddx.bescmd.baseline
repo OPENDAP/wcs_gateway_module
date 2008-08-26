@@ -6,25 +6,25 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
 
     <Attribute name="NC_GLOBAL" type="Container">
         <Attribute name="Conventions" type="String">
-            <value>&quot;CF-1.0&quot;</value>
+            <value>CF-1.0</value>
         </Attribute>
         <Attribute name="Institution" type="String">
-            <value>&quot;CSISS,GMU&quot;</value>
+            <value>CSISS,GMU</value>
         </Attribute>
     </Attribute>
 
     <Grid name="CH4_VMR_eff">
         <Attribute name="standard_name" type="String">
-            <value>&quot;CH4_VMR_eff&quot;</value>
+            <value>CH4_VMR_eff</value>
         </Attribute>
         <Attribute name="long_name" type="String">
-            <value>&quot;Effective CH4 Volume Mixing Ratio Profile&quot;</value>
+            <value>Effective CH4 Volume Mixing Ratio Profile</value>
         </Attribute>
         <Attribute name="_FillValue" type="Float32">
             <value>-1.000000000</value>
         </Attribute>
         <Attribute name="units" type="String">
-            <value>&quot;unitless&quot;</value>
+            <value>unitless</value>
         </Attribute>
         <Array name="CH4_VMR_eff">
             <Float32/>
@@ -52,17 +52,17 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
     </Grid>
     <Array name="nv">
         <Attribute name="long_name" type="String">
-            <value>&quot;number_of_vertices&quot;</value>
+            <value>number_of_vertices</value>
         </Attribute>
         <Int32/>
         <dimension name="nv" size="2"/>
     </Array>
     <Grid name="time_bnds">
         <Attribute name="long_name" type="String">
-            <value>&quot;time_bnds&quot;</value>
+            <value>time_bnds</value>
         </Attribute>
         <Attribute name="units" type="String">
-            <value>&quot;seconds since 1993-1-1 0:0:0&quot;</value>
+            <value>seconds since 1993-1-1 0:0:0</value>
         </Attribute>
         <Array name="time_bnds">
             <Float64/>
@@ -80,76 +80,76 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
     </Grid>
     <Array name="time">
         <Attribute name="long_name" type="String">
-            <value>&quot;time&quot;</value>
+            <value>time</value>
         </Attribute>
         <Attribute name="axis" type="String">
-            <value>&quot;T&quot;</value>
+            <value>T</value>
         </Attribute>
         <Attribute name="units" type="String">
-            <value>&quot;seconds since 1993-1-1 0:0:0&quot;</value>
+            <value>seconds since 1993-1-1 0:0:0</value>
         </Attribute>
         <Attribute name="bounds" type="String">
-            <value>&quot;time_bnds&quot;</value>
+            <value>time_bnds</value>
         </Attribute>
         <Float64/>
         <dimension name="time" size="1"/>
     </Array>
     <Array name="CH4Func">
         <Attribute name="long_name" type="String">
-            <value>&quot;CH4Func&quot;</value>
+            <value>CH4Func</value>
         </Attribute>
         <Attribute name="Description" type="String">
-            <value>&quot;CH4 trapezoid layer ID, each value representing one of the following 7 CH4 trapezoid layers: 1,30,51,60,67,73,80&quot;</value>
+            <value>CH4 trapezoid layer ID, each value representing one of the following 7 CH4 trapezoid layers: 1,30,51,60,67,73,80</value>
         </Attribute>
         <Attribute name="axis" type="String">
-            <value>&quot;Z&quot;</value>
+            <value>Z</value>
         </Attribute>
         <Attribute name="units" type="String">
-            <value>&quot;unitless&quot;</value>
+            <value>unitless</value>
         </Attribute>
         <Int32/>
         <dimension name="CH4Func" size="7"/>
     </Array>
     <Array name="latitude">
         <Attribute name="long_name" type="String">
-            <value>&quot;latitude&quot;</value>
+            <value>latitude</value>
         </Attribute>
         <Attribute name="units" type="String">
-            <value>&quot;degrees_north&quot;</value>
+            <value>degrees_north</value>
         </Attribute>
         <Attribute name="standard_name" type="String">
-            <value>&quot;latitude&quot;</value>
+            <value>latitude</value>
         </Attribute>
         <Attribute name="axis" type="String">
-            <value>&quot;Y&quot;</value>
+            <value>Y</value>
         </Attribute>
         <Attribute name="GCTP_Projection_Name" type="String">
-            <value>&quot;Geographic&quot;</value>
+            <value>Geographic</value>
         </Attribute>
         <Attribute name="GCTP_Spheroid_Name" type="String">
-            <value>&quot;Clarke 1866&quot;</value>
+            <value>Clarke 1866</value>
         </Attribute>
         <Float64/>
         <dimension name="latitude" size="20"/>
     </Array>
     <Array name="longitude">
         <Attribute name="long_name" type="String">
-            <value>&quot;longitude&quot;</value>
+            <value>longitude</value>
         </Attribute>
         <Attribute name="units" type="String">
-            <value>&quot;degrees_east&quot;</value>
+            <value>degrees_east</value>
         </Attribute>
         <Attribute name="standard_name" type="String">
-            <value>&quot;longitude&quot;</value>
+            <value>longitude</value>
         </Attribute>
         <Attribute name="axis" type="String">
-            <value>&quot;X&quot;</value>
+            <value>X</value>
         </Attribute>
         <Attribute name="GCTP_Projection_Name" type="String">
-            <value>&quot;Geographic&quot;</value>
+            <value>Geographic</value>
         </Attribute>
         <Attribute name="GCTP_Spheroid_Name" type="String">
-            <value>&quot;Clarke 1866&quot;</value>
+            <value>Clarke 1866</value>
         </Attribute>
         <Float64/>
         <dimension name="longitude" size="20"/>
