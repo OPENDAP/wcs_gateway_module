@@ -13,19 +13,19 @@ bes_modules_dir=${2:-"@libdir@/bes"}
 # of the file. This could be replaced by a better scheme, but probably not
 # without rewrinting this in Perl or ...
 
-if grep '^# Modified by bes-wcs-data\..*' $bes_conf >/dev/null 2>&1
+if grep '^# Modified by bes-wcsg-data\..*' $bes_conf >/dev/null 2>&1
 then
 	echo
-	echo "The bes-wcs-data script has already been run, not modifying"
+	echo "The bes-wcsg-data script has already been run, not modifying"
 	echo "$bes_conf"
 	echo
 	exit
 else
-	echo "# Modified by bes-wcs-data.sh on `date`" >> $bes_conf
+	echo "# Modified by bes-wcsg-data.sh on `date`" >> $bes_conf
 fi
 
 # Add the handler name(s) to BES.modules
-handler=wcs
+handler=wcsg
 
 sed "s%^\(BES.modules=.*\)%\1,$handler%" < $bes_conf > tmp.conf
 mv tmp.conf $bes_conf

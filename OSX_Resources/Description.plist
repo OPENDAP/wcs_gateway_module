@@ -5,6 +5,6 @@
 	<key>IFPkgDescriptionDescription</key>
 	<string></string>
 	<key>IFPkgDescriptionTitle</key>
-	<string>OPeNDAP wcs_module Package</string>
+	<string>OPeNDAP wcs_gateway_module Package</string>
 </dict>
 </plist>

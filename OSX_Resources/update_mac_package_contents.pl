@@ -84,7 +84,7 @@ sub get_version_number {
     if ( /PACKAGE_VERSION=([0-9.ab]+)/ ) {
       $version_number = $1;
     }
-    elsif ( /AC_INIT\(wcs_module, *([0-9.]+)/ ) {
+    elsif ( /AC_INIT\(wcs_gateway_module, *([0-9.]+)/ ) {
       $version_number = $1;
     }
   }

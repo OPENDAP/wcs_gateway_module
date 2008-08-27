@@ -5,7 +5,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>1.0.0, OPeNDAP</string>
 	<key>CFBundleIdentifier</key>
-	<string>opendap.wcs_module</string>
+	<string>opendap.wcs_gateway_module</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
 	<key>IFMajorVersion</key>

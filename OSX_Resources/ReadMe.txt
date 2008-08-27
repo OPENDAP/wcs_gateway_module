@@ -4,13 +4,13 @@
 
 See the INSTALL file for build instructions.
 
-This is the WCS Module to be loaded by the OPeNDAP Back-End Server (BES).For more information on Hyrax and the BES, please visit our documentationwiki at docs.opendap.org. This will include the latest install and buildinstructions, the latest configuration inforamtion, tutorials, how todevelop new modules for the BES, and more.
+This is the WCS Gateway Module to be loaded by the OPeNDAP Back-End Server (BES). For more information on Hyrax and the BES, please visit our documentation wiki at docs.opendap.org. This will include the latest install and build instructions, the latest configuration inforamtion, tutorials, how to develop new modules for the BES, and more.
 
 Contents  - What's here: What files are in the distribution
 
-  - About the WCS Module: What exactly is this
+  - About the WCS Gateway Module: What exactly is this
 
-  - Configuration: How to configure the WCS Module
+  - Configuration: How to configure the WCS Gateway Module
 
   - Testing: Once built and configured, how do you know it works?
 
@@ -22,42 +22,27 @@ C++ source and header files - WCS Module codeunit-tests/ - directory containing 
 
 * About the WCS Module
 
-The WCS Module adds functionality to the OPeNDAP Back-End Server (BES)allowing it to retrieve data served by WCS requests.
+The WCS Gateway Module adds functionality to the OPeNDAP Back-End Server (BES) allowing it to retrieve data served by WCS requests. This is a gateway service and does not provide WCS functionality, simply returns OPeNDAP responses for WCS requests served by a remote WCS server.
 
 * Configuration
 
-Once the WCS Module has been installed, you will need to add the module tothe local BES configuration file. This configuration file is located in theBES installation directory under etc/bes and is called bes.conf. You willalso need at least the netcdf module and hdf4 module from OPeNDAP. Downloadthese two modules and follow the instructions for configuring the BES toload these modules.
+Once the WCS Gateway Module has been installed, you will need to add the module to the local BES configuration file. This configuration file is located in the BES installation directory under etc/bes and is called bes.conf. You will also need at least the netcdf module and hdf4 module from OPeNDAP. Download these two modules and follow the instructions for configuring the BES to load these modules.
 
-To load the WCS Module into the BES you will need to add wcs to the list ofmodules. Locate the paramter called BES.modules and add ",wcs" to the end ofthat line. For example:
+To load the WCS Module into the BES you will need to add wcs to the list of modules. Locate the paramter called BES.modules and add ",wcsg" to the end of that line. For example:
 
-    BES.modules=dap,cmds,ascii,usage,www,nc,h4,wcs
+    BES.modules=dap,cmds,ascii,usage,www,nc,h4,wcsg
 
+Next you will need to tell the BES where to find the WCS Gateway Module. Add thefollowing line after BES.modules:
 
-Next you will need to tell the BES where to find the WCS Module. Add thefollowing line after BES.modules:
+    BES.module.wcsg=/path/to/libwcs_gateway_module.so
 
-    BES.module.wcs=/path/to/libwcs_module.so
-
-
-There are a few WCS specific parameters that need to be set in the BESconfiguraiton file. At the bottom of this file is a place where you canspecify module-specific parameters. Add the following:
+There is one WCS Gateway specific parameter that needs to be set in the BES configuraiton file. At the bottom of this file is a place where you can specify module-specific parameters. Add the following:
 
     WCS.TypeList=netcdf:nc;hdf:h4;
-    WCS.CacheDir=/tmp/wcs
-    WCS.CacheTime=600
-    WCS.CacheSize=20
-    WCS.CacheEntrySize=3
-
 
 The WCS.TypeList paramter tells the WCS module how to translate WCS datatypes into BES data types. You shouldn't have to change this value.
 
-WCS.CacheDir tells the WCS Module where to put cached wcs request responses,which are the actual data files. /tmp/wcs is a default value and should bechanged. We suggest putting the cache directory under the BES rootdirectory, which is specified in the BES configuration file.
-
-WCS.CacheTime specifies how long a cached object can remain in the cachebefore it is replaced by a subsequent wcs request to retrieve that object.
-
-WCS.CacheSize specifies the maximum size of the WCS cache. Remember, thecached responses are netcdf and hdf files, so this value should besufficient to store many of these files without having to continuously purgethe cache.
-
-WCS.CacheEntrySize specifies the maximum size of a single entry in the WCScache. Remember, the cached responses are netcdf and hdf files, so thisvalue should be set to hold your data. If an entry in the cache is too largethen an error will be thrown.
-
 * Testing
 
-For testing, please refer to the INSTALL file. An internet connection isrequired for these tests to run successfully.
+For testing, please refer to the INSTALL file. An internet connection is required for these tests to run successfully.
 

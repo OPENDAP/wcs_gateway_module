@@ -12,7 +12,7 @@ CONFIGURATION AND TESTING
 
 BUILDING THE SOFTWARE
 
-  To build the WCS Module software, follow these steps:
+  To build the WCS Gateway Module software, follow these steps:
 
   0. Please skim BUILD REQUIREMENTS and NOTES sections of this file before
      reporting problems. Also, this software _requires_ other software
@@ -62,7 +62,7 @@ BUILD REQUIREMENTS
     to watch this issue and hope to get it resolved soon.
 
   o The library uses OPeNDAP's Back-End Server (BES). You will need version
-    3.5.1 or greater to build this software. See
+    3.5.3 or greater to build this software. See
     http://www.opendap.org/download/.
 
   o To serve data returned by making wcs requests you will need the netcdf

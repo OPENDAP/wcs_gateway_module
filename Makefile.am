@@ -14,7 +14,7 @@ DIST_SUBDIRS = unit-tests testsuite
 
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libwcs_gateway_module.la
-dist_bin_SCRIPTS = bes-wcs-data.sh
+dist_bin_SCRIPTS = bes-wcsg-data.sh
 
 WCS_SRCS:=
 
@@ -39,27 +39,27 @@ libwcs_gateway_module_la_LIBADD = $(BES_LIBS)
 
 EXTRA_PROGRAMS = 
 
-EXTRA_DIST = COPYRIGHT_URI COPYING wcs_gateway_module.spec bes-wcs-data.sh.in
+EXTRA_DIST = COPYRIGHT_URI COPYING wcs_gateway_module.spec bes-wcsg-data.sh.in
 
-CLEANFILES = *~ bes-wcs-data.sh
+CLEANFILES = *~ bes-wcsg-data.sh
 
 do_subst = sed -e 's,[@]sysconfdir[@],$(sysconfdir),g' \
 		   	   -e 's,[@]libdir[@],$(libdir),g' \
 		   	   -e 's,[@]datadir[@],$(datadir),g'
 
-bes-wcs-data.sh: bes-wcs-data.sh.in config.status
-	$(do_subst) < $(srcdir)/bes-wcs-data.sh.in > bes-wcs-data.sh
-	chmod +x bes-wcs-data.sh
+bes-wcsg-data.sh: bes-wcsg-data.sh.in config.status
+	$(do_subst) < $(srcdir)/bes-wcsg-data.sh.in > bes-wcsg-data.sh
+	chmod +x bes-wcsg-data.sh
 
 # This makes sure that the handler modifies the bes which configure found
 # even when distcheck is run.
-bes-conf: bes-wcs-data.sh
+bes-conf: bes-wcsg-data.sh
 	(bes_prefix=`bes-config --prefix` ; \
 	if test "$$bes_prefix" = "/usr" ; \
 	 then \
-	    ./bes-wcs-data.sh /etc/bes/bes.conf /usr/lib/bes ;\
+	    ./bes-wcsg-data.sh /etc/bes/bes.conf /usr/lib/bes ;\
 	else \
-	    ./bes-wcs-data.sh $$bes_prefix/etc/bes/bes.conf $$bes_prefix/lib/bes ; \
+	    ./bes-wcsg-data.sh $$bes_prefix/etc/bes/bes.conf $$bes_prefix/lib/bes ; \
 	fi)
 
 ###########################################################################
