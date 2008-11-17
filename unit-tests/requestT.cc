@@ -53,10 +53,7 @@ public:
 
     void make_request()
     {
-	string url = "\"http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&version=1.0.0&request=GetCoverage&coverage=totH2OStd&TIME=2003-03-08&crs=WGS84&bbox=-53.885000,-4.085000,-49.135000,0.665000&resx=0.25&resy=0.25&interpolationMethod=Nearest%20neighbor&format=netCDF\"";
-
-	string qurl = url.substr( 1, url.length() - 2 ) ;
-	cerr << qurl << endl ;
+	string url = "http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&version=1.0.0&request=GetCoverage&coverage=totH2OStd&TIME=2003-03-08&crs=WGS84&bbox=-53.885000,-4.085000,-49.135000,0.665000&resx=0.25&resy=0.25&interpolationMethod=Nearest%20neighbor&format=netCDF";
 
 	// Creating the container validates the WCS request url
 	WCSContainer *c1 = NULL ;

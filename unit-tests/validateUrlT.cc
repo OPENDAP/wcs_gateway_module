@@ -46,7 +46,7 @@ public:
 
 	try
 	{
-	    string url = "\"http://data.laits.gmu.edu/cgi-bin/ACCESS/wcs300?service=WCS&version=1.0.0&request=getCoverage&coverage=/home/mmin/testdata/MOD021KM.A2002248.0140.003.2002248112526.hdf:Swath:MODIS_SWATH_Type_L1B:EV_1KM_Emissive&crs=EPSG:4326&bbox=-40,29,-39,30&format=netCDF&resx=0.01&resy=0.01&Band_1KM_Emissive=1\"" ;
+	    string url = "http://data.laits.gmu.edu/cgi-bin/ACCESS/wcs300?service=WCS&version=1.0.0&request=getCoverage&coverage=/home/mmin/testdata/MOD021KM.A2002248.0140.003.2002248112526.hdf:Swath:MODIS_SWATH_Type_L1B:EV_1KM_Emissive&crs=EPSG:4326&bbox=-40,29,-39,30&format=netCDF&resx=0.01&resy=0.01&Band_1KM_Emissive=1" ;
 	    string format ;
 	    string e_format = "nc" ;
 	    string result = WCSGatewayUtils::validate_url( url, format ) ;
@@ -56,7 +56,7 @@ public:
 	    CPPUNIT_ASSERT( result.empty() ) ;
 	    CPPUNIT_ASSERT( format == e_format ) ;
 
-	    url = "\"http://webapps.datafed.net/ogc_NASA.wsfl?SERVICE=WCS&REQUEST=GetCoverage&VERSION=1.0.0&CRS=EPSG:4326&COVERAGE=GOCART_G_OL.BCEXTTAU&TIME=2007-06-24T23:00:00&BBOX=-180,-90,180,90,0,0&WIDTH=-1&HEIGHT=-1&DEPTH=-1&FORMAT=NetCDF\"" ;
+	    url = "http://webapps.datafed.net/ogc_NASA.wsfl?SERVICE=WCS&REQUEST=GetCoverage&VERSION=1.0.0&CRS=EPSG:4326&COVERAGE=GOCART_G_OL.BCEXTTAU&TIME=2007-06-24T23:00:00&BBOX=-180,-90,180,90,0,0&WIDTH=-1&HEIGHT=-1&DEPTH=-1&FORMAT=NetCDF" ;
 	    format = "" ;
 	    e_format = "nc" ;
 	    result = WCSGatewayUtils::validate_url( url, format ) ;
