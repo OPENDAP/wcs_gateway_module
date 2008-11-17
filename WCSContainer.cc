@@ -69,8 +69,12 @@ WCSContainer::WCSContainer( const string &sym_name,
     }
 
     // remove the leading and trailing double quotes
+    /* With the xml request documents we don't have quotes anymore, so no
+     * need to do this. pcw 09/09/2008
     string new_real_name = real_name.substr( 1, real_name.size() - 2 ) ;
     set_real_name( new_real_name ) ;
+    */
+    set_real_name( real_name ) ;
 
     set_container_type( type ) ;
 }

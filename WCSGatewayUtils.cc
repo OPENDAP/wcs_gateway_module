@@ -30,6 +30,12 @@
 // Authors:
 //      pcw       Patrick West <pwest@ucar.edu>
 
+#include "config.h"
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "WCSGatewayUtils.h"
 #include "BESUtil.h"
 #include "TheBESKeys.h"
@@ -137,11 +143,15 @@ WCSGatewayUtils::validate_url( const string &url, string &format )
     }
 
     // remove the double quotes
+    /* with xml request document we don't have quotes anymore
+     * - pcw * 09/09/2008
     if( (url[0] != '"' ) || (url[url.size() - 1] != '"' ) )
     {
 	return "Invalid WCS request, must be enclosed in double quotes" ;
     }
     string newurl = url.substr( 1, url.size() - 2 ) ;
+    */
+    string newurl = url ;
 
     // convert it all to lower case
     newurl = BESUtil::lowercase( newurl ) ;
@@ -225,7 +235,11 @@ WCSGatewayUtils::validate_url( const string &url, string &format )
     }
     // url and newurl are the same, except for case and the leading and
     // trailing double quote. We want the case for the format conversion.
+    /* There are no longer any leading or trailing double quotes.
+     * - pcw 09/09/2008
     string wcs_format = url.substr( eq_index+2, amp_index - eq_index - 1 ) ;
+    */
+    string wcs_format = url.substr( eq_index+1, amp_index - eq_index - 1 ) ;
     format = WCSGatewayUtils::convert_wcs_type( wcs_format ) ;
 
     return "" ;
