@@ -66,8 +66,8 @@ WCSGatewayRequest::make_request( const string &url )
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "wcs", "WCSGatewayRequest::make_request" << endl )
-    BESDEBUG( "wcs", "  request = " << url << endl )
+    BESDEBUG( "wcs", "WCSGatewayRequest::make_request" << endl );
+    BESDEBUG( "wcs", "  request = " << url << endl );
 
     RCReader *rcr = RCReader::instance() ;
     rcr->set_use_cache( false ) ;
@@ -123,7 +123,7 @@ WCSGatewayRequest::make_request( const string &url )
 	    string hdr_line = (*i) ;
 	    if( hdr_line.find( "text/xml" ) != string::npos )
 	    {
-		BESDEBUG( "wcs", "  found xml error" << endl )
+		BESDEBUG( "wcs", "  found xml error" << endl );
 		request_status = false ;
 		xml_error = true ;
 	    }
@@ -132,18 +132,18 @@ WCSGatewayRequest::make_request( const string &url )
 
     if( request_status == false )
     {
-	BESDEBUG( "wcs", " request FAILED" << endl )
+	BESDEBUG( "wcs", " request FAILED" << endl );
 
-	// get the error information from the temoorary file
+	// get the error information from the temporary file
 	string err ;
 	if( xml_error )
 	{
-	    BESDEBUG( "wcs", " reading xml error" << endl )
+	    BESDEBUG( "wcs", " reading xml error" << endl );
 	    WCSGatewayError::read_xml_error( response->get_file(), err, url ) ;
 	}
 	else
 	{
-	    BESDEBUG( "wcs", " reading text error" << endl )
+	    BESDEBUG( "wcs", " reading text error" << endl );
 	    WCSGatewayError::read_error( response->get_file(), err, url ) ;
 	}
 
@@ -154,7 +154,7 @@ WCSGatewayRequest::make_request( const string &url )
 	throw BESInternalError( err, __FILE__, __LINE__ ) ;
     }
 
-    BESDEBUG( "wcs", "WCSGatewayRequest::make_request - done" << endl )
+    BESDEBUG( "wcs", "WCSGatewayRequest::make_request - done" << endl );
 
     return response ;
 }

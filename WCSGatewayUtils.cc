@@ -87,7 +87,7 @@ WCSGatewayUtils::break_apart_types( const string &types )
  *
  * Use the configuration file parameter WCS.TypeList, which is formated as
  * wcs_type:bes_type; If the list does not exist then assume that it is a
- * direct mappiing.
+ * direct mapping.
  *
  * If the wcs_type cannot be found in the list then simply return the
  * wcs_type
@@ -120,7 +120,7 @@ WCSGatewayUtils::convert_wcs_type( const string &wcs_type )
  * 1. the request URL must begin with http://
  * 2. service=wcs - converted to all lower case, the service being requested must be wcs
  * 3. version=vers_number - a version number must be provided, not validating the version
- * 4. request=getCoverage - only thye getCoverage request is handled by the WCS module
+ * 4. request=getCoverage - only the getCoverage request is handled by the WCS module
  * 5. coverage=wcs_request - the coverage parameter contains the wcs request url
  * 6. format=data_format - the data format of the WCS request response file
  *
@@ -200,6 +200,9 @@ WCSGatewayUtils::validate_url( const string &url, string &format )
     {
 	return "Invalid WCS request, malformed coverage information" ;
     }
+
+	// Not used
+#if 0
     string::size_type col_index = newurl.find( ":", eq_index ) ;
     string::size_type cov_amp_index = newurl.find( "&", eq_index ) ;
     if( cov_amp_index == string::npos )
@@ -216,6 +219,7 @@ WCSGatewayUtils::validate_url( const string &url, string &format )
     {
 	slash_index = eq_index ;
     }
+#endif
 
     // find the format
     string::size_type format_index = newurl.find( "format" ) ;
@@ -246,7 +250,7 @@ WCSGatewayUtils::validate_url( const string &url, string &format )
 }
 
 // Look around for a reasonable place to put a temporary file. Check first
-// the value of the TMPDIR env var. If that does not yeild a path that's
+// the value of the TMPDIR env var. If that does not yield a path that's
 // writable (as defined by access(..., W_OK|R_OK)) then look at P_tmpdir (as
 // defined in stdio.h. If both come up empty, then use `./'.
 //
@@ -262,11 +266,11 @@ char *
 WCSGatewayUtils::get_tempfile_template(char *file_template)
 {
     char *c;
-    
+
 #ifdef WIN32
-    // whitelist for a WIN32 directory
+    // white list for a WIN32 directory
     Regex directory("[-a-zA-Z0-9_\\]*");
-	
+
     c = getenv("TEMP");
     if (c && directory.match(c, strlen(c)) && (access(getenv("TEMP"), 6) == 0))
     	goto valid_temp_directory;
@@ -275,9 +279,9 @@ WCSGatewayUtils::get_tempfile_template(char *file_template)
     if (c && directory.match(c, strlen(c)) && (access(getenv("TEMP"), 6) == 0))
     	goto valid_temp_directory;
 #else
-	// whitelist for a directory
+	// white list for a directory
 	Regex directory("[-a-zA-Z0-9_/]*");
-	
+
 	c = getenv("TMPDIR");
 	if (c && directory.match(c, strlen(c)) && (access(c, W_OK | R_OK) == 0))
     	goto valid_temp_directory;
@@ -292,18 +296,18 @@ WCSGatewayUtils::get_tempfile_template(char *file_template)
 #endif  // WIN32
 
     c = ".";
-    
+
 valid_temp_directory:
 	// Sanitize allocation
 	int size = strlen(c) + strlen(file_template) + 2;
 	if (!size_ok(1, size))
 		throw Error("Bad temporary file name.");
-		
+
     char *temp = new char[size];
     strncpy(temp, c, size-2);
-    strcat(temp, "/");
+    strncat(temp, "/", size-1);
 
-    strcat(temp, file_template);
+    strncat(temp, file_template, size-1);
 
     return temp;
 }

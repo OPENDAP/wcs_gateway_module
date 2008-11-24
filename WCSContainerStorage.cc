@@ -46,7 +46,7 @@ WCSContainerStorage::WCSContainerStorage( const string &n )
 }
 
 WCSContainerStorage::~WCSContainerStorage()
-{ 
+{
 }
 
 /** @brief adds a container with the provided information
@@ -54,7 +54,7 @@ WCSContainerStorage::~WCSContainerStorage()
  * @param s_name symbolic name for the container
  * @param r_name the wcs request url
  * @param type ignored. The type of the target response is determined by the
- * WCS request with the format paramter
+ * WCS request with the format parameter
  */
 void
 WCSContainerStorage::add_container( const string &s_name,

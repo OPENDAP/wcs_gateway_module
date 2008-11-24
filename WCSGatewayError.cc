@@ -88,7 +88,7 @@ WCSGatewayError::read_error( const string &filename,
  * an XML document
  *
  * The XML document is parsed using the libxml2 library and the error
- * information is palced in the err parameter.
+ * information is placed in the err parameter.
  *
  * The format of the XML document ExceptionReport is expected to be as
  * follows, where the report can have multiple Exception elements within it

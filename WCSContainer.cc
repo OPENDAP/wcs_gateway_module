@@ -130,7 +130,7 @@ WCSContainer::~WCSContainer()
 string
 WCSContainer::access()
 {
-    BESDEBUG( "wcs", "accessing " << get_real_name() << endl )
+    BESDEBUG( "wcs", "accessing " << get_real_name() << endl );
     string accessed ;
     if( !_response )
     {
@@ -144,8 +144,8 @@ WCSContainer::access()
 	accessed = _response->get_file() ;
     }
     BESDEBUG( "wcs", "done accessing " << get_real_name() << " returning "
-		     << accessed << endl )
-    BESDEBUG( "wcs", "done accessing " << *this << endl )
+		     << accessed << endl );
+    BESDEBUG( "wcs", "done accessing " << *this << endl );
     return accessed ;
 }
 
@@ -160,12 +160,12 @@ WCSContainer::release()
 {
     if( _response )
     {
-	BESDEBUG( "wcs", "releasing wcs response" << endl )
+	BESDEBUG( "wcs", "releasing wcs response" << endl );
 	delete _response ;
 	_response = 0 ;
     }
 
-    BESDEBUG( "wcs", "done releasing wcs response" << endl )
+    BESDEBUG( "wcs", "done releasing wcs response" << endl );
     return true ;
 }
 
