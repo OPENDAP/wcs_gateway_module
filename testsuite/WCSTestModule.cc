@@ -42,23 +42,23 @@ using std::endl ;
 void
 WCSTestModule::initialize( const string &modname )
 {
-    BESDEBUG( "wcs", "Initializing WCS Module " << modname << endl )
+    BESDEBUG( "wcs", "Initializing WCS Module " << modname << endl ) ;
 
-    BESDEBUG( "wcs", "Registering WCS Test Transmitter" << endl )
+    BESDEBUG( "wcs", "Registering WCS Test Transmitter" << endl ) ;
     BESReturnManager::TheManager()->add_transmitter( "test", new WCSTestTransmitter );
 
-    BESDEBUG( "wcs", "Done Initializing WCS Module " << modname << endl )
+    BESDEBUG( "wcs", "Done Initializing WCS Module " << modname << endl ) ;
 }
 
 void
 WCSTestModule::terminate( const string &modname )
 {
-    BESDEBUG( "wcs", "Cleaning WCS Module " << modname << endl )
+    BESDEBUG( "wcs", "Cleaning WCS Module " << modname << endl ) ;
 
-    BESDEBUG( "wcs", "Deleting WCS Test Transmitter" << endl )
+    BESDEBUG( "wcs", "Deleting WCS Test Transmitter" << endl ) ;
     BESReturnManager::TheManager()->del_transmitter( "test" ) ;
 
-    BESDEBUG( "wcs", "Done Cleaning WCS Module " << modname << endl )
+    BESDEBUG( "wcs", "Done Cleaning WCS Module " << modname << endl ) ;
 }
 
 /** @brief dumps information about this object

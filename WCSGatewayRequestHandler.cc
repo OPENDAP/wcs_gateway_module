@@ -27,7 +27,7 @@ WCSGatewayRequestHandler::sample_build_vers( BESDataHandlerInterface &dhi )
     if( !info )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
   
-    info->addHandlerVersion( PACKAGE_NAME, PACKAGE_VERSION ) ;
+    info->add_module( PACKAGE_NAME, PACKAGE_VERSION ) ;
 
     return true ;
 }
@@ -40,10 +40,11 @@ WCSGatewayRequestHandler::sample_build_help( BESDataHandlerInterface &dhi )
     if( !info )
 	throw BESInternalError( "cast error", __FILE__, __LINE__ ) ;
 
-    info->begin_tag("Handler");
-    info->add_tag("name", PACKAGE_NAME);
-    info->add_tag("version", PACKAGE_STRING);
-    info->end_tag("Handler");
+    map<string,string> attrs ;
+    attrs["name"] = PACKAGE_NAME ;
+    attrs["version"] = PACKAGE_VERSION ;
+    info->begin_tag( "module", &attrs ) ;
+    info->end_tag( "module" ) ;
 
     return true ;
 }
