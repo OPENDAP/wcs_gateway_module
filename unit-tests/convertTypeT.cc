@@ -10,6 +10,7 @@
 #include "WCSGatewayUtils.h"
 #include "BESError.h"
 #include "BESUtil.h"
+#include "TheBESKeys.h"
 #include "test_config.h"
 
 using namespace CppUnit ;
@@ -26,7 +27,8 @@ public:
 
     void setUp()
     {
-	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
+	string bes_conf = (string)TEST_SRC_DIR + "/bes.conf" ;
+	TheBESKeys::ConfigFile = bes_conf ;
 	putenv( (char *)bes_conf.c_str() ) ;
     } 
 
