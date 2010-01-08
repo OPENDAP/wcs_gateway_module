@@ -81,10 +81,10 @@ fortifyclean:
 # Build linux RPMs
 
 srpm:
-	rpmbuild -ts wcs_gateway_module-@PACKAGE_VERSION@.tar.gz
+	rpmbuild -ts --clean @PACKAGE@-@PACKAGE_VERSION@.tar.gz
 
 rpm:
-	rpmbuild -tb wcs_gateway_module-@PACKAGE_VERSION@.tar.gz
+	rpmbuild -tb --clean @PACKAGE@-@PACKAGE_VERSION@.tar.gz
 
 ###########################################################################
 
