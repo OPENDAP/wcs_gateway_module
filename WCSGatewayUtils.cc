@@ -101,7 +101,8 @@ WCSGatewayUtils::convert_wcs_type( const string &wcs_type )
     if( WCSGatewayUtils::type_list.size() == 0 )
     {
 	bool found = false ;
-	string types = TheBESKeys::TheKeys()->get_key( "WCS.TypeList", found ) ;
+	string types ;
+	TheBESKeys::TheKeys()->get_value( "WCS.TypeList", types, found ) ;
 	if( found && !types.empty() )
 	{
 	    WCSGatewayUtils::break_apart_types( types ) ;
