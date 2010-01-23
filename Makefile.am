@@ -14,7 +14,6 @@ DIST_SUBDIRS = unit-tests testsuite
 
 lib_besdir=$(libdir)/bes
 lib_bes_LTLIBRARIES = libwcs_gateway_module.la
-dist_bin_SCRIPTS = bes-wcsg-data.sh
 
 WCS_SRCS:=
 
@@ -39,28 +38,22 @@ libwcs_gateway_module_la_LIBADD = $(BES_LIBS)
 
 EXTRA_PROGRAMS = 
 
-EXTRA_DIST = COPYRIGHT_URI COPYING wcs_gateway_module.spec bes-wcsg-data.sh.in
+EXTRA_DIST = COPYRIGHT_URI COPYING wcs_gateway_module.spec wcsg.conf.in
 
-CLEANFILES = *~ bes-wcsg-data.sh
+CLEANFILES = *~ wcsg.conf
 
-do_subst = sed -e 's,[@]sysconfdir[@],$(sysconfdir),g' \
-		   	   -e 's,[@]libdir[@],$(libdir),g' \
-		   	   -e 's,[@]datadir[@],$(datadir),g'
+install-data-local: wcsg.conf
+	@currdate=`date +"%y%m%d%H%M"`; \
+	test -d $(DESTDIR)$(sysconfdir)/bes || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes; \
+	test -d $(DESTDIR)$(sysconfdir)/bes/modules || $(MKDIR_P) $(DESTDIR)$(sysconfdir)/bes/modules; \
+	test -f $(DESTDIR)$(sysconfdir)/bes/modules/wcsg.conf && mv -f $(DESTDIR)$(sysconfdir)/bes/modules/wcsg.conf $(DESTDIR)$(sysconfdir)/bes/modules/wcsg.conf.$$currdate; \
+	$(INSTALL_DATA) wcsg.conf $(DESTDIR)$(sysconfdir)/bes/modules/wcsg.conf
 
-bes-wcsg-data.sh: bes-wcsg-data.sh.in config.status
-	$(do_subst) < $(srcdir)/bes-wcsg-data.sh.in > bes-wcsg-data.sh
-	chmod +x bes-wcsg-data.sh
+uninstall-local:
+	rm -f $(DESTDIR)$(sysconfdir)/bes/modules/wcsg.conf
 
-# This makes sure that the handler modifies the bes which configure found
-# even when distcheck is run.
-bes-conf: bes-wcsg-data.sh
-	(bes_prefix=`bes-config --prefix` ; \
-	if test "$$bes_prefix" = "/usr" ; \
-	 then \
-	    ./bes-wcsg-data.sh /etc/bes/bes.conf /usr/lib/bes ;\
-	else \
-	    ./bes-wcsg-data.sh $$bes_prefix/etc/bes/bes.conf $$bes_prefix/lib/bes ; \
-	fi)
+wcsg.conf: wcsg.conf.in config.status
+	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > wcsg.conf
 
 ###########################################################################
 

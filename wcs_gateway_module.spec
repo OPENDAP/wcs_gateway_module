@@ -41,7 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/bes-wcs-data.sh
+%dir %{_sysconfdir}/bes/
+%dir %{_sysconfdir}/bes/modules
+%config(noreplace) %{_sysconfdir}/bes/modules/wcsg.conf
 %{_libdir}/bes/libwcs_module.so
 %doc COPYING COPYRIGHT NEWS README
 

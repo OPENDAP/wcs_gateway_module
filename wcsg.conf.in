@@ -1,0 +1,19 @@
+#-----------------------------------------------------------------------#
+# OPeNDAP NetCDF Data Handler BES Module Configuration file             #
+#-----------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------#
+# modules to load, includes data modules and command modules            #
+#-----------------------------------------------------------------------#
+
+BES.modules=wcsg
+BES.module.wcsg=@bes_modules_dir@/libwcs_gateway_module.so
+
+#-----------------------------------------------------------------------#
+# WCS Gateway module specific parameters
+#-----------------------------------------------------------------------#
+# WCS handler specific parameters
+# TypeList: translation between wcs types specified in WCS requests
+#           and the TypeList specified above
+WCS.TypeList=netcdf:nc;hdfeos:h4;
+
