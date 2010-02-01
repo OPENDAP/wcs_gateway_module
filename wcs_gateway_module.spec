@@ -1,6 +1,6 @@
 Summary:         WCS Request module for OPeNDAP Back End Server
 Name:            wcs_module
-Version:         1.0.0
+Version:         1.1.0
 Release:         1
 License:         LGPL
 Group:           System Environment/Daemons 
