@@ -1,3 +1,444 @@
+2010-02-01  rduncan
+
+	Release 1/01/2010
+
+2010-01-22  Patrick West <pwest@ucar.edu>
+
+	Switched to individual conf file
+	A    wcsg.conf.in
+	D    bes-wcsg-data.sh.in
+	M    Makefile.am
+	M    wcs_gateway_module.spec
+
+2010-01-10  Patrick West <pwest@ucar.edu>
+
+	API change to BESKeys
+	M    WCSGatewayUtils.cc
+
+2010-01-08  Patrick West <pwest@ucar.edu>
+
+	--clean to clean build and src files for rpmbuild
+	M    Makefile.am
+
+2009-09-25  James Gallagher <jgallagher@opendap.org>
+
+	It just seem right to save things at this point. Most of the configure.ac files have been updated. The libdap software has had a number of the FILE* methods/functions commented out using #if FILE_METHODS and then #undef FILE_METHODS. We'll see how much of the redundant code can be removed before the next Hyrax 1.6 release.
+
+2009-09-02  Patrick West <pwest@ucar.edu>
+
+	Repaired unit tests, wasn't able to find the configuration file.
+	M    unit-tests/requestT.cc
+	M    unit-tests/validateUrlT.cc
+	M    unit-tests/convertTypeT.cc
+
+2009-08-31  Patrick West <pwest@ucar.edu>
+
+	Updated to current version of libdap and bes
+	M    testsuite/WCSTestModule.cc
+	M    WCSGatewayModule.cc
+	M    WCSGatewayRequestHandler.cc
+
+2009-08-19  James Gallagher <jgallagher@opendap.org>
+
+	Deleted generated files
+
+2008-11-24  James Gallagher <jgallagher@opendap.org>
+
+2008-11-17  Patrick West <pwest@ucar.edu>
+
+	merged unit tests from xml branch to trunk
+
+	M    unit-tests/requestT.cc
+	M    unit-tests/validateUrlT.cc
+
+2008-11-17  Patrick West <pwest@ucar.edu>
+
+	Merged xml branch to trunk versions
+
+	M    WCSGatewayUtils.cc
+	M    WCSContainer.cc
+
+2008-08-26  Patrick West <pwest@ucar.edu>
+
+	Changed documentation to say WCS Gateway Module. Changed bes-wcs-data.sh to
+	bes-wcsg-data.sh (g meaning gateway).
+	D    bes-wcs-data.sh.in
+	A    bes-wcsg-data.sh.in
+	M    INSTALL
+	M    README
+	M    OSX_Resources/update_mac_package_contents.pl
+	M    OSX_Resources/Info.plist
+	M    OSX_Resources/ReadMe.txt
+	M    OSX_Resources/Description.plist
+	M    OSX_Resources/Welcome.html
+	M    Makefile.am
+
+2008-08-26  Patrick West <pwest@ucar.edu>
+
+	Updated ddx responses for quote changes
+	M    testsuite/bes.conf.in
+	M    testsuite/wcs/outfile1.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile2.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile3.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile4.ddx.bescmd.baseline
+
+2008-08-25  Patrick West <pwest@ucar.edu>
+
+	Made these executable
+
+	_M   conf/mkinstalldirs
+	_M   conf/depcomp
+	_M   conf/missing
+	_M   conf/config.guess
+	_M   conf/config.sub
+	_M   conf/ltmain.sh
+	_M   conf/install-sh
+
+2008-08-25  Patrick West <pwest@ucar.edu>
+
+	Changing names to include Gateway, as this is really a WCS client gateway
+	service and not a WCS server itself.
+	M    WCSContainer.cc
+	D    WCSModule.cc
+	D    WCSRequestHandler.cc
+	D    WCSRequestHandler.h
+	D    WCSRequest.cc
+	D    WCSError.cc
+	D    WCSRequest.h
+	D    WCSUtils.cc
+	M    configure.ac
+	D    WCSUtils.h
+	A    WCSGatewayModule.cc
+	A    WCSGatewayRequestHandler.cc
+	A    WCSGatewayRequestHandler.h
+	A    WCSGatewayRequest.cc
+	A    WCSGatewayError.cc
+	A    WCSGatewayRequest.h
+	M    unit-tests/xmlErrT.cc
+	M    unit-tests/validateUrlT.cc
+	M    unit-tests/Makefile.am
+	M    unit-tests/convertTypeT.cc
+	A    WCSGatewayUtils.cc
+	A    WCSGatewayUtils.h
+	D    WCSModule.h
+	D    wcs_module.spec
+	D    WCSError.h
+	M    Makefile.am
+	A    WCSGatewayModule.h
+	A    wcs_gateway_module.spec
+	A    WCSGatewayError.h
+
+2008-08-25  Patrick West <pwest@ucar.edu>
+
+	This module is actually a WCS gateway module that takes an already formed
+	WCS request and forwards it on to a WCS server. We are creating a new
+	wcs_module that will actually be a WCS server.
+	A    http://scm.opendap.org/svn/trunk/wcs_gateway_module
+	D    http://scm.opendap.org/svn/trunk/wcs_module
+
+2008-08-11  Patrick West <pwest@ucar.edu>
+
+	Setting use cache on RCReader to false after creating to make sure cache is
+	NOT being used in HTTPConnect and HTTPCache.
+
+	M    WCSRequest.cc
+
+2008-07-16  Patrick West <pwest@ucar.edu>
+
+	Checking results of dynamic casts and throwing a cast error if fails.
+	M    WCSRequestHandler.cc
+
+2008-07-08  Patrick West <pwest@ucar.edu>
+
+	Cleaned up un-needed header includes. Removed un-needed methods from
+	WCSRequest. Cleaned up code documentation. Removed Cache parameters from
+	bes.conf script bes-wcs-data.sh.in. Added more dump information in
+	WCSContainer to include name of response file and response headers.
+	M    WCSContainer.cc
+	M    WCSModule.cc
+	M    bes-wcs-data.sh.in
+	M    WCSRequest.cc
+	M    WCSError.cc
+	M    WCSRequest.h
+	M    WCSContainerStorage.cc
+
+2008-07-07  Patrick West <pwest@ucar.edu>
+
+	Fixed problem with no Location information in the exception.
+	M    testsuite/wcs/accesserror.bescmd.baseline
+	M    testsuite/wcs/accesserror2.bescmd.baseline
+	M    testsuite/besstandalone.wcs/accesserror2.exp
+	M    testsuite/besstandalone.wcs/accesserror.exp
+
+2008-06-16  Patrick West <pwest@ucar.edu>
+
+	Re-worked WCSRequest to use HTTPConnect and HTTPResponse, not using
+	HTTPCache but instead relying on external caching mechanism, like squid.
+	M    WCSContainer.cc
+	D    WCSParams.cc
+	M    WCSContainer.h
+	M    WCSModule.cc
+	M    WCSRequest.cc
+	M    WCSRequest.h
+	M    unit-tests/requestT.cc
+	M    unit-tests/bes.conf
+	D    WCSParams.h
+	M    testsuite/wcs/accesserror.bescmd.baseline
+	A    testsuite/wcs/accesserror2.bescmd
+	A    testsuite/wcs/accesserror2.bescmd.baseline
+	A    testsuite/besstandalone.wcs/accesserror2.exp
+	M    Makefile.am
+
+2008-05-05  Patrick West <pwest@ucar.edu>
+
+	1.0 version spec
+	A    docs/03-065r6_Web_Coverage_Service_WCS_version_1.0.pdf
+
+2008-04-30  Patrick West <pwest@ucar.edu>
+
+	Changed the format of the error messages, so needed to update the test
+	M    unit-tests/xmlErrT.cc
+
+2008-04-21  Patrick West <pwest@ucar.edu>
+
+	Able to handle ExceptionReport and ServiceExceptionReport with multiple
+	Exception or ServiceException elements and messages.
+	M    WCSError.cc
+
+2008-04-16  Patrick West <pwest@ucar.edu>
+
+	dejagnu start functions
+	A    config
+	A    config/unix.exp
+
+2008-04-10  Patrick West <pwest@ucar.edu>
+
+	Forgot to put newlines at the end of the member dumps.
+	M    WCSParams.cc
+
+2008-04-10  Patrick West <pwest@ucar.edu>
+
+	curl options include following redirects through Location header information
+	with a max redirect of 5.
+	M    WCSModule.cc
+	M    WCSRequest.cc
+
+2008-04-10  Patrick West <pwest@ucar.edu>
+
+	New tests as old WCS server running against no longer allows access or is
+	down. Access error test results needed to be changed because error
+	information added to an XML document is a cleaned xml string.
+	M    testsuite/wcs/accesserror.bescmd.baseline
+	M    testsuite/wcs/infile1.das.bescmd
+	M    testsuite/wcs/infile3.das.bescmd
+	M    testsuite/wcs/infile1.dds.bescmd
+	M    testsuite/wcs/infile3.dds.bescmd
+	M    testsuite/wcs/infile2.ddx.bescmd
+	M    testsuite/wcs/infile4.ddx.bescmd
+	M    testsuite/wcs/infile1.ascii.bescmd
+	M    testsuite/wcs/infile3.ascii.bescmd
+	M    testsuite/wcs/outfile1.dds.bescmd.baseline
+	M    testsuite/wcs/outfile2.dds.bescmd.baseline
+	M    testsuite/wcs/outfile3.dds.bescmd.baseline
+	M    testsuite/wcs/outfile4.dds.bescmd.baseline
+	M    testsuite/wcs/outfile1.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile2.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile3.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile4.ddx.bescmd.baseline
+	M    testsuite/wcs/infile2.das.bescmd
+	M    testsuite/wcs/infile4.das.bescmd
+	M    testsuite/wcs/outfile1.ascii.bescmd.baseline
+	M    testsuite/wcs/infile2.dds.bescmd
+	M    testsuite/wcs/outfile2.ascii.bescmd.baseline
+	M    testsuite/wcs/outfile3.ascii.bescmd.baseline
+	M    testsuite/wcs/infile4.dds.bescmd
+	M    testsuite/wcs/outfile4.ascii.bescmd.baseline
+	M    testsuite/wcs/infile1.ddx.bescmd
+	M    testsuite/wcs/infile3.ddx.bescmd
+	M    testsuite/wcs/infile2.ascii.bescmd
+	M    testsuite/wcs/outfile1.das.bescmd.baseline
+	M    testsuite/wcs/outfile2.das.bescmd.baseline
+	M    testsuite/wcs/outfile3.das.bescmd.baseline
+	M    testsuite/wcs/infile4.ascii.bescmd
+	M    testsuite/wcs/outfile4.das.bescmd.baseline
+
+2008-04-10  Patrick West <pwest@ucar.edu>
+
+	Make sure the WCS cahce directory exists for the test.
+	M    requestT.cc
+
+2008-04-07  Patrick West <pwest@ucar.edu>
+
+	Was closing the stream twice, once in close_temp and then the following
+	fclose statement.
+	M    WCSRequest.cc
+
+2008-04-01  Patrick West <pwest@ucar.edu>
+
+	Was grabbing HTTPCache with incorrect cache directory. Since instance in
+	HTTPCache was already created, it wasn't using the incorrect cache directory
+	for anything. Also added debug statements for accessing and releasing the
+	WCS request cached entries.
+	M    WCSContainer.cc
+
+2008-04-01  Patrick West <pwest@ucar.edu>
+
+	Created a WCSParams static class to hold parameters for WCS from BES
+	configuration file. Updated the unit test with a valid URL. Initializing the
+	WCSParams from within the WCS module. Using WCSParams in WCSContainer and
+	WCSRequest.
+	M    WCSContainer.cc
+	A    WCSParams.cc
+	M    WCSContainer.h
+	M    WCSModule.cc
+	M    WCSRequest.cc
+	M    WCSRequest.h
+	M    unit-tests/requestT.cc
+	A    WCSParams.h
+	M    Makefile.am
+
+2008-03-25  Patrick West <pwest@ucar.edu>
+
+	Added RequestHandler back to WCS to handle version and help requests.
+	M    WCSModule.cc
+	A    WCSRequestHandler.cc
+	A    WCSRequestHandler.h
+	M    Makefile.am
+
+2008-03-05  Patrick West <pwest@ucar.edu>
+
+	Scoped the new function get_tempfile_template
+	M    WCSUtils.cc
+
+2008-03-05  Patrick West <pwest@ucar.edu>
+
+	Copied get_tempfile_template from libdap here until can put back in util.h.
+	M    WCSRequest.cc
+	M    WCSUtils.cc
+	M    WCSUtils.h
+
+2008-02-28  Patrick West <pwest@ucar.edu>
+
+	Forgot to add cppunit.m4 in conf directory.
+	A    conf/cppunit.m4
+
+2008-02-28  Patrick West <pwest@ucar.edu>
+
+	If cppunit not installed then the tests aren't run, message is displayed
+	saying cppunit must be installed.
+	M    unit-tests/Makefile.am
+	M    configure.ac
+
+2008-02-26  Patrick West <pwest@ucar.edu>
+
+	Added Mac OSX pkg build using package maker and dropdmg. Removed
+	testsuite/bes.conf because it is generated. Updated README for formatting on
+	Mac OSX pkg build.
+	D    testsuite/bes.conf
+	M    README
+	M    configure.ac
+	A    OSX_Resources
+	AM   OSX_Resources/InstallationCheck
+	A    OSX_Resources/License.txt
+	AM   OSX_Resources/update_mac_package_contents.pl
+	A    OSX_Resources/Info.plist
+	A    OSX_Resources/InstallationCheck.strings
+	A    OSX_Resources/ReadMe.txt
+	A    OSX_Resources/Description.plist
+	AM   OSX_Resources/background.jpg
+	A    OSX_Resources/Welcome.html
+	M    Makefile.am
+
+2008-02-14  Patrick West <pwest@ucar.edu>
+
+	Updated configure to use latest and greatest libdap and bes config macros
+	and m4 files.
+	M    conf/bes.m4
+	M    conf/libdap.m4
+	M    configure.ac
+
+2008-02-07  Patrick West <pwest@ucar.edu>
+
+	Needed by the testsuite.
+	A    bes.conf.in
+
+2008-02-07  Patrick West <pwest@ucar.edu>
+
+	Used to check packages.
+	A    pkg.m4
+
+2008-02-06  Patrick West <pwest@ucar.edu>
+
+	Got distcheck to work by adding COPYING, NEWS and updating unit tests.
+	Updated README and INSTALL and NEWS. Added a ChangeLog to get it started.
+	A    unit-tests/test_config.h.in
+	M    unit-tests/requestT.cc
+	M    unit-tests/xmlErrT.cc
+	M    unit-tests/validateUrlT.cc
+	M    unit-tests/Makefile.am
+	M    unit-tests/convertTypeT.cc
+	A    ChangeLog
+	A    wcs_module.spec
+	M    README
+	M    INSTALL
+	A    COPYING
+	M    Makefile.am
+	A    NEWS
+
+2008-02-05  Patrick West <pwest@ucar.edu>
+
+	Updated configuration and cleaned up unneeded files. Updated the regression
+	tests in testsuite to have a consistent name for checking.
+	D    unit-tests/validateUrlT.dbg
+	M    conf/mkinstalldirs
+	D    conf/acinclude.m4
+	M    conf/bes.m4
+	M    conf/missing
+	M    conf/config.guess
+	M    conf/libdap.m4
+	M    conf/config.sub
+	M    conf/install-sh
+	A    testsuite/WCSTestTransmitter.h
+	A    testsuite/WCSTestModule.cc
+	A    testsuite/WCSTestModule.h
+	M    testsuite/Makefile.am
+	M    testsuite/wcs/accesserror.bescmd.baseline
+	M    testsuite/wcs/infile1.das.bescmd
+	M    testsuite/wcs/infile3.das.bescmd
+	M    testsuite/wcs/infile1.dds.bescmd
+	M    testsuite/wcs/infile3.dds.bescmd
+	M    testsuite/wcs/infile2.ddx.bescmd
+	M    testsuite/wcs/infile4.ddx.bescmd
+	M    testsuite/wcs/infile1.ascii.bescmd
+	M    testsuite/wcs/infile3.ascii.bescmd
+	M    testsuite/wcs/outfile1.dds.bescmd.baseline
+	M    testsuite/wcs/outfile2.dds.bescmd.baseline
+	M    testsuite/wcs/outfile3.dds.bescmd.baseline
+	M    testsuite/wcs/outfile4.dds.bescmd.baseline
+	M    testsuite/wcs/outfile1.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile2.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile3.ddx.bescmd.baseline
+	M    testsuite/wcs/outfile4.ddx.bescmd.baseline
+	M    testsuite/wcs/infile2.das.bescmd
+	M    testsuite/wcs/outfile1.ascii.bescmd.baseline
+	M    testsuite/wcs/infile4.das.bescmd
+	M    testsuite/wcs/outfile2.ascii.bescmd.baseline
+	M    testsuite/wcs/infile2.dds.bescmd
+	M    testsuite/wcs/outfile3.ascii.bescmd.baseline
+	M    testsuite/wcs/outfile4.ascii.bescmd.baseline
+	M    testsuite/wcs/infile4.dds.bescmd
+	M    testsuite/wcs/infile1.ddx.bescmd
+	M    testsuite/wcs/infile3.ddx.bescmd
+	M    testsuite/wcs/infile2.ascii.bescmd
+	M    testsuite/wcs/infile4.ascii.bescmd
+	M    testsuite/bes.conf
+	A    testsuite/WCSTestTransmitter.cc
+	M    config.h.in
+	M    configure.ac
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
 2008-02-05  Patrick West <pwest@ucar.edu>
 
 	Updated configuration and cleaned up unneeded files. Updated the
