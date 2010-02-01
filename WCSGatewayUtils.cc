@@ -266,25 +266,24 @@ WCSGatewayUtils::validate_url( const string &url, string &format )
 char *
 WCSGatewayUtils::get_tempfile_template(char *file_template)
 {
-    char *c;
-
 #ifdef WIN32
     // white list for a WIN32 directory
     Regex directory("[-a-zA-Z0-9_\\]*");
 
-    c = getenv("TEMP");
-    if (c && directory.match(c, strlen(c)) && (access(getenv("TEMP"), 6) == 0))
+    string c = getenv("TEMP");
+    if (c && directory.match(c.c_str(), c.length()) && (access(getenv("TEMP"), 6) == 0))
     	goto valid_temp_directory;
 
-    c= getenv("TMP");
-    if (c && directory.match(c, strlen(c)) && (access(getenv("TEMP"), 6) == 0))
+    c = getenv("TMP");
+    if (c && directory.match(c.c_str(), c.length()) && (access(getenv("TEMP"), 6) == 0))
     	goto valid_temp_directory;
 #else
 	// white list for a directory
 	Regex directory("[-a-zA-Z0-9_/]*");
 
-	c = getenv("TMPDIR");
-	if (c && directory.match(c, strlen(c)) && (access(c, W_OK | R_OK) == 0))
+	string c = getenv("TMPDIR");
+	if (!c.empty() && directory.match(c.c_str(), c.length())
+		&& (access(c.c_str(), W_OK | R_OK) == 0))
     	goto valid_temp_directory;
 
 #ifdef P_tmpdir
@@ -299,16 +298,12 @@ WCSGatewayUtils::get_tempfile_template(char *file_template)
     c = ".";
 
 valid_temp_directory:
-	// Sanitize allocation
-	int size = strlen(c) + strlen(file_template) + 2;
-	if (!size_ok(1, size))
-		throw Error("Bad temporary file name.");
 
-    char *temp = new char[size];
-    strncpy(temp, c, size-2);
-    strncat(temp, "/", size-1);
+	c.append("/");
+	c.append(file_template);
 
-    strncat(temp, file_template, size-1);
+    char *temp = new char[c.length()];
+    strncpy(temp, c.c_str(), c.length());
 
     return temp;
 }

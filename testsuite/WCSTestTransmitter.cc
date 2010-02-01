@@ -78,6 +78,8 @@ WCSTestTransmitter::send_basic_dds(BESResponseObject * obj,
                                     BESDataHandlerInterface & dhi)
 {
     BESDDSResponse *bdds = dynamic_cast < BESDDSResponse * >(obj);
+    if (!bdds)
+    	throw InternalErr(__FILE__, __LINE__, "BESDDSResponse null!");
     DDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
@@ -99,6 +101,8 @@ WCSTestTransmitter::send_basic_data(BESResponseObject * obj,
                                      BESDataHandlerInterface & dhi)
 {
     BESDataDDSResponse *bdds = dynamic_cast < BESDataDDSResponse * >(obj);
+    if (!bdds)
+    	throw InternalErr(__FILE__, __LINE__, "BESDDSResponse null!");
     DataDDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
@@ -120,6 +124,8 @@ WCSTestTransmitter::send_basic_ddx(BESResponseObject * obj,
                                     BESDataHandlerInterface & dhi)
 {
     BESDDSResponse *bdds = dynamic_cast < BESDDSResponse * >(obj);
+    if (!bdds)
+    	throw InternalErr(__FILE__, __LINE__, "BESDDSResponse null!");
     DDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
@@ -141,6 +147,8 @@ WCSTestTransmitter::send_basic_ascii( BESResponseObject * obj,
                                     BESDataHandlerInterface & dhi )
 {
     BESDataDDSResponse *bdds = dynamic_cast < BESDataDDSResponse * >(obj);
+    if (!bdds)
+    	throw InternalErr(__FILE__, __LINE__, "BESDDSResponse null!");
     DataDDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
