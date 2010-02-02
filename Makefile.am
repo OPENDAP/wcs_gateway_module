@@ -73,10 +73,10 @@ fortifyclean:
 
 # Build linux RPMs
 
-srpm:
+srpm: dist
 	rpmbuild -ts --clean @PACKAGE@-@PACKAGE_VERSION@.tar.gz
 
-rpm:
+rpm: dist
 	rpmbuild -tb --clean @PACKAGE@-@PACKAGE_VERSION@.tar.gz
 
 ###########################################################################
