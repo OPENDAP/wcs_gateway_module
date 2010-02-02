@@ -1,6 +1,6 @@
 2010-02-01  rduncan
 
-	Release 1/01/2010
+	Release 2/1/2010
 
 2010-01-22  Patrick West <pwest@ucar.edu>
 
@@ -22,7 +22,12 @@
 
 2009-09-25  James Gallagher <jgallagher@opendap.org>
 
-	It just seem right to save things at this point. Most of the configure.ac files have been updated. The libdap software has had a number of the FILE* methods/functions commented out using #if FILE_METHODS and then #undef FILE_METHODS. We'll see how much of the redundant code can be removed before the next Hyrax 1.6 release.
+	It just seems right to save things at this point. Most of the
+	configure.ac files have been updated. The libdap software has had
+	a number of the FILE* methods/functions commented out using #if
+	FILE_METHODS and then #undef FILE_METHODS. We'll see how much of
+	the redundant code can be removed before the next Hyrax 1.6
+	release.
 
 2009-09-02  Patrick West <pwest@ucar.edu>
 
@@ -60,7 +65,9 @@
 
 2008-08-26  Patrick West <pwest@ucar.edu>
 
-	Changed documentation to say WCS Gateway Module. Changed bes-wcs-data.sh to
+	Changed documentation to say WCS Gateway Module. Changed
+	bes-wcs-data.sh to 
+	
 	bes-wcsg-data.sh (g meaning gateway).
 	D    bes-wcs-data.sh.in
 	A    bes-wcsg-data.sh.in

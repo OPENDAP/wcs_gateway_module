@@ -29,8 +29,8 @@ unit-tests/ - directory containing unit tests. See below for testing.
 
 The WCS Gateway Module adds functionality to the OPeNDAP Back-End Server
 (BES) allowing it to retrieve data served by WCS requests. This is a gateway
-service and does not provide WCS functionality, simply returns OPeNDAP
-responses for WCS requests served by a remote WCS server.
+service and does not provide WCS functionality; itreturns OPeNDAP
+responses for data served by a remote WCS server.
 
 * Configuration
 
