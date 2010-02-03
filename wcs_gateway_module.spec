@@ -8,8 +8,8 @@ Source0:         http://www.opendap.org/pub/source/%{name}-%{version}.tar.gz
 URL:             http://www.opendap.org/
 
 BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:   libdap-devel >= 3.7.10
-BuildRequires:   bes-devel >= 3.5.3
+BuildRequires:   libdap-devel >= 3.10.0
+BuildRequires:   bes-devel >= 3.8.0
 
 %description
 This is the WCS request module that is to be loaded in to the OPeNDAP
