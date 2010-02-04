@@ -1,7 +1,9 @@
 
  $Id: README 16473 2007-05-14 22:03:25Z jimg $
 
-See the INSTALL file for build instructions.
+Updated for version 1.1.0 of the OPeNDAP BES - WCS Gateway Module
+
+See the INSTALL file for build and installation instructions.
 
 This is the WCS Gateway Module to be loaded by the OPeNDAP Back-End Server
 (BES).  For more information on Hyrax and the BES, please visit our
@@ -34,31 +36,14 @@ responses for data served by a remote WCS server.
 
 * Configuration
 
-Once the WCS Gateway Module has been installed, you will need to add the
-module to the local BES configuration file. This configuration file is
-located in the BES installation directory under etc/bes and is called
-bes.conf. You will also need at least the netcdf module and hdf4 module from
-OPeNDAP. Download these two modules and follow the instructions for
-configuring the BES to load these modules.
-
-To load the WCS Module into the BES you will need to add wcs to the list of
-modules. Locate the paramter called BES.modules and add ",wcsg" to the end
-of that line. For example:
-
-<code>
-    BES.modules=dap,cmds,ascii,usage,www,nc,h4,wcsg
-</code>
-
-Next you will need to tell the BES where to find the WCS Gateway Module. Add
-thefollowing line after BES.modules:
-
-<code>
-    BES.module.wcsg=/path/to/libwcs_gateway_module.so
-</code>
+Once the WCS Gateway Module has been installed, you will need to check
+the configuration of the module. In the $prefix/etc/bes/modules
+directory there will be a wcsg.conf file. This file is the configuraiton
+file for the wcs gateway module that gets loaded by the BES.
 
 There is one WCS Gateway specific parameter that needs to be set in the BES
 configuraiton file. At the bottom of this file is a place where you can
-specify module-specific parameters. Add the following:
+specify module-specific parameters. You should see the following:
 
 <code>
     WCS.TypeList=netcdf:nc;hdf:h4;

@@ -1,3 +1,10 @@
-set container in wcs values wcsContainer, "http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&version=1.0.0&request=GetCoverage&coverage=CO_total_column&TIME=2002-10-10&crs=WGS84&bbox=0.125000,11.125000,4.875000,15.875000&resx=0.25&resy=0.25&interpolationMethod=Nearest%20neighbor&format=netCDF";
-define d1 as wcsContainer;
-get ddx for d1 return as "test";
+<?xml version="1.0" encoding="UTF-8"?>
+<request reqID ="some_unique_value" >
+    <setContext name="dap_format">dap2</setContext>
+    <setContainer name="wcsContainer" space="wcs">http://g0dup05u.ecs.nasa.gov/cgi-bin/ceopAIRX2RET?service=WCS&amp;version=1.0.0&amp;request=GetCoverage&amp;coverage=CO_total_column&amp;TIME=2002-10-10&amp;crs=WGS84&amp;bbox=0.125000,11.125000,4.875000,15.875000&amp;resx=0.25&amp;resy=0.25&amp;interpolationMethod=Nearest%20neighbor&amp;format=netCDF</setContainer>
+    <define name="d1">
+        <container name="wcsContainer" />
+    </define>
+    <get type="ddx" definition="d1" returnAs="test" />
+</request>
+

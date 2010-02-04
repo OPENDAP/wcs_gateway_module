@@ -34,29 +34,82 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
             <dimension name="longitude" size="20"/>
         </Array>
         <Map name="time">
+            <Attribute name="long_name" type="String">
+                <value>time</value>
+            </Attribute>
+            <Attribute name="axis" type="String">
+                <value>T</value>
+            </Attribute>
+            <Attribute name="units" type="String">
+                <value>seconds since 1993-1-1 0:0:0</value>
+            </Attribute>
+            <Attribute name="bounds" type="String">
+                <value>time_bnds</value>
+            </Attribute>
             <Float64/>
             <dimension name="time" size="2"/>
         </Map>
         <Map name="Cloud">
+            <Attribute name="long_name" type="String">
+                <value>Cloud</value>
+            </Attribute>
+            <Attribute name="Description" type="String">
+                <value>Cloud layer ID</value>
+            </Attribute>
+            <Attribute name="axis" type="String">
+                <value>Z</value>
+            </Attribute>
+            <Attribute name="units" type="String">
+                <value>unitless</value>
+            </Attribute>
             <Int32/>
             <dimension name="Cloud" size="2"/>
         </Map>
         <Map name="latitude">
+            <Attribute name="long_name" type="String">
+                <value>latitude</value>
+            </Attribute>
+            <Attribute name="units" type="String">
+                <value>degrees_north</value>
+            </Attribute>
+            <Attribute name="standard_name" type="String">
+                <value>latitude</value>
+            </Attribute>
+            <Attribute name="axis" type="String">
+                <value>Y</value>
+            </Attribute>
+            <Attribute name="GCTP_Projection_Name" type="String">
+                <value>Geographic</value>
+            </Attribute>
+            <Attribute name="GCTP_Spheroid_Name" type="String">
+                <value>Clarke 1866</value>
+            </Attribute>
             <Float64/>
             <dimension name="latitude" size="20"/>
         </Map>
         <Map name="longitude">
+            <Attribute name="long_name" type="String">
+                <value>longitude</value>
+            </Attribute>
+            <Attribute name="units" type="String">
+                <value>degrees_east</value>
+            </Attribute>
+            <Attribute name="standard_name" type="String">
+                <value>longitude</value>
+            </Attribute>
+            <Attribute name="axis" type="String">
+                <value>X</value>
+            </Attribute>
+            <Attribute name="GCTP_Projection_Name" type="String">
+                <value>Geographic</value>
+            </Attribute>
+            <Attribute name="GCTP_Spheroid_Name" type="String">
+                <value>Clarke 1866</value>
+            </Attribute>
             <Float64/>
             <dimension name="longitude" size="20"/>
         </Map>
     </Grid>
-    <Array name="nv">
-        <Attribute name="long_name" type="String">
-            <value>number_of_vertices</value>
-        </Attribute>
-        <Int32/>
-        <dimension name="nv" size="2"/>
-    </Array>
     <Grid name="time_bnds">
         <Attribute name="long_name" type="String">
             <value>time_bnds</value>
@@ -74,86 +127,13 @@ xsi:schemaLocation="http://xml.opendap.org/ns/DAP2  http://xml.opendap.org/dap/d
             <dimension name="time" size="2"/>
         </Map>
         <Map name="nv">
+            <Attribute name="long_name" type="String">
+                <value>number_of_vertices</value>
+            </Attribute>
             <Int32/>
             <dimension name="nv" size="2"/>
         </Map>
     </Grid>
-    <Array name="time">
-        <Attribute name="long_name" type="String">
-            <value>time</value>
-        </Attribute>
-        <Attribute name="axis" type="String">
-            <value>T</value>
-        </Attribute>
-        <Attribute name="units" type="String">
-            <value>seconds since 1993-1-1 0:0:0</value>
-        </Attribute>
-        <Attribute name="bounds" type="String">
-            <value>time_bnds</value>
-        </Attribute>
-        <Float64/>
-        <dimension name="time" size="2"/>
-    </Array>
-    <Array name="Cloud">
-        <Attribute name="long_name" type="String">
-            <value>Cloud</value>
-        </Attribute>
-        <Attribute name="Description" type="String">
-            <value>Cloud layer ID</value>
-        </Attribute>
-        <Attribute name="axis" type="String">
-            <value>Z</value>
-        </Attribute>
-        <Attribute name="units" type="String">
-            <value>unitless</value>
-        </Attribute>
-        <Int32/>
-        <dimension name="Cloud" size="2"/>
-    </Array>
-    <Array name="latitude">
-        <Attribute name="long_name" type="String">
-            <value>latitude</value>
-        </Attribute>
-        <Attribute name="units" type="String">
-            <value>degrees_north</value>
-        </Attribute>
-        <Attribute name="standard_name" type="String">
-            <value>latitude</value>
-        </Attribute>
-        <Attribute name="axis" type="String">
-            <value>Y</value>
-        </Attribute>
-        <Attribute name="GCTP_Projection_Name" type="String">
-            <value>Geographic</value>
-        </Attribute>
-        <Attribute name="GCTP_Spheroid_Name" type="String">
-            <value>Clarke 1866</value>
-        </Attribute>
-        <Float64/>
-        <dimension name="latitude" size="20"/>
-    </Array>
-    <Array name="longitude">
-        <Attribute name="long_name" type="String">
-            <value>longitude</value>
-        </Attribute>
-        <Attribute name="units" type="String">
-            <value>degrees_east</value>
-        </Attribute>
-        <Attribute name="standard_name" type="String">
-            <value>longitude</value>
-        </Attribute>
-        <Attribute name="axis" type="String">
-            <value>X</value>
-        </Attribute>
-        <Attribute name="GCTP_Projection_Name" type="String">
-            <value>Geographic</value>
-        </Attribute>
-        <Attribute name="GCTP_Spheroid_Name" type="String">
-            <value>Clarke 1866</value>
-        </Attribute>
-        <Float64/>
-        <dimension name="longitude" size="20"/>
-    </Array>
 
     <dataBLOB href=""/>
 </Dataset>

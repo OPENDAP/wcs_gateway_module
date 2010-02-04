@@ -45,8 +45,6 @@ public:
     			WCSTestTransmitter() ;
     virtual		~WCSTestTransmitter() {}
 
-    static void		send_basic_das( BESResponseObject *obj,
-    				        BESDataHandlerInterface &dhi ) ;
     static void		send_basic_dds( BESResponseObject *obj,
     				        BESDataHandlerInterface &dhi ) ;
     static void		send_basic_data( BESResponseObject *obj,

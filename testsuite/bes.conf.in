@@ -66,14 +66,14 @@ BES.LogVerbose=no
 
 BES.modules=dap,cmd,ascii,usage,www,nc,h4,wcs,test
 BES.module.dap=@libdir@/bes/libdap_module.so
-BES.module.cmd=@libdir@/bes/libdap_cmd_module.so
+BES.module.cmd=@libdir@/bes/libdap_xml_module.so
 BES.module.ascii=@libdir@/bes/libascii_module.so
 BES.module.usage=@libdir@/bes/libusage_module.so
 BES.module.www=@libdir@/bes/libwww_module.so
 BES.module.nc=@libdir@/bes/libnc_module.so
 BES.module.h4=@libdir@/bes/libhdf4_module.so
-BES.module.wcs=@libdir@/bes/libwcs_gateway_module.so
-BES.module.test=@libdir@/bes/libwcs_test_module.so
+BES.module.wcs=@abs_top_builddir@/.libs/libwcs_gateway_module.so
+BES.module.test=@abs_top_builddir@/testsuite/.libs/libwcs_test_module.so
 
 #-----------------------------------------------------------------------#
 # Setting the data location

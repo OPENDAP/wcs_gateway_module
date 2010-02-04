@@ -8,7 +8,6 @@ Dataset {
         Float64 latitude[latitude = 20];
         Float64 longitude[longitude = 20];
     } CH4_VMR_eff;
-    Int32 nv[nv = 2];
     Grid {
       Array:
         Float64 time_bnds[time = 1][nv = 2];
@@ -16,8 +15,4 @@ Dataset {
         Float64 time[time = 1];
         Int32 nv[nv = 2];
     } time_bnds;
-    Float64 time[time = 1];
-    Int32 CH4Func[CH4Func = 7];
-    Float64 latitude[latitude = 20];
-    Float64 longitude[longitude = 20];
 } test;

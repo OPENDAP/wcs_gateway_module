@@ -39,38 +39,15 @@ using std::ostringstream;
 #include "BESDataDDSResponse.h"
 #include "BESReturnManager.h"
 #include "BESTransmitterNames.h"
+#include "BESDapNames.h"
 #include "BESInternalError.h"
-
-#define DAS_TRANSMITTER "das"
-#define DDS_TRANSMITTER "dds"
-#define DDX_TRANSMITTER "ddx"
-#define DATA_TRANSMITTER "data"
-#define ASCII_TRANSMITTER "ascii"
 
 WCSTestTransmitter::WCSTestTransmitter()
 {
-    add_method( DAS_TRANSMITTER, WCSTestTransmitter::send_basic_das ) ;
-    add_method( DDS_TRANSMITTER, WCSTestTransmitter::send_basic_dds ) ;
-    add_method( DDX_TRANSMITTER, WCSTestTransmitter::send_basic_ddx ) ;
-    add_method( DATA_TRANSMITTER, WCSTestTransmitter::send_basic_data ) ;
-    add_method( ASCII_TRANSMITTER, WCSTestTransmitter::send_basic_ascii ) ;
-}
-
-void
-WCSTestTransmitter::send_basic_das(BESResponseObject * obj,
-                               BESDataHandlerInterface & dhi)
-{
-    BESTransmitter *t = BESReturnManager::TheManager()->find_transmitter( BASIC_TRANSMITTER ) ;
-    if( t )
-    {
-	t->send_response( DAS_TRANSMITTER, obj, dhi ) ;
-    }
-    else
-    {
-	string err = (string)"WCS Test Transmitter could not locate the basic "
-	             + "transmitter" ;
-	throw BESInternalError( err, __FILE__, __LINE__ ) ;
-    }
+    add_method( DDS_SERVICE, WCSTestTransmitter::send_basic_dds ) ;
+    add_method( DDX_SERVICE, WCSTestTransmitter::send_basic_ddx ) ;
+    add_method( DATA_SERVICE, WCSTestTransmitter::send_basic_data ) ;
+    add_method( "ascii", WCSTestTransmitter::send_basic_ascii ) ;
 }
 
 void
@@ -81,10 +58,11 @@ WCSTestTransmitter::send_basic_dds(BESResponseObject * obj,
     DDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
-    BESTransmitter *t = BESReturnManager::TheManager()->find_transmitter( BASIC_TRANSMITTER ) ;
+    BESTransmitter *t =
+	BESReturnManager::TheManager()->find_transmitter( DAP2_FORMAT ) ;
     if( t )
     {
-	t->send_response( DDS_TRANSMITTER, obj, dhi ) ;
+	t->send_response( DDS_SERVICE, obj, dhi ) ;
     }
     else
     {
@@ -102,10 +80,11 @@ WCSTestTransmitter::send_basic_data(BESResponseObject * obj,
     DataDDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
-    BESTransmitter *t = BESReturnManager::TheManager()->find_transmitter( BASIC_TRANSMITTER ) ;
+    BESTransmitter *t =
+	BESReturnManager::TheManager()->find_transmitter( DAP2_FORMAT ) ;
     if( t )
     {
-	t->send_response( DATA_TRANSMITTER, obj, dhi ) ;
+	t->send_response( DATA_SERVICE, obj, dhi ) ;
     }
     else
     {
@@ -123,10 +102,11 @@ WCSTestTransmitter::send_basic_ddx(BESResponseObject * obj,
     DDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
-    BESTransmitter *t = BESReturnManager::TheManager()->find_transmitter( BASIC_TRANSMITTER ) ;
+    BESTransmitter *t =
+	BESReturnManager::TheManager()->find_transmitter( DAP2_FORMAT ) ;
     if( t )
     {
-	t->send_response( DDX_TRANSMITTER, obj, dhi ) ;
+	t->send_response( DDX_SERVICE, obj, dhi ) ;
     }
     else
     {
@@ -144,10 +124,11 @@ WCSTestTransmitter::send_basic_ascii( BESResponseObject * obj,
     DataDDS *dds = bdds->get_dds();
     dds->set_dataset_name( "test" ) ;
 
-    BESTransmitter *t = BESReturnManager::TheManager()->find_transmitter( BASIC_TRANSMITTER ) ;
+    BESTransmitter *t =
+	BESReturnManager::TheManager()->find_transmitter( DAP2_FORMAT ) ;
     if( t )
     {
-	t->send_response( ASCII_TRANSMITTER, obj, dhi ) ;
+	t->send_response( "ascii", obj, dhi ) ;
     }
     else
     {

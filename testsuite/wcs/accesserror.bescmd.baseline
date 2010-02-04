@@ -1,12 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<getHtmlForm>
-    <response>
-        <BESError>
-            <Type>1</Type>
-            <Message>Error while reading the URL: http://g0dup05u-ts2.ecs.nasa.gov/cgi-bin/WCS/ceopL2AIRS2?service=WCS&amp;version=1.0.0&amp;request=GetCoverage&amp;coverage=H2OMMRStd&amp;crs=WGS84&amp;bbox=-99.865000,34.235000,-95.115000,38.985000&amp;format=netCDF&amp;TIME=2002-08-31&amp;resx=0.25&amp;resy=0.25&amp;interpolationMethod=Nearest%20neighbor.
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<response xmlns="http://xml.opendap.org/ns/bes/1.0#" reqID="some_unique_value"><getDAS><BESError><Type>1</Type><Message>Error while reading the URL: http://g0dup05u-ts2.ecs.nasa.gov/cgi-bin/WCS/ceopL2AIRS2?service=WCS&amp;version=1.0.0&amp;request=GetCoverage&amp;coverage=H2OMMRStd&amp;crs=WGS84&amp;bbox=-99.865000,34.235000,-95.115000,38.985000&amp;format=netCDF&amp;TIME=2002-08-31&amp;resx=0.25&amp;resy=0.25&amp;interpolationMethod=Nearest%20neighbor.
 The OPeNDAP server returned the following message:
-Forbidden: Contact the server administrator.</Message>
-            <Administrator>admin.email.address@your.domain.name</Administrator>*
-        </BESError>
-    </response>
-</getHtmlForm>
+Forbidden: Contact the server administrator.</Message><Administrator>admin.email.address@your.domain.name</Administrator></BESError></getDAS></response>

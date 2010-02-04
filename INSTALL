@@ -27,6 +27,11 @@ BUILDING THE SOFTWARE
 
   3. Type `make install' to install the BES software. The package installs
      in /usr/local/ by default; use --prefix to change that.
+     This will also add the new wcsg.conf file to the $prefix/etc/bes/modules
+     directory. The BES configuration file bes.conf will automatically
+     load any module configuration files in that directory. The wcsg.conf
+     file contains wcs_gateway_module specific configurations for use with the
+     BES Framework.
 
   4 Type `make check' to run the tests. You must run 'make install'
     first in order to run these tests as a test module for the BES is
@@ -53,13 +58,6 @@ BUILD REQUIREMENTS
     make. Given those requirements, use 'autoreconf --force --verbose'
     and then build as described above.
 
-    If you have an Intel Mac and you are experiencing configuration issues
-    then you might need to download the latest and greatest autoconf,
-    automake, and libtool using the DarwinPorts tool. We've tried using
-    other download tools, like fink, and building from source these
-    packages, but only DarwinPorts seems to resolve the issues. We continue
-    to watch this issue and hope to get it resolved soon.
-
   o The library uses OPeNDAP's Back-End Server (BES). You will need version
     3.8.0 or greater to build this software. See
     http://www.opendap.org/download/.
@@ -78,10 +76,7 @@ BUILD REQUIREMENTS
 NOTES
 
   o If you are building on a new platform (one for which we don't supply
-    binaries), please run the tests and tell us about any failures. To do a
-    really complete job of this you'll need to get the GNU test system called
-    DejaGNU and the CppUnit unit testing package. It is very simple to
-    install these and we're very willing to help, so don't be shy!
+    binaries), please run the tests and tell us about any failures.
 
   o If you are developing code that uses the WCS Module, get autoconf and
     SVN. We maintain a SVN-managed source tree that people outside the group
@@ -94,16 +89,8 @@ NOTES
     information it needs. Only developers working on libdap should ever have
     to do this.
 
-  o To build a rpm file for a source or binary distribution: 1) Use 'make
-    dist' to build a *.tar.gz file; 2) Copy that to ~/rpm/SOURCES,
-    and; 3) Run 'rpmbuild -ts ~/rpm/SOURCES/libdap-3.5.1.tar.gz' to make the
-    source package. Use '-tb' to make the binary package. I use a
-    ~/.rpmmacros file that contains:
-
-	%_topdir		/home/jimg/rpm
-	%_tmppath               /home/jimg/rpm/tmp
-	
-    Or, use the 'rpm' target in the Makefile.
+  o To build a rpm file for a source or binary distribution, use 'make
+    rpm'
 
   o DEBUGGING AIDS
 
@@ -136,10 +123,10 @@ CONFIGURATION AND TESTING
   o CONFIGURATION
 
     - The configuration file is located in the BES installation directory
-      under etc/bes and is called bes.conf. This file will need to be
+      under etc/bes/modules and is called wcsg.conf. This file will need to be
       edited, and is fairly well documented. So, if you installed in
       /usr/local, then this file will be located in
-      /usr/local/etc/bes/bes.conf.
+      /usr/local/etc/bes/modules/wcsg.conf.
 
   o TESTING
 

@@ -35,17 +35,29 @@
 using std::endl ;
 
 #include "WCSTestModule.h"
-#include "WCSTestTransmitter.h"
-#include "BESReturnManager.h"
 #include "BESDebug.h"
+#include <BESReturnManager.h>
+#include <BESServiceRegistry.h>
+#include <WCSTestTransmitter.h>
+#include <BESDapNames.h>
+
 
 void
 WCSTestModule::initialize( const string &modname )
 {
     BESDEBUG( "wcs", "Initializing WCS Module " << modname << endl ) ;
 
-    BESDEBUG( "wcs", "Registering WCS Test Transmitter" << endl ) ;
-    BESReturnManager::TheManager()->add_transmitter( "test", new WCSTestTransmitter );
+    BESDEBUG( "wcs", "    adding test transmitter" << endl ) ;
+    BESReturnManager::TheManager()->add_transmitter( "test",
+						 new WCSTestTransmitter( ) ) ;
+
+    BESDEBUG( "wcs", "    adding test service to dap" << endl ) ;
+    BESServiceRegistry::TheRegistry()->add_format( OPENDAP_SERVICE,
+						   DDS_SERVICE,
+						   "test" ) ;
+    BESServiceRegistry::TheRegistry()->add_format( OPENDAP_SERVICE,
+						   DATA_SERVICE,
+						   "test" ) ;
 
     BESDEBUG( "wcs", "Done Initializing WCS Module " << modname << endl ) ;
 }
@@ -55,7 +67,7 @@ WCSTestModule::terminate( const string &modname )
 {
     BESDEBUG( "wcs", "Cleaning WCS Module " << modname << endl ) ;
 
-    BESDEBUG( "wcs", "Deleting WCS Test Transmitter" << endl ) ;
+    BESDEBUG( "wcs", "    removing test transmitter" << endl ) ;
     BESReturnManager::TheManager()->del_transmitter( "test" ) ;
 
     BESDEBUG( "wcs", "Done Cleaning WCS Module " << modname << endl ) ;
