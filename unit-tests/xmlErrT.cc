@@ -7,6 +7,7 @@
 #include <string>
 #include <fstream>
 
+#include "TheBESKeys.h"
 #include "WCSGatewayError.h"
 #include "BESError.h"
 #include "test_config.h"
@@ -25,8 +26,8 @@ public:
 
     void setUp()
     {
-	string bes_conf = (string)"BES_CONF=" + TEST_SRC_DIR + "/bes.conf" ;
-	putenv( (char *)bes_conf.c_str() ) ;
+	string bes_conf = (string)TEST_SRC_DIR + "/bes.conf" ;
+	TheBESKeys::ConfigFile = bes_conf ;
     } 
 
     void tearDown()

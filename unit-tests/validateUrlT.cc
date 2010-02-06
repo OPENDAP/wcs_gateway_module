@@ -29,7 +29,6 @@ public:
     {
 	string bes_conf = (string)TEST_SRC_DIR + "/bes.conf" ;
 	TheBESKeys::ConfigFile = bes_conf ;
-	putenv( (char *)bes_conf.c_str() ) ;
     } 
 
     void tearDown()

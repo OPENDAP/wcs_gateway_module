@@ -1,5 +1,5 @@
 Summary:         WCS Request module for OPeNDAP Back End Server
-Name:            wcs_module
+Name:            wcs_gateway_module
 Version:         1.1.0
 Release:         1
 License:         LGPL
@@ -28,9 +28,7 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install INSTALL="install -p"
 
-rm $RPM_BUILD_ROOT%{_libdir}/*.la
-rm $RPM_BUILD_ROOT%{_libdir}/*.so
-rm $RPM_BUILD_ROOT%{_libdir}/bes/*.la
+rm $RPM_BUILD_ROOT%{_libdir}/bes/libwcs_gateway_module.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -44,8 +42,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/bes/
 %dir %{_sysconfdir}/bes/modules
 %config(noreplace) %{_sysconfdir}/bes/modules/wcsg.conf
-%{_libdir}/bes/libwcs_module.so
-%doc COPYING COPYRIGHT NEWS README
+%{_libdir}/bes/libwcs_gateway_module.so
+%doc COPYING COPYRIGHT_URI NEWS README
 
 %changelog
 * Wed Feb  6 2008 Patrick West <pwest at ucar.edu> - 1.0.0-1

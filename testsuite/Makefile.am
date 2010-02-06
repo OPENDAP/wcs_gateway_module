@@ -15,8 +15,7 @@ AM_CPPFLAGS = -I$(top_srcdir)
 CXXFLAGS_DEBUG = -g3 -O0 -fno-defer-pop -Wall -W -Wcast-align -Werror
 TEST_COV_FLAGS = -ftest-coverage -fprofile-arcs
 
-lib_besdir=$(libdir)/bes
-lib_bes_LTLIBRARIES = libwcs_test_module.la
+check_LTLIBRARIES = libwcs_test_module.la
 
 noinst_DATA = bes.conf
 

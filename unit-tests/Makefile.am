@@ -19,7 +19,7 @@ TEST_COV_FLAGS = -ftest-coverage -fprofile-arcs
 # This determines what gets built by make check
 check_PROGRAMS = $(UNIT_TESTS)
 
-nodist_include_HEADERS = test_config.h
+noinst_HEADERS = test_config.h
 
 # This determines what gets run by 'make check.'
 TESTS = $(UNIT_TESTS)
@@ -33,7 +33,7 @@ DISTCLEANFILES = test_config.h
 CLEANFILES = *.dbg
 
 test_config.h: test_config.h.in Makefile
-	sed -e "s%[@]srcdir[@]%${srcdir}%" $< > test_config.h
+	sed -e "s%[@]abs_srcdir[@]%${abs_srcdir}%" $< > test_config.h
 
 clean-local:
 	rm -rf wcs
