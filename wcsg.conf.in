@@ -6,7 +6,7 @@
 # modules to load, includes data modules and command modules            #
 #-----------------------------------------------------------------------#
 
-BES.modules=wcsg
+BES.modules+=wcsg
 BES.module.wcsg=@bes_modules_dir@/libwcs_gateway_module.so
 
 #-----------------------------------------------------------------------#
