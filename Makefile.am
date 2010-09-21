@@ -55,6 +55,18 @@ uninstall-local:
 wcsg.conf: wcsg.conf.in config.status
 	sed -e "s%[@]bes_modules_dir[@]%${lib_besdir}%" $< > wcsg.conf
 
+# docs
+
+.PHONY: docs
+docs:
+	srcdir=$(srcdir) doxygen $(srcdir)/doxy.conf
+	(cd docs && tar -czf html.tar.gz html)
+
+C4_DIR=./cccc
+.PHONY: cccc
+cccc:	
+	cccc --outdir=$(C4_DIR) $(FONC_SRC) $(FONC_HDR)
+
 ###########################################################################
 
 # Fortify targets.
