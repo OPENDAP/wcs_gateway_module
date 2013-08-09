@@ -42,11 +42,12 @@ using std::string ;
 /** @brief utility class for the WCS request mechanism
  *
  * Current static functions available are:
- *   convert_wcs_type - converts the format parameter in the WCS request to a type that is
- *   understood by the BES using the WCS.TypeList parameter in the BES configuration file
+ *   convert_wcs_type - converts the format parameter in the WCS request
+ *   to a type that is understood by the BES using the WCS.TypeList
+ *   parameter in the BES configuration file
  *
- *   validate_url - validates the WCS request URL to make sure all the information
- *   required to make the request are present.
+ *   validate_url - validates the WCS request URL to make sure all the
+ *   information required to make the request are present.
  */
 class WCSGatewayUtils
 {
